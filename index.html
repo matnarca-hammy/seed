@@ -11,480 +11,140 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
-    --parchment: #F5EDD6;
-    --parchment-dark: #EDE0C0;
-    --parchment-deeper: #E2D2A8;
-    --ink: #2C1F0E;
-    --ink-mid: #5C4A2A;
-    --ink-light: #9A825A;
-    --gold: #B8860B;
-    --gold-light: #D4A017;
-    --gold-pale: #F0D98A;
-    --red-earth: #8B3A2A;
-    --surface: #FAF4E4;
-    --card: #F0E6C8;
-    --border: #D4C49A;
-    --shadow: rgba(44,31,14,0.12);
+    --parchment: #F5EDD6; --parchment-dark: #EDE0C0; --parchment-deeper: #E2D2A8;
+    --ink: #2C1F0E; --ink-mid: #5C4A2A; --ink-light: #9A825A;
+    --gold: #B8860B; --gold-light: #D4A017; --gold-pale: #F0D98A;
+    --red-earth: #8B3A2A; --surface: #FAF4E4; --card: #F0E6C8;
+    --border: #D4C49A; --shadow: rgba(44,31,14,0.12);
   }
   .dark {
-    --parchment: #1A1208;
-    --parchment-dark: #221A0A;
-    --parchment-deeper: #2C2210;
-    --ink: #F0E6C8;
-    --ink-mid: #C8B07A;
-    --ink-light: #9A825A;
-    --gold: #D4A017;
-    --gold-light: #E8BC30;
-    --gold-pale: #3A2C08;
-    --surface: #140E04;
-    --card: #221A0A;
-    --border: #3A2C10;
-    --shadow: rgba(0,0,0,0.4);
+    --parchment: #1A1208; --parchment-dark: #221A0A; --parchment-deeper: #2C2210;
+    --ink: #F0E6C8; --ink-mid: #C8B07A; --ink-light: #9A825A;
+    --gold: #D4A017; --gold-light: #E8BC30; --gold-pale: #3A2C08;
+    --surface: #140E04; --card: #221A0A; --border: #3A2C10; --shadow: rgba(0,0,0,0.4);
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Source Serif 4', Georgia, serif;
-    background: var(--surface);
-    color: var(--ink);
-    min-height: 100vh;
-    transition: background 0.3s, color 0.3s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  header {
-    background: var(--parchment-dark);
-    border-bottom: 1px solid var(--border);
-    padding: 0 1.5rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 8px var(--shadow);
-  }
-  .header-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-  }
-  .logo {
-    font-family: 'Lora', serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--gold);
-    letter-spacing: 0.04em;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .logo-seed { font-style: italic; }
-  .logo-dot { color: var(--red-earth); font-style: normal; }
-  .header-actions { display: flex; align-items: center; gap: 0.75rem; }
-  .icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--ink-mid);
-    padding: 0.4rem;
-    border-radius: 6px;
-    transition: background 0.15s, color 0.15s;
-    font-size: 1.1rem;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .icon-btn:hover { background: var(--parchment-deeper); color: var(--gold); }
-  .icon-btn.active { color: var(--gold); }
-  nav {
-    background: var(--parchment);
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  nav::-webkit-scrollbar { display: none; }
-  .nav-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    padding: 0 1.5rem;
-  }
-  .tab {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--ink-light);
-    padding: 0.75rem 1rem;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-    transition: color 0.15s, border-color 0.15s;
-    letter-spacing: 0.02em;
-  }
-  .tab:hover { color: var(--ink-mid); }
-  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-  .search-bar {
-    max-width: 900px;
-    margin: 1.25rem auto 0;
-    padding: 0 1.5rem;
-  }
-  .search-wrap { position: relative; }
-  .search-wrap input {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.7rem 1rem 0.7rem 2.75rem;
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.95rem;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .search-wrap input::placeholder { color: var(--ink-light); }
-  .search-wrap input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(184,134,11,0.15); }
-  .search-icon {
-    position: absolute;
-    left: 0.85rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--ink-light);
-    font-size: 1rem;
-    pointer-events: none;
-  }
-  main {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 1.5rem 1.5rem 4rem;
-  }
-  .section-label {
-    font-family: 'Lora', serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    margin-bottom: 1rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .verse-grid { display: grid; gap: 1rem; }
-  .verse-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem 1.4rem;
-    transition: box-shadow 0.2s, transform 0.15s;
-  }
-  .verse-card:hover { box-shadow: 0 4px 16px var(--shadow); transform: translateY(-1px); }
-  .verse-ref {
-    font-family: 'Lora', serif;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-  .verse-category-tag {
-    font-size: 0.68rem;
-    background: var(--parchment-deeper);
-    color: var(--ink-mid);
-    border-radius: 4px;
-    padding: 0.15rem 0.5rem;
-    letter-spacing: 0.06em;
-    font-weight: 500;
-  }
-  .verse-text {
-    font-size: 1rem;
-    line-height: 1.75;
-    color: var(--ink);
-    font-style: italic;
-  }
-  .verse-actions {
-    margin-top: 0.75rem;
-    display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
-  }
-  .fav-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--ink-light);
-    font-size: 1.15rem;
-    padding: 0.25rem;
-    transition: color 0.15s, transform 0.1s;
-  }
-  .fav-btn:hover { transform: scale(1.2); }
-  .fav-btn.active { color: var(--red-earth); }
-  .category-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.25rem;
-  }
-  .chip {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 0.35rem 0.9rem;
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.82rem;
-    color: var(--ink-mid);
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
-    white-space: nowrap;
-  }
-  .chip:hover { background: var(--parchment-deeper); }
-  .chip.active { background: var(--gold); color: #fff; border-color: var(--gold); }
-  .flashcard-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 0.25rem;
-  }
-  .flashcard-label {
-    font-family: 'Lora', serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    margin-bottom: 1.25rem;
-    align-self: flex-start;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid var(--border);
-    width: 100%;
-  }
-  .flashcard-wrap {
-    width: 100%;
-    max-width: 680px;
-    cursor: grab;
-    user-select: none;
-  }
-  .flashcard-wrap:active { cursor: grabbing; }
-  .flashcard {
-    width: 100%;
-    background: linear-gradient(150deg, var(--parchment-dark) 0%, var(--gold-pale) 100%);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 3rem 2.5rem 2.5rem;
-    box-shadow: 0 8px 40px var(--shadow), 0 1px 0 rgba(255,255,255,0.3) inset;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-height: 320px;
-    justify-content: center;
-    transition: opacity 0.2s;
-  }
-  .dark .flashcard { background: linear-gradient(150deg, #221A0A 0%, #3A2C08 100%); }
-  .flashcard-ornament {
-    font-size: 2rem;
-    color: var(--gold);
-    opacity: 0.35;
-    margin-bottom: 1.25rem;
-    line-height: 1;
-  }
-  .flashcard-cat {
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    margin-bottom: 0.75rem;
-  }
-  .flashcard-text {
-    font-family: 'Lora', serif;
-    font-size: 1.45rem;
-    line-height: 1.7;
-    color: var(--ink);
-    font-style: italic;
-    font-weight: 400;
-    margin-bottom: 1.5rem;
-  }
-  .flashcard-ref {
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .flashcard-controls {
-    margin-top: 1.75rem;
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-  }
-  .fc-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    width: 44px; height: 44px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    color: var(--ink-mid);
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s, color 0.15s, box-shadow 0.15s;
-  }
-  .fc-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
-  .fc-count {
-    font-family: 'Lora', serif;
-    font-size: 0.85rem;
-    color: var(--ink-light);
-    min-width: 60px;
-    text-align: center;
-  }
-  .fc-fav {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.4rem;
-    color: var(--ink-light);
-    transition: color 0.15s, transform 0.1s;
-    padding: 0.25rem;
-  }
-  .fc-fav:hover { transform: scale(1.2); }
-  .fc-fav.active { color: var(--red-earth); }
-  .swipe-hint {
-    font-size: 0.75rem;
-    color: var(--ink-light);
-    margin-top: 0.75rem;
-    font-style: italic;
-    letter-spacing: 0.04em;
-  }
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(44,31,14,0.55);
-    z-index: 200;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    backdrop-filter: blur(2px);
-  }
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2rem;
-    width: 100%;
-    max-width: 520px;
-    box-shadow: 0 16px 48px var(--shadow);
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .modal-title {
-    font-family: 'Lora', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 1.5rem;
-  }
-  .modal label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    margin-bottom: 0.4rem;
-    margin-top: 1rem;
-  }
-  .modal label:first-of-type { margin-top: 0; }
-  .modal input, .modal textarea, .modal select {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0.65rem 0.85rem;
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.95rem;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    resize: vertical;
-  }
-  .modal input:focus, .modal textarea:focus, .modal select:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(184,134,11,0.15);
-  }
-  .modal textarea { min-height: 100px; }
-  .modal-actions {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-    justify-content: flex-end;
-  }
-  .btn {
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    padding: 0.6rem 1.25rem;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-  }
-  .btn-primary { background: var(--gold); color: #fff; }
-  .btn-primary:hover { background: var(--gold-light); }
-  .btn-ghost { background: none; border: 1px solid var(--border); color: var(--ink-mid); }
-  .btn-ghost:hover { background: var(--card); }
-  .new-cat-row { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
-  .new-cat-row input { flex: 1; margin: 0; }
-  .new-cat-row .btn { white-space: nowrap; padding: 0.6rem 0.9rem; font-size: 0.82rem; }
-  .fab {
-    position: fixed;
-    bottom: 2rem;
-    right: 1.5rem;
-    width: 52px; height: 52px;
-    background: var(--gold);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(184,134,11,0.4);
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s, transform 0.15s;
-    z-index: 150;
-  }
-  .fab:hover { background: var(--gold-light); transform: scale(1.08); }
-  .empty {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--ink-light);
-    font-style: italic;
-    font-size: 1rem;
-  }
-  .toast {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--ink);
-    color: var(--parchment);
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.88rem;
-    padding: 0.65rem 1.25rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px var(--shadow);
-    transition: transform 0.3s ease;
-    z-index: 1000;
-    white-space: nowrap;
-    pointer-events: none;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  @media (max-width: 600px) {
-    .flashcard-text { font-size: 1.15rem; }
-    .flashcard { padding: 2.25rem 1.5rem 2rem; min-height: 260px; }
-    main { padding: 1.25rem 1rem 4rem; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Source Serif 4',Georgia,serif; background:var(--surface); color:var(--ink); min-height:100vh; transition:background 0.3s,color 0.3s; -webkit-tap-highlight-color:transparent; }
+
+  /* HEADER */
+  header { background:var(--parchment-dark); border-bottom:1px solid var(--border); padding:0 1.5rem; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px var(--shadow); }
+  .header-inner { max-width:900px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:60px; }
+  .logo { font-family:'Lora',serif; font-size:1.6rem; font-weight:700; color:var(--gold); letter-spacing:0.04em; display:flex; align-items:center; gap:0.4rem; }
+  .logo-seed { font-style:italic; } .logo-dot { color:var(--red-earth); }
+  .header-actions { display:flex; align-items:center; gap:0.75rem; }
+  .icon-btn { background:none; border:none; cursor:pointer; color:var(--ink-mid); padding:0.4rem; border-radius:6px; transition:background 0.15s,color 0.15s; font-size:1.1rem; display:flex; align-items:center; justify-content:center; }
+  .icon-btn:hover { background:var(--parchment-deeper); color:var(--gold); }
+  .icon-btn.active { color:var(--gold); }
+
+  /* NAV */
+  nav { background:var(--parchment); border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+  nav::-webkit-scrollbar { display:none; }
+  .nav-inner { max-width:900px; margin:0 auto; display:flex; padding:0 1.5rem; }
+  .tab { background:none; border:none; cursor:pointer; font-family:'Source Serif 4',serif; font-size:0.85rem; font-weight:500; color:var(--ink-light); padding:0.75rem 1rem; border-bottom:2px solid transparent; white-space:nowrap; transition:color 0.15s,border-color 0.15s; letter-spacing:0.02em; }
+  .tab:hover { color:var(--ink-mid); } .tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+
+  /* SEARCH */
+  .search-bar { max-width:900px; margin:1.25rem auto 0; padding:0 1.5rem; }
+  .search-wrap { position:relative; }
+  .search-wrap input { width:100%; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:0.7rem 1rem 0.7rem 2.75rem; font-family:'Source Serif 4',serif; font-size:0.95rem; color:var(--ink); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
+  .search-wrap input::placeholder { color:var(--ink-light); }
+  .search-wrap input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(184,134,11,0.15); }
+  .search-icon { position:absolute; left:0.85rem; top:50%; transform:translateY(-50%); color:var(--ink-light); font-size:1rem; pointer-events:none; }
+
+  /* MAIN */
+  main { max-width:900px; margin:0 auto; padding:1.5rem 1.5rem 4rem; }
+  .section-label { font-family:'Lora',serif; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-light); margin-bottom:1rem; padding-bottom:0.4rem; border-bottom:1px solid var(--border); }
+
+  /* VERSE CARDS */
+  .verse-grid { display:grid; gap:1rem; }
+  .verse-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.4rem; transition:box-shadow 0.2s,transform 0.15s; }
+  .verse-card:hover { box-shadow:0 4px 16px var(--shadow); transform:translateY(-1px); }
+  .verse-ref { font-family:'Lora',serif; font-size:0.78rem; font-weight:600; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.4rem; }
+  .verse-category-tag { font-size:0.68rem; background:var(--parchment-deeper); color:var(--ink-mid); border-radius:4px; padding:0.15rem 0.5rem; letter-spacing:0.06em; font-weight:500; }
+  .verse-text { font-size:1rem; line-height:1.75; color:var(--ink); font-style:italic; }
+  .verse-actions { margin-top:0.75rem; display:flex; gap:0.5rem; justify-content:flex-end; }
+  .fav-btn { background:none; border:none; cursor:pointer; color:var(--ink-light); font-size:1.15rem; padding:0.25rem; transition:color 0.15s,transform 0.1s; }
+  .fav-btn:hover { transform:scale(1.2); } .fav-btn.active { color:var(--red-earth); }
+
+  /* CHIPS */
+  .category-chips { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.25rem; }
+  .chip { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:0.35rem 0.9rem; font-family:'Source Serif 4',serif; font-size:0.82rem; color:var(--ink-mid); cursor:pointer; transition:background 0.15s,color 0.15s,border-color 0.15s; white-space:nowrap; }
+  .chip:hover { background:var(--parchment-deeper); } .chip.active { background:var(--gold); color:#fff; border-color:var(--gold); }
+
+  /* FLASHCARD */
+  .flashcard-section { display:flex; flex-direction:column; align-items:center; padding-top:0.25rem; }
+  .flashcard-label { font-family:'Lora',serif; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-light); margin-bottom:1.25rem; align-self:flex-start; padding-bottom:0.4rem; border-bottom:1px solid var(--border); width:100%; }
+  .flashcard-wrap { width:100%; max-width:680px; }
+  .flashcard { width:100%; background:linear-gradient(150deg,var(--parchment-dark) 0%,var(--gold-pale) 100%); border:1px solid var(--border); border-radius:20px; padding:3rem 2.5rem 2.5rem; box-shadow:0 8px 40px var(--shadow),0 1px 0 rgba(255,255,255,0.3) inset; display:flex; flex-direction:column; align-items:center; text-align:center; min-height:320px; justify-content:center; }
+  .dark .flashcard { background:linear-gradient(150deg,#221A0A 0%,#3A2C08 100%); }
+  .flashcard-ornament { font-size:2rem; color:var(--gold); opacity:0.35; margin-bottom:1.25rem; line-height:1; }
+  .flashcard-cat { font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-light); margin-bottom:0.75rem; }
+  .flashcard-text { font-family:'Lora',serif; font-size:1.45rem; line-height:1.7; color:var(--ink); font-style:italic; font-weight:400; margin-bottom:1.5rem; }
+  .flashcard-ref { font-family:'Source Serif 4',serif; font-size:0.88rem; font-weight:600; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; }
+  .flashcard-controls { margin-top:1.75rem; display:flex; align-items:center; gap:1.25rem; }
+  .fc-fav { background:none; border:none; cursor:pointer; font-size:1.6rem; color:var(--ink-light); transition:color 0.15s,transform 0.1s; padding:0.25rem; }
+  .fc-fav:hover { transform:scale(1.2); } .fc-fav.active { color:var(--red-earth); }
+
+  /* AUTH SCREEN */
+  .auth-screen { max-width:420px; margin:3rem auto; padding:0 1.5rem; }
+  .auth-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:2.5rem 2rem; box-shadow:0 8px 32px var(--shadow); }
+  .auth-title { font-family:'Lora',serif; font-size:1.4rem; font-weight:700; color:var(--ink); margin-bottom:0.4rem; }
+  .auth-subtitle { font-size:0.9rem; color:var(--ink-light); margin-bottom:2rem; line-height:1.5; }
+  .auth-label { display:block; font-size:0.78rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-light); margin-bottom:0.4rem; margin-top:1rem; }
+  .auth-input { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:0.7rem 0.9rem; font-family:'Source Serif 4',serif; font-size:0.95rem; color:var(--ink); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
+  .auth-input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(184,134,11,0.15); }
+  .auth-btn { width:100%; margin-top:1.5rem; background:var(--gold); color:#fff; border:none; border-radius:8px; padding:0.8rem; font-family:'Source Serif 4',serif; font-size:1rem; font-weight:600; cursor:pointer; transition:background 0.15s; }
+  .auth-btn:hover { background:var(--gold-light); }
+  .auth-btn:disabled { opacity:0.6; cursor:not-allowed; }
+  .auth-switch { margin-top:1.25rem; text-align:center; font-size:0.88rem; color:var(--ink-light); }
+  .auth-switch a { color:var(--gold); cursor:pointer; text-decoration:none; font-weight:600; }
+  .auth-switch a:hover { text-decoration:underline; }
+  .auth-error { margin-top:1rem; padding:0.65rem 0.9rem; background:#fef2f2; border:1px solid #fca5a5; border-radius:8px; font-size:0.85rem; color:#b91c1c; }
+  .dark .auth-error { background:#3A0A0A; border-color:#7f1d1d; color:#fca5a5; }
+  .auth-success { margin-top:1rem; padding:0.65rem 0.9rem; background:#f0fdf4; border:1px solid #86efac; border-radius:8px; font-size:0.85rem; color:#166534; }
+  .dark .auth-success { background:#0A2A0A; border-color:#166534; color:#86efac; }
+
+  /* USER PILL */
+  .user-pill { font-size:0.78rem; color:var(--ink-light); background:var(--parchment-deeper); border-radius:20px; padding:0.25rem 0.75rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px; }
+
+  /* MODAL */
+  .modal-overlay { position:fixed; inset:0; background:rgba(44,31,14,0.55); z-index:200; display:flex; align-items:center; justify-content:center; padding:1.5rem; backdrop-filter:blur(2px); }
+  .modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:2rem; width:100%; max-width:520px; box-shadow:0 16px 48px var(--shadow); max-height:90vh; overflow-y:auto; }
+  .modal-title { font-family:'Lora',serif; font-size:1.2rem; font-weight:700; color:var(--ink); margin-bottom:1.5rem; }
+  .modal label { display:block; font-size:0.8rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-light); margin-bottom:0.4rem; margin-top:1rem; }
+  .modal label:first-of-type { margin-top:0; }
+  .modal input,.modal textarea,.modal select { width:100%; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:0.65rem 0.85rem; font-family:'Source Serif 4',serif; font-size:0.95rem; color:var(--ink); outline:none; transition:border-color 0.2s,box-shadow 0.2s; resize:vertical; }
+  .modal input:focus,.modal textarea:focus,.modal select:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(184,134,11,0.15); }
+  .modal textarea { min-height:100px; }
+  .modal-actions { display:flex; gap:0.75rem; margin-top:1.5rem; justify-content:flex-end; }
+  .btn { font-family:'Source Serif 4',serif; font-size:0.9rem; font-weight:600; padding:0.6rem 1.25rem; border-radius:8px; border:none; cursor:pointer; transition:background 0.15s,color 0.15s; }
+  .btn-primary { background:var(--gold); color:#fff; } .btn-primary:hover { background:var(--gold-light); }
+  .btn-ghost { background:none; border:1px solid var(--border); color:var(--ink-mid); } .btn-ghost:hover { background:var(--card); }
+  .new-cat-row { display:flex; gap:0.5rem; align-items:center; margin-top:0.5rem; }
+  .new-cat-row input { flex:1; margin:0; }
+  .new-cat-row .btn { white-space:nowrap; padding:0.6rem 0.9rem; font-size:0.82rem; }
+
+  /* FAB */
+  .fab { position:fixed; bottom:2rem; right:1.5rem; width:52px; height:52px; background:var(--gold); color:#fff; border:none; border-radius:50%; font-size:1.5rem; cursor:pointer; box-shadow:0 4px 16px rgba(184,134,11,0.4); display:flex; align-items:center; justify-content:center; transition:background 0.15s,transform 0.15s; z-index:150; }
+  .fab:hover { background:var(--gold-light); transform:scale(1.08); }
+
+  /* LOADING */
+  .loading { text-align:center; padding:3rem 1rem; color:var(--ink-light); font-style:italic; }
+  .spinner { display:inline-block; width:28px; height:28px; border:3px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; margin-bottom:0.75rem; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  .empty { text-align:center; padding:3rem 1rem; color:var(--ink-light); font-style:italic; font-size:1rem; }
+  .toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(80px); background:var(--ink); color:var(--parchment); font-family:'Source Serif 4',serif; font-size:0.88rem; padding:0.65rem 1.25rem; border-radius:8px; box-shadow:0 4px 16px var(--shadow); transition:transform 0.3s ease; z-index:1000; white-space:nowrap; pointer-events:none; }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  @media (max-width:600px) {
+    .flashcard-text { font-size:1.15rem; }
+    .flashcard { padding:2.25rem 1.5rem 2rem; min-height:260px; }
+    main { padding:1.25rem 1rem 4rem; }
+    .user-pill { max-width:90px; }
   }
 </style>
 </head>
@@ -496,6 +156,8 @@
     <div class="header-actions">
       <button class="icon-btn" id="searchToggle" title="Search">&#128269;</button>
       <button class="icon-btn" id="darkToggle" title="Toggle dark mode">&#127768;</button>
+      <span class="user-pill" id="userPill" style="display:none;"></span>
+      <button class="icon-btn" id="signOutBtn" title="Sign out" style="display:none;">&#x2192;</button>
     </div>
   </div>
 </header>
@@ -517,7 +179,7 @@
 </div>
 
 <main id="mainContent"></main>
-<button class="fab" id="addBtn" title="Add a verse">&#43;</button>
+<button class="fab" id="addBtn" title="Add a verse" style="display:none;">&#43;</button>
 
 <div class="modal-overlay" id="modalOverlay" style="display:none;">
   <div class="modal">
@@ -545,152 +207,352 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// SUPABASE
+const SUPA_URL = "https://lbdjclsoayhnesavsnam.supabase.co";
+const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxiZGpjbHNvYXlobmVzYXZzbmFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NzY0ODIsImV4cCI6MjA5NzI1MjQ4Mn0.Kk1OPpRfot2TetIf-GzSexnYsmHpuyWxT2r2BfsR62A";
+const { createClient } = supabase;
+const db = createClient(SUPA_URL, SUPA_KEY);
+
+// BASE DATA
 const BASE_VERSES = [
-  { ref: "Deuteronomy 8:18", text: "And you shall remember the LORD your God, for it is He who gives you power to get wealth, that He may establish His covenant which He swore to your fathers, as it is this day.", cat: "Prosperity" },
-  { ref: "Psalm 35:27", text: "Let them shout for joy and be glad, who favor my righteous cause; And let them say continually, 'Let the LORD be magnified, who has pleasure in the prosperity of His servant.'", cat: "Prosperity" },
-  { ref: "3 John 1:2", text: "Beloved, I pray that you may prosper in all things and be in health, just as your soul prospers.", cat: "Prosperity" },
-  { ref: "Jeremiah 29:11", text: "For I know the thoughts that I think toward you, says the LORD, thoughts of peace and not of evil, to give you a future and a hope.", cat: "Prosperity" },
-  { ref: "Psalm 1:3", text: "He shall be like a tree planted by the rivers of water, that brings forth its fruit in its season, whose leaf also shall not wither; and whatever he does shall prosper.", cat: "Prosperity" },
-  { ref: "Isaiah 48:17", text: "Thus says the LORD, your Redeemer, the Holy One of Israel: 'I am the LORD your God, who teaches you to profit, who leads you by the way you should go.'", cat: "Prosperity" },
-  { ref: "Psalm 112:3", text: "Wealth and riches will be in his house, and his righteousness endures forever.", cat: "Prosperity" },
-  { ref: "Deuteronomy 28:11", text: "And the LORD will grant you plenty of goods, in the fruit of your body, in the increase of your livestock, and in the produce of your ground, in the land of which the LORD swore to your fathers to give you.", cat: "Prosperity" },
-  { ref: "Proverbs 10:22", text: "The blessing of the LORD makes one rich, and He adds no sorrow with it.", cat: "Prosperity" },
-  { ref: "Psalm 68:19", text: "Blessed be the Lord, who daily loads us with benefits, the God of our salvation!", cat: "Prosperity" },
-  { ref: "Malachi 3:10", text: "'Bring all the tithes into the storehouse, that there may be food in My house, and try Me now in this,' says the LORD of hosts, 'If I will not open for you the windows of heaven and pour out for you such blessing that there will not be room enough to receive it.'", cat: "Tithing & Giving" },
-  { ref: "2 Corinthians 9:6-7", text: "But this I say: He who sows sparingly will also reap sparingly, and he who sows bountifully will also reap bountifully. So let each one give as he purposes in his heart, not grudgingly or of necessity; for God loves a cheerful giver.", cat: "Tithing & Giving" },
-  { ref: "Proverbs 3:9-10", text: "Honor the LORD with your possessions, and with the firstfruits of all your increase; so your barns will be filled with plenty, and your vats will overflow with new wine.", cat: "Tithing & Giving" },
-  { ref: "Luke 6:38", text: "Give, and it will be given to you: good measure, pressed down, shaken together, and running over will be put into your bosom. For with the same measure that you use, it will be measured back to you.", cat: "Tithing & Giving" },
-  { ref: "2 Corinthians 9:8", text: "And God is able to make all grace abound toward you, that you, always having all sufficiency in all things, may have an abundance for every good work.", cat: "Tithing & Giving" },
-  { ref: "Proverbs 11:24-25", text: "There is one who scatters, yet increases more; and there is one who withholds more than is right, but it leads to poverty. The generous soul will be made rich, and he who waters will also be watered himself.", cat: "Tithing & Giving" },
-  { ref: "Ecclesiastes 11:1", text: "Cast your bread upon the waters, for you will find it after many days.", cat: "Tithing & Giving" },
-  { ref: "Malachi 3:11", text: "'And I will rebuke the devourer for your sakes, so that he will not destroy the fruit of your ground, nor shall the vine fail to bear fruit for you in the field,' says the LORD of hosts.", cat: "Tithing & Giving" },
-  { ref: "Proverbs 21:5", text: "The plans of the diligent lead surely to plenty, but those of everyone who is hasty, surely to poverty.", cat: "Wisdom" },
-  { ref: "Proverbs 13:11", text: "Wealth gained by dishonesty will be diminished, but he who gathers by labor will increase.", cat: "Wisdom" },
-  { ref: "Proverbs 22:7", text: "The rich rules over the poor, and the borrower is servant to the lender.", cat: "Wisdom" },
-  { ref: "Proverbs 27:23-24", text: "Be diligent to know the state of your flocks, and attend to your herds; for riches are not forever, nor does a crown endure to all generations.", cat: "Wisdom" },
-  { ref: "Proverbs 24:3-4", text: "Through wisdom a house is built, and by understanding it is established; by knowledge the rooms are filled with all precious and pleasant riches.", cat: "Wisdom" },
-  { ref: "Ecclesiastes 5:10", text: "He who loves silver will not be satisfied with silver; nor he who loves abundance, with increase. This also is vanity.", cat: "Wisdom" },
-  { ref: "Proverbs 28:20", text: "A faithful man will abound with blessings, but he who hastens to be rich will not go unpunished.", cat: "Wisdom" },
-  { ref: "1 Timothy 6:6", text: "Now godliness with contentment is great gain.", cat: "Wisdom" },
-  { ref: "Proverbs 22:4", text: "By humility and the fear of the LORD are riches and honor and life.", cat: "Wisdom" },
-  { ref: "Proverbs 14:23", text: "In all labor there is profit, but idle chatter leads only to poverty.", cat: "Wisdom" },
-  { ref: "Philippians 4:19", text: "And my God shall supply all your need according to His riches in glory by Christ Jesus.", cat: "Provision" },
-  { ref: "Matthew 6:33", text: "But seek first the kingdom of God and His righteousness, and all these things shall be added to you.", cat: "Provision" },
-  { ref: "Psalm 23:1", text: "The LORD is my shepherd; I shall not want.", cat: "Provision" },
-  { ref: "Isaiah 58:11", text: "The LORD will guide you continually, and satisfy your soul in drought, and strengthen your bones; you shall be like a watered garden, and like a spring of water, whose waters do not fail.", cat: "Provision" },
-  { ref: "Matthew 7:11", text: "If you then, being evil, know how to give good gifts to your children, how much more will your Father who is in heaven give good things to those who ask Him!", cat: "Provision" },
-  { ref: "Psalm 34:10", text: "The young lions lack and suffer hunger; but those who seek the LORD shall not lack any good thing.", cat: "Provision" },
-  { ref: "Deuteronomy 2:7", text: "For the LORD your God has blessed you in all the work of your hand. He knows your trudging through this great wilderness. These forty years the LORD your God has been with you; you have lacked nothing.", cat: "Provision" },
-  { ref: "Genesis 22:14", text: "And Abraham called the name of the place, The-LORD-Will-Provide; as it is said to this day, 'In the Mount of the LORD it shall be provided.'", cat: "Provision" },
-  { ref: "2 Corinthians 9:10", text: "Now may He who supplies seed to the sower, and bread for food, supply and multiply the seed you have sown and increase the fruits of your righteousness.", cat: "Provision" },
-  { ref: "Psalm 37:25", text: "I have been young, and now am old; yet I have not seen the righteous forsaken, nor his descendants begging bread.", cat: "Provision" },
-  { ref: "Joshua 1:8", text: "This Book of the Law shall not depart from your mouth, but you shall meditate in it day and night, that you may observe to do according to all that is written in it. For then you will make your way prosperous, and then you will have good success.", cat: "Breakthrough" },
-  { ref: "Psalm 5:12", text: "For You, O LORD, will bless the righteous; with favor You will surround him as with a shield.", cat: "Breakthrough" },
-  { ref: "Numbers 6:24-26", text: "The LORD bless you and keep you; the LORD make His face shine upon you, and be gracious to you; the LORD lift up His countenance upon you, and give you peace.", cat: "Breakthrough" },
-  { ref: "Deuteronomy 28:12", text: "The LORD will open to you His good treasure, the heavens, to give the rain to your land in its season, and to bless all the work of your hand. You shall lend to many nations, but you shall not borrow.", cat: "Breakthrough" },
-  { ref: "Isaiah 60:5", text: "Then you shall see and become radiant, and your heart shall swell with joy; because the abundance of the sea shall be turned to you, the wealth of the Gentiles shall come to you.", cat: "Breakthrough" },
-  { ref: "Proverbs 13:22", text: "A good man leaves an inheritance to his children's children, but the wealth of the sinner is stored up for the righteous.", cat: "Breakthrough" },
-  { ref: "Ecclesiastes 2:26", text: "For God gives wisdom and knowledge and joy to a man who is good in His sight; but to the sinner He gives the work of gathering and collecting, that he may give to him who is good before God.", cat: "Breakthrough" },
-  { ref: "Haggai 2:8", text: "'The silver is Mine, and the gold is Mine,' says the LORD of hosts.", cat: "Breakthrough" },
+  { ref:"Deuteronomy 8:18", text:"And you shall remember the LORD your God, for it is He who gives you power to get wealth, that He may establish His covenant which He swore to your fathers, as it is this day.", cat:"Prosperity" },
+  { ref:"Psalm 35:27", text:"Let them shout for joy and be glad, who favor my righteous cause; And let them say continually, 'Let the LORD be magnified, who has pleasure in the prosperity of His servant.'", cat:"Prosperity" },
+  { ref:"3 John 1:2", text:"Beloved, I pray that you may prosper in all things and be in health, just as your soul prospers.", cat:"Prosperity" },
+  { ref:"Jeremiah 29:11", text:"For I know the thoughts that I think toward you, says the LORD, thoughts of peace and not of evil, to give you a future and a hope.", cat:"Prosperity" },
+  { ref:"Psalm 1:3", text:"He shall be like a tree planted by the rivers of water, that brings forth its fruit in its season, whose leaf also shall not wither; and whatever he does shall prosper.", cat:"Prosperity" },
+  { ref:"Isaiah 48:17", text:"Thus says the LORD, your Redeemer, the Holy One of Israel: 'I am the LORD your God, who teaches you to profit, who leads you by the way you should go.'", cat:"Prosperity" },
+  { ref:"Psalm 112:3", text:"Wealth and riches will be in his house, and his righteousness endures forever.", cat:"Prosperity" },
+  { ref:"Deuteronomy 28:11", text:"And the LORD will grant you plenty of goods, in the fruit of your body, in the increase of your livestock, and in the produce of your ground, in the land of which the LORD swore to your fathers to give you.", cat:"Prosperity" },
+  { ref:"Proverbs 10:22", text:"The blessing of the LORD makes one rich, and He adds no sorrow with it.", cat:"Prosperity" },
+  { ref:"Psalm 68:19", text:"Blessed be the Lord, who daily loads us with benefits, the God of our salvation!", cat:"Prosperity" },
+  { ref:"Malachi 3:10", text:"'Bring all the tithes into the storehouse, that there may be food in My house, and try Me now in this,' says the LORD of hosts, 'If I will not open for you the windows of heaven and pour out for you such blessing that there will not be room enough to receive it.'", cat:"Tithing & Giving" },
+  { ref:"2 Corinthians 9:6-7", text:"But this I say: He who sows sparingly will also reap sparingly, and he who sows bountifully will also reap bountifully. So let each one give as he purposes in his heart, not grudgingly or of necessity; for God loves a cheerful giver.", cat:"Tithing & Giving" },
+  { ref:"Proverbs 3:9-10", text:"Honor the LORD with your possessions, and with the firstfruits of all your increase; so your barns will be filled with plenty, and your vats will overflow with new wine.", cat:"Tithing & Giving" },
+  { ref:"Luke 6:38", text:"Give, and it will be given to you: good measure, pressed down, shaken together, and running over will be put into your bosom. For with the same measure that you use, it will be measured back to you.", cat:"Tithing & Giving" },
+  { ref:"2 Corinthians 9:8", text:"And God is able to make all grace abound toward you, that you, always having all sufficiency in all things, may have an abundance for every good work.", cat:"Tithing & Giving" },
+  { ref:"Proverbs 11:24-25", text:"There is one who scatters, yet increases more; and there is one who withholds more than is right, but it leads to poverty. The generous soul will be made rich, and he who waters will also be watered himself.", cat:"Tithing & Giving" },
+  { ref:"Ecclesiastes 11:1", text:"Cast your bread upon the waters, for you will find it after many days.", cat:"Tithing & Giving" },
+  { ref:"Malachi 3:11", text:"'And I will rebuke the devourer for your sakes, so that he will not destroy the fruit of your ground, nor shall the vine fail to bear fruit for you in the field,' says the LORD of hosts.", cat:"Tithing & Giving" },
+  { ref:"Proverbs 21:5", text:"The plans of the diligent lead surely to plenty, but those of everyone who is hasty, surely to poverty.", cat:"Wisdom" },
+  { ref:"Proverbs 13:11", text:"Wealth gained by dishonesty will be diminished, but he who gathers by labor will increase.", cat:"Wisdom" },
+  { ref:"Proverbs 22:7", text:"The rich rules over the poor, and the borrower is servant to the lender.", cat:"Wisdom" },
+  { ref:"Proverbs 27:23-24", text:"Be diligent to know the state of your flocks, and attend to your herds; for riches are not forever, nor does a crown endure to all generations.", cat:"Wisdom" },
+  { ref:"Proverbs 24:3-4", text:"Through wisdom a house is built, and by understanding it is established; by knowledge the rooms are filled with all precious and pleasant riches.", cat:"Wisdom" },
+  { ref:"Ecclesiastes 5:10", text:"He who loves silver will not be satisfied with silver; nor he who loves abundance, with increase. This also is vanity.", cat:"Wisdom" },
+  { ref:"Proverbs 28:20", text:"A faithful man will abound with blessings, but he who hastens to be rich will not go unpunished.", cat:"Wisdom" },
+  { ref:"1 Timothy 6:6", text:"Now godliness with contentment is great gain.", cat:"Wisdom" },
+  { ref:"Proverbs 22:4", text:"By humility and the fear of the LORD are riches and honor and life.", cat:"Wisdom" },
+  { ref:"Proverbs 14:23", text:"In all labor there is profit, but idle chatter leads only to poverty.", cat:"Wisdom" },
+  { ref:"Philippians 4:19", text:"And my God shall supply all your need according to His riches in glory by Christ Jesus.", cat:"Provision" },
+  { ref:"Matthew 6:33", text:"But seek first the kingdom of God and His righteousness, and all these things shall be added to you.", cat:"Provision" },
+  { ref:"Psalm 23:1", text:"The LORD is my shepherd; I shall not want.", cat:"Provision" },
+  { ref:"Isaiah 58:11", text:"The LORD will guide you continually, and satisfy your soul in drought, and strengthen your bones; you shall be like a watered garden, and like a spring of water, whose waters do not fail.", cat:"Provision" },
+  { ref:"Matthew 7:11", text:"If you then, being evil, know how to give good gifts to your children, how much more will your Father who is in heaven give good things to those who ask Him!", cat:"Provision" },
+  { ref:"Psalm 34:10", text:"The young lions lack and suffer hunger; but those who seek the LORD shall not lack any good thing.", cat:"Provision" },
+  { ref:"Deuteronomy 2:7", text:"For the LORD your God has blessed you in all the work of your hand. He knows your trudging through this great wilderness. These forty years the LORD your God has been with you; you have lacked nothing.", cat:"Provision" },
+  { ref:"Genesis 22:14", text:"And Abraham called the name of the place, The-LORD-Will-Provide; as it is said to this day, 'In the Mount of the LORD it shall be provided.'", cat:"Provision" },
+  { ref:"2 Corinthians 9:10", text:"Now may He who supplies seed to the sower, and bread for food, supply and multiply the seed you have sown and increase the fruits of your righteousness.", cat:"Provision" },
+  { ref:"Psalm 37:25", text:"I have been young, and now am old; yet I have not seen the righteous forsaken, nor his descendants begging bread.", cat:"Provision" },
+  { ref:"Joshua 1:8", text:"This Book of the Law shall not depart from your mouth, but you shall meditate in it day and night, that you may observe to do according to all that is written in it. For then you will make your way prosperous, and then you will have good success.", cat:"Breakthrough" },
+  { ref:"Psalm 5:12", text:"For You, O LORD, will bless the righteous; with favor You will surround him as with a shield.", cat:"Breakthrough" },
+  { ref:"Numbers 6:24-26", text:"The LORD bless you and keep you; the LORD make His face shine upon you, and be gracious to you; the LORD lift up His countenance upon you, and give you peace.", cat:"Breakthrough" },
+  { ref:"Deuteronomy 28:12", text:"The LORD will open to you His good treasure, the heavens, to give the rain to your land in its season, and to bless all the work of your hand. You shall lend to many nations, but you shall not borrow.", cat:"Breakthrough" },
+  { ref:"Isaiah 60:5", text:"Then you shall see and become radiant, and your heart shall swell with joy; because the abundance of the sea shall be turned to you, the wealth of the Gentiles shall come to you.", cat:"Breakthrough" },
+  { ref:"Proverbs 13:22", text:"A good man leaves an inheritance to his children's children, but the wealth of the sinner is stored up for the righteous.", cat:"Breakthrough" },
+  { ref:"Ecclesiastes 2:26", text:"For God gives wisdom and knowledge and joy to a man who is good in His sight; but to the sinner He gives the work of gathering and collecting, that he may give to him who is good before God.", cat:"Breakthrough" },
+  { ref:"Haggai 2:8", text:"'The silver is Mine, and the gold is Mine,' says the LORD of hosts.", cat:"Breakthrough" },
 ];
 const BASE_CATS = ["Prosperity","Tithing & Giving","Wisdom","Provision","Breakthrough"];
 
-let customVerses = JSON.parse(localStorage.getItem("seed_custom_verses")||"[]");
-let customCats = JSON.parse(localStorage.getItem("seed_custom_cats")||"[]");
-let favorites = JSON.parse(localStorage.getItem("seed_favs")||"[]");
-let isDark = localStorage.getItem("seed_dark")==="true";
-let searchVisible=false,searchQuery="",selectedCat="All",currentView="daily",flashIndex=0,flashOrder=[];
+// APP STATE
+let currentUser = null;
+let cloudFavs = [];
+let cloudVerses = [];
+let cloudCats = [];
+let isDark = localStorage.getItem("seed_dark") === "true";
+let searchVisible = false, searchQuery = "", selectedCat = "All", currentView = "daily";
+let authMode = "login"; // or "signup"
 
-function getVerses(){return[...BASE_VERSES,...customVerses];}
-function getCategories(){return["All",...BASE_CATS,...customCats];}
-if(isDark)document.body.classList.add("dark");
+if (isDark) document.body.classList.add("dark");
 
-function saveCustom(){localStorage.setItem("seed_custom_verses",JSON.stringify(customVerses));localStorage.setItem("seed_custom_cats",JSON.stringify(customCats));}
-function saveFavs(){localStorage.setItem("seed_favs",JSON.stringify(favorites));}
-function isFav(ref){return favorites.includes(ref);}
-function toggleFav(ref){
-  if(isFav(ref))favorites=favorites.filter(r=>r!==ref);else favorites.push(ref);
-  saveFavs();showToast(isFav(ref)?"Added to Favorites":"Removed from Favorites");render();
-}
-function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove("show"),2400);}
-function shuffleArray(len){const a=[...Array(len).keys()];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+// HELPERS
+function getVerses() { return [...BASE_VERSES, ...cloudVerses]; }
+function getCategories() { return ["All", ...BASE_CATS, ...cloudCats]; }
+function isFav(ref) { return cloudFavs.includes(ref); }
 
-function initFlash(){
-  const verses=getVerses();const today=new Date().toDateString();
-  const stored=localStorage.getItem("seed_flash_date");
-  if(stored!==today){flashOrder=shuffleArray(verses.length);localStorage.setItem("seed_flash_date",today);localStorage.setItem("seed_flash_order",JSON.stringify(flashOrder));flashIndex=0;localStorage.setItem("seed_flash_idx","0");}
-  else{const so=JSON.parse(localStorage.getItem("seed_flash_order")||"null");flashOrder=(so&&so.length===verses.length)?so:shuffleArray(verses.length);flashIndex=parseInt(localStorage.getItem("seed_flash_idx")||"0");if(flashIndex>=verses.length)flashIndex=0;}
-}
-function saveFlashState(){localStorage.setItem("seed_flash_idx",flashIndex);}
-
-let touchStartX=0,touchStartY=0;
-function setupSwipe(el){
-  el.addEventListener("touchstart",e=>{touchStartX=e.touches[0].clientX;touchStartY=e.touches[0].clientY;},{passive:true});
-  el.addEventListener("touchend",e=>{const dx=e.changedTouches[0].clientX-touchStartX;const dy=e.changedTouches[0].clientY-touchStartY;if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40){if(dx<0)nextCard();else prevCard();}},{passive:true});
-}
-function nextCard(){const v=getVerses();flashIndex=(flashIndex+1)%v.length;saveFlashState();renderFlash();}
-function prevCard(){const v=getVerses();flashIndex=(flashIndex-1+v.length)%v.length;saveFlashState();renderFlash();}
-
-function renderFlash(){
-  const verses=getVerses();const v=verses[flashOrder[flashIndex]%verses.length];
-  const card=document.getElementById("flashcard");const countEl=document.getElementById("fcCount");const favBtn=document.getElementById("fcFav");
-  if(!card)return;
-  card.innerHTML=`<div class="flashcard-ornament">&#10022;</div><div class="flashcard-cat">${v.cat}</div><div class="flashcard-text">"${v.text}"</div><div class="flashcard-ref">${v.ref} &middot; NKJV</div>`;
-  if(countEl)countEl.textContent=`${flashIndex+1} / ${verses.length}`;
-  if(favBtn){favBtn.className="fc-fav"+(isFav(v.ref)?" active":"");favBtn.innerHTML=isFav(v.ref)?"&#9829;":"&#9825;";}
-}
-function toggleFlashFav(){const verses=getVerses();const v=verses[flashOrder[flashIndex]%verses.length];toggleFav(v.ref);renderFlash();}
-
-function renderVerseCard(v){
-  const sr=v.ref.replace(/\\/g,"\\\\").replace(/'/g,"\\'");
-  return`<div class="verse-card"><div class="verse-ref"><span>${v.ref} &middot; NKJV</span><span class="verse-category-tag">${v.cat}</span></div><div class="verse-text">"${v.text}"</div><div class="verse-actions"><button class="fav-btn ${isFav(v.ref)?"active":""}" onclick="toggleFav('${sr}')">${isFav(v.ref)?"&#9829;":"&#9825;"}</button></div></div>`;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._timer); t._timer = setTimeout(() => t.classList.remove("show"), 2400);
 }
 
-function getFilteredVerses(){
-  let list=getVerses();
-  if(currentView==="favorites")list=list.filter(v=>isFav(v.ref));
-  if(currentView==="browse"&&selectedCat!=="All")list=list.filter(v=>v.cat===selectedCat);
-  if(searchQuery){const q=searchQuery.toLowerCase();list=list.filter(v=>v.ref.toLowerCase().includes(q)||v.text.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q));}
+// DAILY VERSE
+function getDailyVerse() {
+  const verses = getVerses();
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const dayOfYear = Math.floor((now - start) / 86400000);
+  const seed = (now.getFullYear() * 1000) + dayOfYear;
+  return verses[seed % verses.length];
+}
+
+// CLOUD OPS
+async function loadUserData() {
+  const [favRes, verseRes, catRes] = await Promise.all([
+    db.from("favorites").select("verse_ref"),
+    db.from("custom_verses").select("*").order("created_at"),
+    db.from("custom_categories").select("name").order("created_at"),
+  ]);
+  cloudFavs = (favRes.data || []).map(r => r.verse_ref);
+  cloudVerses = (verseRes.data || []).map(r => ({ ref: r.ref, text: r.text, cat: r.cat }));
+  cloudCats = (catRes.data || []).map(r => r.name);
+}
+
+async function toggleFav(ref) {
+  if (isFav(ref)) {
+    cloudFavs = cloudFavs.filter(r => r !== ref);
+    await db.from("favorites").delete().eq("verse_ref", ref).eq("user_id", currentUser.id);
+    showToast("Removed from Favorites");
+  } else {
+    cloudFavs.push(ref);
+    await db.from("favorites").insert({ user_id: currentUser.id, verse_ref: ref });
+    showToast("Added to Favorites");
+  }
+  render();
+}
+
+async function toggleFlashFav() {
+  const v = getDailyVerse();
+  await toggleFav(v.ref);
+  renderFlash();
+}
+
+function renderFlash() {
+  const v = getDailyVerse();
+  const card = document.getElementById("flashcard");
+  const favBtn = document.getElementById("fcFav");
+  if (!card) return;
+  card.innerHTML = `<div class="flashcard-ornament">&#10022;</div><div class="flashcard-cat">${v.cat}</div><div class="flashcard-text">"${v.text}"</div><div class="flashcard-ref">${v.ref} &middot; NKJV</div>`;
+  if (favBtn) { favBtn.className = "fc-fav" + (isFav(v.ref) ? " active" : ""); favBtn.innerHTML = isFav(v.ref) ? "&#9829;" : "&#9825;"; }
+}
+
+// VERSE CARD
+function renderVerseCard(v) {
+  const sr = v.ref.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+  return `<div class="verse-card"><div class="verse-ref"><span>${v.ref} &middot; NKJV</span><span class="verse-category-tag">${v.cat}</span></div><div class="verse-text">"${v.text}"</div><div class="verse-actions"><button class="fav-btn ${isFav(v.ref) ? "active" : ""}" onclick="toggleFav('${sr}')">${isFav(v.ref) ? "&#9829;" : "&#9825;"}</button></div></div>`;
+}
+
+function getFilteredVerses() {
+  let list = getVerses();
+  if (currentView === "favorites") list = list.filter(v => isFav(v.ref));
+  if (currentView === "browse" && selectedCat !== "All") list = list.filter(v => v.cat === selectedCat);
+  if (searchQuery) { const q = searchQuery.toLowerCase(); list = list.filter(v => v.ref.toLowerCase().includes(q) || v.text.toLowerCase().includes(q) || v.cat.toLowerCase().includes(q)); }
   return list;
 }
 
-function render(){
-  const main=document.getElementById("mainContent");
-  if(currentView==="daily"){
-    main.innerHTML=`<div class="flashcard-section"><div class="flashcard-label">Today's Verses &middot; Swipe to explore</div><div class="flashcard-wrap" id="flashWrap"><div class="flashcard" id="flashcard"></div></div><div class="swipe-hint">Swipe left / right to navigate</div><div class="flashcard-controls"><button class="fc-btn" onclick="prevCard()">&#8592;</button><span class="fc-count" id="fcCount"></span><button class="fc-fav" id="fcFav" onclick="toggleFlashFav()">&#9825;</button><button class="fc-btn" onclick="nextCard()">&#8594;</button></div></div>`;
-    renderFlash();const wrap=document.getElementById("flashWrap");if(wrap)setupSwipe(wrap);return;
+// MAIN RENDER
+function render() {
+  const main = document.getElementById("mainContent");
+  if (!currentUser) { renderAuth(); return; }
+
+  if (currentView === "daily") {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric" });
+    main.innerHTML = `<div class="flashcard-section"><div class="flashcard-label">Verse of the Day &middot; ${dateStr}</div><div class="flashcard-wrap"><div class="flashcard" id="flashcard"></div></div><div class="flashcard-controls"><button class="fc-fav" id="fcFav" onclick="toggleFlashFav()" title="Add to Favorites">&#9825;</button></div></div>`;
+    renderFlash(); return;
   }
-  let html="";const list=getFilteredVerses();
-  if(currentView==="browse"){
-    html+=`<div class="category-chips">`;getCategories().forEach(cat=>{html+=`<button class="chip ${selectedCat===cat?"active":""}" onclick="selectCat('${cat.replace(/'/g,"\\'")}')">${cat}</button>`;});html+=`</div>`;
-    html+=`<div class="section-label">${selectedCat==="All"?"All Categories":selectedCat} &middot; ${list.length} verse${list.length!==1?"s":""}</div>`;
+
+  let html = ""; const list = getFilteredVerses();
+  if (currentView === "browse") {
+    html += `<div class="category-chips">`;
+    getCategories().forEach(cat => { html += `<button class="chip ${selectedCat === cat ? "active" : ""}" onclick="selectCat('${cat.replace(/'/g, "\\'")}')">${cat}</button>`; });
+    html += `</div>`;
+    html += `<div class="section-label">${selectedCat === "All" ? "All Categories" : selectedCat} &middot; ${list.length} verse${list.length !== 1 ? "s" : ""}</div>`;
   }
-  if(currentView==="all")html+=`<div class="section-label">All ${list.length} Verses &middot; NKJV</div>`;
-  if(currentView==="favorites")html+=`<div class="section-label">Your Favorites &middot; ${list.length} verse${list.length!==1?"s":""}</div>`;
-  if(list.length===0){html+=currentView==="favorites"?`<div class="empty">No favorites yet. Tap &#9825; on any verse to save it here.</div>`:`<div class="empty">No verses found.</div>`;}
-  else{html+=`<div class="verse-grid">`;list.forEach(v=>{html+=renderVerseCard(v);});html+=`</div>`;}
-  main.innerHTML=html;
+  if (currentView === "all") html += `<div class="section-label">All ${list.length} Verses &middot; NKJV</div>`;
+  if (currentView === "favorites") html += `<div class="section-label">Your Favorites &middot; ${list.length} verse${list.length !== 1 ? "s" : ""}</div>`;
+  if (list.length === 0) { html += currentView === "favorites" ? `<div class="empty">No favorites yet. Tap &#9825; on any verse to save it here.</div>` : `<div class="empty">No verses found.</div>`; }
+  else { html += `<div class="verse-grid">`; list.forEach(v => { html += renderVerseCard(v); }); html += `</div>`; }
+  main.innerHTML = html;
 }
-function selectCat(cat){selectedCat=cat;render();}
 
-function openModal(){populateCatSelect();document.getElementById("newRef").value="";document.getElementById("newText").value="";document.getElementById("newCatInput").value="";document.getElementById("modalOverlay").style.display="flex";}
-function closeModal(){document.getElementById("modalOverlay").style.display="none";}
-function populateCatSelect(){const sel=document.getElementById("newCat");sel.innerHTML="";[...BASE_CATS,...customCats].forEach(cat=>{const opt=document.createElement("option");opt.value=cat;opt.textContent=cat;sel.appendChild(opt);});}
-function addCategory(){const input=document.getElementById("newCatInput");const name=input.value.trim();if(!name)return showToast("Please enter a category name.");if([...BASE_CATS,...customCats].map(c=>c.toLowerCase()).includes(name.toLowerCase()))return showToast("That category already exists.");customCats.push(name);saveCustom();input.value="";populateCatSelect();document.getElementById("newCat").value=name;showToast(`Category "${name}" added.`);}
-function saveVerse(){const ref=document.getElementById("newRef").value.trim();const text=document.getElementById("newText").value.trim();const cat=document.getElementById("newCat").value;if(!ref)return showToast("Please enter a verse reference.");if(!text)return showToast("Please enter the verse text.");if(getVerses().find(v=>v.ref.toLowerCase()===ref.toLowerCase()))return showToast("That reference already exists.");customVerses.push({ref,text,cat});saveCustom();initFlash();closeModal();showToast(`"${ref}" added to ${cat}.`);render();}
+function selectCat(cat) { selectedCat = cat; render(); }
 
-document.getElementById("modalOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("modalOverlay"))closeModal();});
-document.querySelectorAll(".tab").forEach(tab=>{tab.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));tab.classList.add("active");currentView=tab.dataset.view;searchQuery="";document.getElementById("searchInput").value="";render();});});
-document.getElementById("searchToggle").addEventListener("click",()=>{searchVisible=!searchVisible;document.getElementById("searchBar").style.display=searchVisible?"block":"none";document.getElementById("searchToggle").classList.toggle("active",searchVisible);if(searchVisible)document.getElementById("searchInput").focus();});
-document.getElementById("searchInput").addEventListener("input",e=>{searchQuery=e.target.value;if(searchQuery&&currentView==="daily"){currentView="all";document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.view==="all"));}render();});
-document.getElementById("darkToggle").addEventListener("click",()=>{isDark=!isDark;document.body.classList.toggle("dark",isDark);localStorage.setItem("seed_dark",isDark);document.getElementById("darkToggle").textContent=isDark?"☀️":"🌙";});
-if(isDark)document.getElementById("darkToggle").textContent="☀️";
-document.getElementById("addBtn").addEventListener("click",openModal);
+// AUTH SCREEN
+function renderAuth() {
+  const main = document.getElementById("mainContent");
+  const isLogin = authMode === "login";
+  main.innerHTML = `
+    <div class="auth-screen">
+      <div class="auth-card">
+        <div class="auth-title">${isLogin ? "Welcome back" : "Create your account"}</div>
+        <div class="auth-subtitle">${isLogin ? "Sign in to access your saved verses and favorites." : "Sign up to save your verses and favorites to the cloud."}</div>
+        <label class="auth-label">Email</label>
+        <input class="auth-input" type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
+        <label class="auth-label">Password</label>
+        <input class="auth-input" type="password" id="authPassword" placeholder="${isLogin ? "Your password" : "Choose a password (min 6 characters)"}" autocomplete="${isLogin ? "current-password" : "new-password"}">
+        <div id="authMsg"></div>
+        <button class="auth-btn" id="authSubmit" onclick="handleAuth()">${isLogin ? "Sign In" : "Sign Up"}</button>
+        <div class="auth-switch">
+          ${isLogin ? "Don't have an account? <a onclick=\"switchAuth('signup')\">Sign up</a>" : "Already have an account? <a onclick=\"switchAuth('login')\">Sign in</a>"}
+        </div>
+      </div>
+    </div>`;
+  setTimeout(() => { const e = document.getElementById("authEmail"); if (e) e.focus(); }, 100);
+}
+
+function switchAuth(mode) { authMode = mode; render(); }
+
+async function handleAuth() {
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const btn = document.getElementById("authSubmit");
+  const msg = document.getElementById("authMsg");
+  if (!email || !password) { msg.innerHTML = `<div class="auth-error">Please enter your email and password.</div>`; return; }
+  btn.disabled = true; btn.textContent = authMode === "login" ? "Signing in..." : "Creating account...";
+  msg.innerHTML = "";
+  let result;
+  if (authMode === "login") {
+    result = await db.auth.signInWithPassword({ email, password });
+  } else {
+    result = await db.auth.signUp({ email, password });
+  }
+  if (result.error) {
+    msg.innerHTML = `<div class="auth-error">${result.error.message}</div>`;
+    btn.disabled = false; btn.textContent = authMode === "login" ? "Sign In" : "Sign Up";
+  } else if (authMode === "signup" && !result.data.session) {
+    msg.innerHTML = `<div class="auth-success">Check your email to confirm your account, then sign in.</div>`;
+    btn.disabled = false; btn.textContent = "Sign Up";
+  }
+}
+
+async function signOut() {
+  await db.auth.signOut();
+  currentUser = null; cloudFavs = []; cloudVerses = []; cloudCats = [];
+  document.getElementById("userPill").style.display = "none";
+  document.getElementById("signOutBtn").style.display = "none";
+  document.getElementById("addBtn").style.display = "none";
+  render();
+}
+
+// ADD VERSE MODAL
+function openModal() { populateCatSelect(); document.getElementById("newRef").value = ""; document.getElementById("newText").value = ""; document.getElementById("newCatInput").value = ""; document.getElementById("modalOverlay").style.display = "flex"; }
+function closeModal() { document.getElementById("modalOverlay").style.display = "none"; }
+function populateCatSelect() { const sel = document.getElementById("newCat"); sel.innerHTML = ""; [...BASE_CATS, ...cloudCats].forEach(cat => { const opt = document.createElement("option"); opt.value = cat; opt.textContent = cat; sel.appendChild(opt); }); }
+
+async function addCategory() {
+  const input = document.getElementById("newCatInput");
+  const name = input.value.trim();
+  if (!name) return showToast("Please enter a category name.");
+  if ([...BASE_CATS, ...cloudCats].map(c => c.toLowerCase()).includes(name.toLowerCase())) return showToast("That category already exists.");
+  const { error } = await db.from("custom_categories").insert({ user_id: currentUser.id, name });
+  if (error) return showToast("Error saving category.");
+  cloudCats.push(name); input.value = ""; populateCatSelect();
+  document.getElementById("newCat").value = name;
+  showToast(`Category "${name}" added.`);
+}
+
+async function saveVerse() {
+  const ref = document.getElementById("newRef").value.trim();
+  const text = document.getElementById("newText").value.trim();
+  const cat = document.getElementById("newCat").value;
+  if (!ref) return showToast("Please enter a verse reference.");
+  if (!text) return showToast("Please enter the verse text.");
+  if (getVerses().find(v => v.ref.toLowerCase() === ref.toLowerCase())) return showToast("That reference already exists.");
+  const { error } = await db.from("custom_verses").insert({ user_id: currentUser.id, ref, text, cat });
+  if (error) return showToast("Error saving verse.");
+  cloudVerses.push({ ref, text, cat }); closeModal();
+  showToast(`"${ref}" added to ${cat}.`); render();
+}
+
+// EVENTS
+document.getElementById("modalOverlay").addEventListener("click", e => { if (e.target === document.getElementById("modalOverlay")) closeModal(); });
+document.querySelectorAll(".tab").forEach(tab => { tab.addEventListener("click", () => { document.querySelectorAll(".tab").forEach(t => t.classList.remove("active")); tab.classList.add("active"); currentView = tab.dataset.view; searchQuery = ""; document.getElementById("searchInput").value = ""; render(); }); });
+document.getElementById("searchToggle").addEventListener("click", () => { searchVisible = !searchVisible; document.getElementById("searchBar").style.display = searchVisible ? "block" : "none"; document.getElementById("searchToggle").classList.toggle("active", searchVisible); if (searchVisible) document.getElementById("searchInput").focus(); });
+document.getElementById("searchInput").addEventListener("input", e => { searchQuery = e.target.value; if (searchQuery && currentView === "daily") { currentView = "all"; document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.view === "all")); } render(); });
+document.getElementById("darkToggle").addEventListener("click", () => { isDark = !isDark; document.body.classList.toggle("dark", isDark); localStorage.setItem("seed_dark", isDark); document.getElementById("darkToggle").textContent = isDark ? "☀️" : "🌙"; });
+if (isDark) document.getElementById("darkToggle").textContent = "☀️";
+document.getElementById("addBtn").addEventListener("click", openModal);
+document.getElementById("signOutBtn").addEventListener("click", signOut);
+
+// ONE-TIME MIGRATION from localStorage to Supabase
+async function migrateFromLocalStorage(userId) {
+  const migrated = localStorage.getItem("seed_migrated");
+  if (migrated) return; // already done
+
+  let didMigrate = false;
+
+  // Migrate favorites
+  const oldFavs = JSON.parse(localStorage.getItem("seed_favs") || "[]");
+  if (oldFavs.length > 0) {
+    // Only insert refs not already in cloud
+    const newFavs = oldFavs.filter(ref => !cloudFavs.includes(ref));
+    if (newFavs.length > 0) {
+      const rows = newFavs.map(ref => ({ user_id: userId, verse_ref: ref }));
+      await db.from("favorites").upsert(rows, { onConflict: "user_id,verse_ref" });
+      cloudFavs = [...cloudFavs, ...newFavs];
+      didMigrate = true;
+    }
+  }
+
+  // Migrate custom verses
+  const oldVerses = JSON.parse(localStorage.getItem("seed_custom_verses") || "[]");
+  if (oldVerses.length > 0) {
+    const existingRefs = cloudVerses.map(v => v.ref.toLowerCase());
+    const newVerses = oldVerses.filter(v => !existingRefs.includes(v.ref.toLowerCase()));
+    if (newVerses.length > 0) {
+      const rows = newVerses.map(v => ({ user_id: userId, ref: v.ref, text: v.text, cat: v.cat }));
+      await db.from("custom_verses").insert(rows);
+      cloudVerses = [...cloudVerses, ...newVerses];
+      didMigrate = true;
+    }
+  }
+
+  // Migrate custom categories
+  const oldCats = JSON.parse(localStorage.getItem("seed_custom_cats") || "[]");
+  if (oldCats.length > 0) {
+    const existingCats = cloudCats.map(c => c.toLowerCase());
+    const newCats = oldCats.filter(c => !existingCats.includes(c.toLowerCase()));
+    if (newCats.length > 0) {
+      const rows = newCats.map(name => ({ user_id: userId, name }));
+      await db.from("custom_categories").upsert(rows, { onConflict: "user_id,name" });
+      cloudCats = [...cloudCats, ...newCats];
+      didMigrate = true;
+    }
+  }
+
+  // Mark migration done and clear old localStorage data
+  localStorage.setItem("seed_migrated", "true");
+  localStorage.removeItem("seed_favs");
+  localStorage.removeItem("seed_custom_verses");
+  localStorage.removeItem("seed_custom_cats");
+  localStorage.removeItem("seed_flash_date");
+  localStorage.removeItem("seed_flash_order");
+  localStorage.removeItem("seed_flash_idx");
+
+  if (didMigrate) showToast("Your saved verses and favorites have been moved to the cloud.");
+}
+
+// AUTH STATE LISTENER
+db.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    currentUser = session.user;
+    document.getElementById("mainContent").innerHTML = `<div class="loading"><div class="spinner"></div><br>Loading your verses...</div>`;
+    await loadUserData();
+    await migrateFromLocalStorage(currentUser.id);
+    const pill = document.getElementById("userPill");
+    pill.textContent = currentUser.email.split("@")[0];
+    pill.style.display = "inline-block";
+    document.getElementById("signOutBtn").style.display = "flex";
+    document.getElementById("addBtn").style.display = "flex";
+  } else {
+    currentUser = null;
+  }
+  render();
+});
 
 // SERVICE WORKER
-if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").then(r=>console.log("SW registered")).catch(e=>console.log("SW failed",e));});}
-
-initFlash();render();
+if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(e => console.log("SW failed", e)); }); }
 </script>
 </body>
 </html>
