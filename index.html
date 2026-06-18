@@ -2,198 +2,439 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seed — Financial Blessings</title>
-<meta name="theme-color" content="#B8860B">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Seed</title>
+<meta name="theme-color" content="#FAFAF7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Seed">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  :root {
-    --parchment: #F5EDD6; --parchment-dark: #EDE0C0; --parchment-deeper: #E2D2A8;
-    --ink: #2C1F0E; --ink-mid: #5C4A2A; --ink-light: #9A825A;
-    --gold: #B8860B; --gold-light: #D4A017; --gold-pale: #F0D98A;
-    --red-earth: #8B3A2A; --surface: #FAF4E4; --card: #F0E6C8;
-    --border: #D4C49A; --shadow: rgba(44,31,14,0.12);
-  }
-  .dark {
-    --parchment: #1A1208; --parchment-dark: #221A0A; --parchment-deeper: #2C2210;
-    --ink: #F0E6C8; --ink-mid: #C8B07A; --ink-light: #9A825A;
-    --gold: #D4A017; --gold-light: #E8BC30; --gold-pale: #3A2C08;
-    --surface: #140E04; --card: #221A0A; --border: #3A2C10; --shadow: rgba(0,0,0,0.4);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Source Serif 4',Georgia,serif; background:var(--surface); color:var(--ink); min-height:100vh; transition:background 0.3s,color 0.3s; -webkit-tap-highlight-color:transparent; }
+:root {
+  --bg: #FAFAF7;
+  --bg2: #F3F1EA;
+  --card: #FFFFFF;
+  --card2: #F7F5EE;
+  --border: #E8E4D8;
+  --ink: #1A1208;
+  --ink2: #4A3F2A;
+  --ink3: #9A8E78;
+  --gold: #C49A2A;
+  --gold-bg: #FBF3DC;
+  --gold-border: #E8D48A;
+  --accent: #C49A2A;
+  --red: #A03020;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.05);
+  --nav-h: 72px;
+  --header-h: 60px;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-lg: 24px;
+}
+.dark {
+  --bg: #100E08;
+  --bg2: #1A1610;
+  --card: #1E1A12;
+  --card2: #252018;
+  --border: #302A1E;
+  --ink: #F0EAD8;
+  --ink2: #C8B890;
+  --ink3: #7A6E58;
+  --gold: #D4A830;
+  --gold-bg: #2A2010;
+  --gold-border: #4A3A18;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { height:100%; }
+body {
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  min-height:100dvh;
+  transition:background 0.25s,color 0.25s;
+  overscroll-behavior:none;
+}
 
-  /* HEADER */
-  header { background:var(--parchment-dark); border-bottom:1px solid var(--border); padding:0 1.5rem; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px var(--shadow); }
-  .header-inner { max-width:900px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:60px; }
-  .logo { font-family:'Lora',serif; font-size:1.6rem; font-weight:700; color:var(--gold); letter-spacing:0.04em; display:flex; align-items:center; gap:0.4rem; }
-  .logo-seed { font-style:italic; } .logo-dot { color:var(--red-earth); }
-  .header-actions { display:flex; align-items:center; gap:0.75rem; }
-  .icon-btn { background:none; border:none; cursor:pointer; color:var(--ink-mid); padding:0.4rem; border-radius:6px; transition:background 0.15s,color 0.15s; font-size:1.1rem; display:flex; align-items:center; justify-content:center; }
-  .icon-btn:hover { background:var(--parchment-deeper); color:var(--gold); }
-  .icon-btn.active { color:var(--gold); }
+/* ── APP SHELL ── */
+.app-shell { display:flex; flex-direction:column; min-height:100vh; min-height:100dvh; max-width:480px; margin:0 auto; position:relative; }
 
-  /* NAV */
-  nav { background:var(--parchment); border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
-  nav::-webkit-scrollbar { display:none; }
-  .nav-inner { max-width:900px; margin:0 auto; display:flex; padding:0 1.5rem; }
-  .tab { background:none; border:none; cursor:pointer; font-family:'Source Serif 4',serif; font-size:0.85rem; font-weight:500; color:var(--ink-light); padding:0.75rem 1rem; border-bottom:2px solid transparent; white-space:nowrap; transition:color 0.15s,border-color 0.15s; letter-spacing:0.02em; }
-  .tab:hover { color:var(--ink-mid); } .tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+/* ── HEADER ── */
+.app-header {
+  position:sticky; top:0; z-index:50;
+  background:var(--bg);
+  padding: 0 1.25rem;
+  height:var(--header-h);
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.header-logo {
+  font-family:'Lora',serif;
+  font-size:1.5rem; font-weight:700;
+  color:var(--gold);
+  letter-spacing:0.02em;
+  font-style:italic;
+}
+.header-logo span { color:var(--red); font-style:normal; }
+.header-right { display:flex; align-items:center; gap:0.5rem; }
+.hbtn {
+  background:var(--card2); border:1px solid var(--border);
+  border-radius:50%; width:36px; height:36px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:1rem;
+  transition:background 0.15s, border-color 0.15s;
+  color:var(--ink2);
+}
+.hbtn:hover, .hbtn.active { background:var(--gold-bg); border-color:var(--gold-border); color:var(--gold); }
+.logout-btn {
+  background:var(--card2); border:1px solid var(--border);
+  border-radius:20px; padding:0.3rem 0.85rem;
+  font-family:'Inter',sans-serif; font-size:0.75rem; font-weight:600;
+  color:var(--ink2); cursor:pointer;
+  transition:background 0.15s, color 0.15s;
+}
+.logout-btn:hover { background:var(--red); color:#fff; border-color:var(--red); }
+.user-pill {
+  font-size:0.72rem; font-weight:600; color:var(--ink3);
+  background:var(--card2); border:1px solid var(--border);
+  border-radius:20px; padding:0.25rem 0.7rem;
+  max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
 
-  /* SEARCH */
-  .search-bar { max-width:900px; margin:1.25rem auto 0; padding:0 1.5rem; }
-  .search-wrap { position:relative; }
-  .search-wrap input { width:100%; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:0.7rem 1rem 0.7rem 2.75rem; font-family:'Source Serif 4',serif; font-size:0.95rem; color:var(--ink); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
-  .search-wrap input::placeholder { color:var(--ink-light); }
-  .search-wrap input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(184,134,11,0.15); }
-  .search-icon { position:absolute; left:0.85rem; top:50%; transform:translateY(-50%); color:var(--ink-light); font-size:1rem; pointer-events:none; }
+/* ── SEARCH BAR ── */
+.search-wrap {
+  margin: 0.75rem 1.25rem 0;
+  position:relative;
+}
+.search-wrap input {
+  width:100%; background:var(--card);
+  border:1.5px solid var(--border); border-radius:50px;
+  padding:0.65rem 1rem 0.65rem 2.6rem;
+  font-family:'Inter',sans-serif; font-size:0.9rem;
+  color:var(--ink); outline:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+  box-shadow:var(--shadow-sm);
+}
+.search-wrap input::placeholder { color:var(--ink3); }
+.search-wrap input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(196,154,42,0.12); }
+.search-icon { position:absolute; left:0.9rem; top:50%; transform:translateY(-50%); color:var(--ink3); font-size:0.95rem; pointer-events:none; }
 
-  /* MAIN */
-  main { max-width:900px; margin:0 auto; padding:1.5rem 1.5rem 4rem; }
-  .section-label { font-family:'Lora',serif; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-light); margin-bottom:1rem; padding-bottom:0.4rem; border-bottom:1px solid var(--border); }
+/* ── SCROLL AREA ── */
+.scroll-area { flex:1; overflow-y:auto; padding:1.25rem 1.25rem calc(var(--nav-h) + 1.5rem); }
 
-  /* VERSE CARDS */
-  .verse-grid { display:grid; gap:1rem; }
-  .verse-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.4rem; transition:box-shadow 0.2s,transform 0.15s; }
-  .verse-card:hover { box-shadow:0 4px 16px var(--shadow); transform:translateY(-1px); }
-  .verse-ref { font-family:'Lora',serif; font-size:0.78rem; font-weight:600; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.4rem; }
-  .verse-category-tag { font-size:0.68rem; background:var(--parchment-deeper); color:var(--ink-mid); border-radius:4px; padding:0.15rem 0.5rem; letter-spacing:0.06em; font-weight:500; }
-  .verse-text { font-size:1rem; line-height:1.75; color:var(--ink); font-style:italic; }
-  .verse-actions { margin-top:0.75rem; display:flex; gap:0.5rem; justify-content:flex-end; }
-  .fav-btn { background:none; border:none; cursor:pointer; color:var(--ink-light); font-size:1.15rem; padding:0.25rem; transition:color 0.15s,transform 0.1s; }
-  .fav-btn:hover { transform:scale(1.2); } .fav-btn.active { color:var(--red-earth); }
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:480px;
+  background:var(--card);
+  border-top:1px solid var(--border);
+  height:var(--nav-h);
+  display:flex; align-items:center; justify-content:space-around;
+  padding: 0 0.5rem;
+  padding-bottom:env(safe-area-inset-bottom);
+  z-index:50;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.06);
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:0.28rem; cursor:pointer; padding:0.5rem 0;
+  border:none; background:none; color:var(--ink3);
+  font-family:'Inter',sans-serif; font-size:0.65rem; font-weight:500;
+  letter-spacing:0.02em; transition:color 0.15s;
+  position:relative;
+}
+.nav-item.active { color:var(--gold); }
+.nav-icon {
+  font-size:1.3rem; line-height:1;
+  transition:transform 0.2s;
+}
+.nav-item.active .nav-icon { transform:scale(1.1); }
+.nav-item.center-btn {
+  background:var(--gold); color:#fff !important;
+  border-radius:50%; width:52px; height:52px; flex:none;
+  margin-top:-20px;
+  box-shadow:0 4px 16px rgba(196,154,42,0.45);
+  font-size:0; padding:0;
+}
+.nav-item.center-btn .nav-icon { font-size:1.5rem; color:#fff; transform:none; }
+.nav-item.center-btn:hover { background:var(--gold); filter:brightness(1.1); }
 
-  /* CHIPS */
-  .category-chips { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.25rem; }
-  .chip { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:0.35rem 0.9rem; font-family:'Source Serif 4',serif; font-size:0.82rem; color:var(--ink-mid); cursor:pointer; transition:background 0.15s,color 0.15s,border-color 0.15s; white-space:nowrap; }
-  .chip:hover { background:var(--parchment-deeper); } .chip.active { background:var(--gold); color:#fff; border-color:var(--gold); }
+/* ── PAGE TITLE ── */
+.page-title { font-family:'Lora',serif; font-size:1.5rem; font-weight:700; color:var(--ink); margin-bottom:0.25rem; }
+.page-sub { font-size:0.8rem; color:var(--ink3); margin-bottom:1.25rem; }
 
-  /* FLASHCARD */
-  .flashcard-section { display:flex; flex-direction:column; align-items:center; padding-top:0.25rem; }
-  .flashcard-label { font-family:'Lora',serif; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-light); margin-bottom:1.25rem; align-self:flex-start; padding-bottom:0.4rem; border-bottom:1px solid var(--border); width:100%; }
-  .flashcard-wrap { width:100%; max-width:680px; }
-  .flashcard { width:100%; background:linear-gradient(150deg,var(--parchment-dark) 0%,var(--gold-pale) 100%); border:1px solid var(--border); border-radius:20px; padding:3rem 2.5rem 2.5rem; box-shadow:0 8px 40px var(--shadow),0 1px 0 rgba(255,255,255,0.3) inset; display:flex; flex-direction:column; align-items:center; text-align:center; min-height:320px; justify-content:center; }
-  .dark .flashcard { background:linear-gradient(150deg,#221A0A 0%,#3A2C08 100%); }
-  .flashcard-ornament { font-size:2rem; color:var(--gold); opacity:0.35; margin-bottom:1.25rem; line-height:1; }
-  .flashcard-cat { font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-light); margin-bottom:0.75rem; }
-  .flashcard-text { font-family:'Lora',serif; font-size:1.45rem; line-height:1.7; color:var(--ink); font-style:italic; font-weight:400; margin-bottom:1.5rem; }
-  .flashcard-ref { font-family:'Source Serif 4',serif; font-size:0.88rem; font-weight:600; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; }
-  .flashcard-controls { margin-top:1.75rem; display:flex; align-items:center; gap:1.25rem; }
-  .fc-fav { background:none; border:none; cursor:pointer; font-size:1.6rem; color:var(--ink-light); transition:color 0.15s,transform 0.1s; padding:0.25rem; }
-  .fc-fav:hover { transform:scale(1.2); } .fc-fav.active { color:var(--red-earth); }
+/* ── DAILY CARD ── */
+.daily-greeting { margin-bottom:1.5rem; }
+.daily-greeting .greeting-label {
+  font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--ink3); margin-bottom:0.2rem;
+}
+.daily-greeting .greeting-date { font-family:'Lora',serif; font-size:1.3rem; font-weight:600; color:var(--ink); }
 
-  /* AUTH SCREEN */
-  .auth-screen { max-width:420px; margin:3rem auto; padding:0 1.5rem; }
-  .auth-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:2.5rem 2rem; box-shadow:0 8px 32px var(--shadow); }
-  .auth-title { font-family:'Lora',serif; font-size:1.4rem; font-weight:700; color:var(--ink); margin-bottom:0.4rem; }
-  .auth-subtitle { font-size:0.9rem; color:var(--ink-light); margin-bottom:2rem; line-height:1.5; }
-  .auth-label { display:block; font-size:0.78rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-light); margin-bottom:0.4rem; margin-top:1rem; }
-  .auth-input { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:0.7rem 0.9rem; font-family:'Source Serif 4',serif; font-size:0.95rem; color:var(--ink); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
-  .auth-input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(184,134,11,0.15); }
-  .auth-btn { width:100%; margin-top:1.5rem; background:var(--gold); color:#fff; border:none; border-radius:8px; padding:0.8rem; font-family:'Source Serif 4',serif; font-size:1rem; font-weight:600; cursor:pointer; transition:background 0.15s; }
-  .auth-btn:hover { background:var(--gold-light); }
-  .auth-btn:disabled { opacity:0.6; cursor:not-allowed; }
-  .auth-switch { margin-top:1.25rem; text-align:center; font-size:0.88rem; color:var(--ink-light); }
-  .auth-switch a { color:var(--gold); cursor:pointer; text-decoration:none; font-weight:600; }
-  .auth-switch a:hover { text-decoration:underline; }
-  .auth-error { margin-top:1rem; padding:0.65rem 0.9rem; background:#fef2f2; border:1px solid #fca5a5; border-radius:8px; font-size:0.85rem; color:#b91c1c; }
-  .dark .auth-error { background:#3A0A0A; border-color:#7f1d1d; color:#fca5a5; }
-  .auth-success { margin-top:1rem; padding:0.65rem 0.9rem; background:#f0fdf4; border:1px solid #86efac; border-radius:8px; font-size:0.85rem; color:#166534; }
-  .dark .auth-success { background:#0A2A0A; border-color:#166534; color:#86efac; }
+.verse-hero {
+  background:linear-gradient(145deg, #FBF5E0 0%, #F0E8C8 60%, #EAE0B8 100%);
+  border:1px solid var(--gold-border);
+  border-radius:var(--radius-lg);
+  padding:2rem 1.75rem 1.75rem;
+  box-shadow:var(--shadow-lg);
+  position:relative; overflow:hidden;
+  margin-bottom:1rem;
+}
+.dark .verse-hero { background:linear-gradient(145deg,#2A2210 0%,#221A08 100%); }
+.verse-hero::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:120px; height:120px;
+  background:radial-gradient(circle, rgba(196,154,42,0.12) 0%, transparent 70%);
+  border-radius:50%;
+}
+.vh-cat {
+  display:inline-flex; align-items:center; gap:0.35rem;
+  background:rgba(196,154,42,0.12); border:1px solid var(--gold-border);
+  border-radius:20px; padding:0.25rem 0.75rem;
+  font-size:0.68rem; font-weight:600; color:var(--gold);
+  letter-spacing:0.08em; text-transform:uppercase;
+  margin-bottom:1.25rem;
+}
+.vh-ornament { opacity:0.4; font-size:0.85rem; }
+.vh-text {
+  font-family:'Lora',serif;
+  font-size:1.2rem; line-height:1.75;
+  color:var(--ink); font-style:italic; font-weight:400;
+  margin-bottom:1.5rem;
+}
+.vh-footer { display:flex; align-items:center; justify-content:space-between; }
+.vh-ref {
+  font-size:0.78rem; font-weight:700;
+  color:var(--gold); letter-spacing:0.08em; text-transform:uppercase;
+}
+.fav-circle {
+  width:38px; height:38px; border-radius:50%;
+  background:var(--card); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:1.1rem; color:var(--ink3);
+  box-shadow:var(--shadow-sm);
+  transition:background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+}
+.fav-circle:hover { transform:scale(1.1); }
+.fav-circle.active { background:rgba(160,48,32,0.08); border-color:rgba(160,48,32,0.2); color:var(--red); }
 
-  /* USER PILL */
-  .user-pill { font-size:0.78rem; color:var(--ink-light); background:var(--parchment-deeper); border-radius:20px; padding:0.25rem 0.75rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px; }
+/* ── QUICK STATS ── */
+.quick-stats { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.25rem; }
+.stat-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1rem;
+  box-shadow:var(--shadow-sm);
+}
+.stat-num { font-family:'Lora',serif; font-size:1.6rem; font-weight:700; color:var(--gold); line-height:1; margin-bottom:0.25rem; }
+.stat-label { font-size:0.72rem; color:var(--ink3); font-weight:500; }
 
-  /* MODAL */
-  .modal-overlay { position:fixed; inset:0; background:rgba(44,31,14,0.55); z-index:200; display:flex; align-items:center; justify-content:center; padding:1.5rem; backdrop-filter:blur(2px); }
-  .modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:2rem; width:100%; max-width:520px; box-shadow:0 16px 48px var(--shadow); max-height:90vh; overflow-y:auto; }
-  .modal-title { font-family:'Lora',serif; font-size:1.2rem; font-weight:700; color:var(--ink); margin-bottom:1.5rem; }
-  .modal label { display:block; font-size:0.8rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-light); margin-bottom:0.4rem; margin-top:1rem; }
-  .modal label:first-of-type { margin-top:0; }
-  .modal input,.modal textarea,.modal select { width:100%; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:0.65rem 0.85rem; font-family:'Source Serif 4',serif; font-size:0.95rem; color:var(--ink); outline:none; transition:border-color 0.2s,box-shadow 0.2s; resize:vertical; }
-  .modal input:focus,.modal textarea:focus,.modal select:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(184,134,11,0.15); }
-  .modal textarea { min-height:100px; }
-  .modal-actions { display:flex; gap:0.75rem; margin-top:1.5rem; justify-content:flex-end; }
-  .btn { font-family:'Source Serif 4',serif; font-size:0.9rem; font-weight:600; padding:0.6rem 1.25rem; border-radius:8px; border:none; cursor:pointer; transition:background 0.15s,color 0.15s; }
-  .btn-primary { background:var(--gold); color:#fff; } .btn-primary:hover { background:var(--gold-light); }
-  .btn-ghost { background:none; border:1px solid var(--border); color:var(--ink-mid); } .btn-ghost:hover { background:var(--card); }
-  .new-cat-row { display:flex; gap:0.5rem; align-items:center; margin-top:0.5rem; }
-  .new-cat-row input { flex:1; margin:0; }
-  .new-cat-row .btn { white-space:nowrap; padding:0.6rem 0.9rem; font-size:0.82rem; }
+/* ── SECTION HEADER ── */
+.sec-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.85rem; margin-top:1.5rem; }
+.sec-title { font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink3); }
 
-  /* FAB */
-  .fab { position:fixed; bottom:2rem; right:1.5rem; width:52px; height:52px; background:var(--gold); color:#fff; border:none; border-radius:50%; font-size:1.5rem; cursor:pointer; box-shadow:0 4px 16px rgba(184,134,11,0.4); display:flex; align-items:center; justify-content:center; transition:background 0.15s,transform 0.15s; z-index:150; }
-  .fab:hover { background:var(--gold-light); transform:scale(1.08); }
+/* ── CATEGORY CHIPS ── */
+.chips-scroll { display:flex; gap:0.5rem; overflow-x:auto; scrollbar-width:none; padding-bottom:0.25rem; margin-bottom:1rem; }
+.chips-scroll::-webkit-scrollbar { display:none; }
+.chip {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:50px; padding:0.4rem 1rem;
+  font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:500;
+  color:var(--ink2); cursor:pointer; white-space:nowrap;
+  transition:all 0.15s; box-shadow:var(--shadow-sm);
+}
+.chip:hover { border-color:var(--gold-border); color:var(--gold); background:var(--gold-bg); }
+.chip.active { background:var(--gold); color:#fff; border-color:var(--gold); box-shadow:0 2px 8px rgba(196,154,42,0.3); }
 
-  /* LOADING */
-  .loading { text-align:center; padding:3rem 1rem; color:var(--ink-light); font-style:italic; }
-  .spinner { display:inline-block; width:28px; height:28px; border:3px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; margin-bottom:0.75rem; }
-  @keyframes spin { to { transform:rotate(360deg); } }
+/* ── VERSE CARDS ── */
+.verse-list { display:flex; flex-direction:column; gap:0.75rem; }
+.verse-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1.1rem 1.2rem;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow 0.2s, transform 0.15s;
+  position:relative;
+}
+.verse-card:active { transform:scale(0.99); }
+.vc-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:0.6rem; gap:0.5rem; }
+.vc-ref { font-size:0.72rem; font-weight:700; color:var(--gold); letter-spacing:0.06em; text-transform:uppercase; }
+.vc-cat { font-size:0.62rem; font-weight:600; background:var(--gold-bg); color:var(--gold); border:1px solid var(--gold-border); border-radius:6px; padding:0.15rem 0.45rem; letter-spacing:0.04em; white-space:nowrap; }
+.vc-text { font-family:'Lora',serif; font-size:0.95rem; line-height:1.7; color:var(--ink2); font-style:italic; margin-bottom:0.75rem; }
+.vc-bottom { display:flex; justify-content:flex-end; }
+.fav-btn {
+  background:none; border:none; cursor:pointer;
+  color:var(--ink3); font-size:1.1rem; padding:0.2rem;
+  transition:color 0.15s, transform 0.1s;
+}
+.fav-btn:hover { transform:scale(1.2); }
+.fav-btn.active { color:var(--red); }
 
-  .empty { text-align:center; padding:3rem 1rem; color:var(--ink-light); font-style:italic; font-size:1rem; }
-  .toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(80px); background:var(--ink); color:var(--parchment); font-family:'Source Serif 4',serif; font-size:0.88rem; padding:0.65rem 1.25rem; border-radius:8px; box-shadow:0 4px 16px var(--shadow); transition:transform 0.3s ease; z-index:1000; white-space:nowrap; pointer-events:none; }
-  .toast.show { transform:translateX(-50%) translateY(0); }
+/* ── EMPTY ── */
+.empty { text-align:center; padding:3rem 1rem; color:var(--ink3); font-style:italic; font-size:0.95rem; }
 
-  @media (max-width:600px) {
-    .flashcard-text { font-size:1.15rem; }
-    .flashcard { padding:2.25rem 1.5rem 2rem; min-height:260px; }
-    main { padding:1.25rem 1rem 4rem; }
-    .user-pill { max-width:90px; }
-  }
+/* ── AUTH SCREEN ── */
+.auth-wrap { padding:2rem 1.25rem; }
+.auth-hero { text-align:center; margin-bottom:2rem; }
+.auth-logo { font-family:'Lora',serif; font-size:2.5rem; font-weight:700; color:var(--gold); font-style:italic; margin-bottom:0.5rem; }
+.auth-logo span { color:var(--red); font-style:normal; }
+.auth-tagline { font-size:0.88rem; color:var(--ink3); line-height:1.5; }
+.auth-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.75rem 1.5rem; box-shadow:var(--shadow-md); }
+.auth-card-title { font-family:'Lora',serif; font-size:1.2rem; font-weight:700; color:var(--ink); margin-bottom:0.25rem; }
+.auth-card-sub { font-size:0.82rem; color:var(--ink3); margin-bottom:1.5rem; }
+.auth-field { margin-bottom:1rem; }
+.auth-label { display:block; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink3); margin-bottom:0.4rem; }
+.auth-input {
+  width:100%; background:var(--bg2);
+  border:1.5px solid var(--border); border-radius:var(--radius-sm);
+  padding:0.75rem 1rem; font-family:'Inter',sans-serif; font-size:0.95rem;
+  color:var(--ink); outline:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.auth-input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(196,154,42,0.12); }
+.auth-btn {
+  width:100%; margin-top:0.5rem;
+  background:var(--gold); color:#fff; border:none;
+  border-radius:50px; padding:0.9rem;
+  font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:700;
+  cursor:pointer; letter-spacing:0.02em;
+  box-shadow:0 4px 16px rgba(196,154,42,0.35);
+  transition:filter 0.15s, transform 0.1s;
+}
+.auth-btn:hover { filter:brightness(1.08); }
+.auth-btn:active { transform:scale(0.98); }
+.auth-btn:disabled { opacity:0.55; cursor:not-allowed; }
+.auth-switch { margin-top:1.25rem; text-align:center; font-size:0.84rem; color:var(--ink3); }
+.auth-switch a { color:var(--gold); cursor:pointer; font-weight:600; }
+.auth-error { margin-top:0.85rem; padding:0.6rem 0.9rem; background:rgba(160,48,32,0.07); border:1px solid rgba(160,48,32,0.2); border-radius:8px; font-size:0.82rem; color:var(--red); }
+.auth-success { margin-top:0.85rem; padding:0.6rem 0.9rem; background:rgba(50,120,50,0.07); border:1px solid rgba(50,120,50,0.2); border-radius:8px; font-size:0.82rem; color:#276027; }
+
+/* ── MODAL ── */
+.modal-overlay { position:fixed; inset:0; background:rgba(10,8,4,0.5); z-index:200; display:flex; align-items:flex-end; justify-content:center; backdrop-filter:blur(3px); }
+.modal {
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  padding:1.5rem 1.5rem 2.5rem;
+  width:100%; max-width:480px;
+  box-shadow:var(--shadow-lg);
+  max-height:90vh; overflow-y:auto;
+}
+.modal-handle { width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 1.25rem; }
+.modal-title { font-family:'Lora',serif; font-size:1.15rem; font-weight:700; color:var(--ink); margin-bottom:1.25rem; }
+.modal label { display:block; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink3); margin-bottom:0.4rem; margin-top:1rem; }
+.modal label:first-of-type { margin-top:0; }
+.modal input,.modal textarea,.modal select {
+  width:100%; background:var(--card2); border:1.5px solid var(--border);
+  border-radius:var(--radius-sm); padding:0.7rem 0.9rem;
+  font-family:'Inter',sans-serif; font-size:0.9rem; color:var(--ink);
+  outline:none; transition:border-color 0.2s; resize:vertical;
+}
+.modal input:focus,.modal textarea:focus,.modal select:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(196,154,42,0.1); }
+.modal textarea { min-height:90px; }
+.modal-actions { display:flex; gap:0.75rem; margin-top:1.5rem; }
+.btn { font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:600; padding:0.7rem 1.25rem; border-radius:50px; border:none; cursor:pointer; transition:all 0.15s; flex:1; }
+.btn-primary { background:var(--gold); color:#fff; box-shadow:0 2px 8px rgba(196,154,42,0.3); }
+.btn-primary:hover { filter:brightness(1.08); }
+.btn-ghost { background:var(--card2); border:1.5px solid var(--border); color:var(--ink2); }
+.btn-ghost:hover { background:var(--bg2); }
+.new-cat-row { display:flex; gap:0.5rem; align-items:center; margin-top:0.5rem; }
+.new-cat-row input { flex:1; margin:0; }
+.new-cat-row .btn { flex:none; padding:0.65rem 1rem; font-size:0.8rem; white-space:nowrap; }
+
+/* ── LOADING ── */
+.loading { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 1rem; gap:1rem; color:var(--ink3); font-size:0.9rem; }
+.spinner { width:28px; height:28px; border:2.5px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.65s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── TOAST ── */
+.toast {
+  position:fixed; bottom:calc(var(--nav-h) + 1rem); left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--ink); color:var(--bg);
+  font-family:'Inter',sans-serif; font-size:0.84rem; font-weight:500;
+  padding:0.65rem 1.25rem; border-radius:50px;
+  box-shadow:var(--shadow-lg); opacity:0;
+  transition:transform 0.25s ease, opacity 0.25s ease;
+  z-index:300; white-space:nowrap; pointer-events:none;
+}
+.toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+
+@media (min-width:481px) {
+  .bottom-nav { border-radius:0; }
+}
 </style>
 </head>
 <body>
+<div class="app-shell">
 
-<header>
-  <div class="header-inner">
-    <div class="logo"><span class="logo-seed">Seed</span><span class="logo-dot">.</span></div>
-    <div class="header-actions">
-      <button class="icon-btn" id="searchToggle" title="Search">&#128269;</button>
-      <button class="icon-btn" id="darkToggle" title="Toggle dark mode">&#127768;</button>
+  <!-- HEADER -->
+  <header class="app-header" id="appHeader">
+    <div class="header-logo">Seed<span>.</span></div>
+    <div class="header-right">
+      <button class="hbtn" id="searchToggle" title="Search">&#128269;</button>
+      <button class="hbtn" id="darkToggle" title="Toggle mode">&#127768;</button>
       <span class="user-pill" id="userPill" style="display:none;"></span>
-      <button class="icon-btn" id="signOutBtn" title="Sign out" style="display:none;">&#x2192;</button>
+      <button class="logout-btn" id="signOutBtn" style="display:none;">Logout</button>
+    </div>
+  </header>
+
+  <!-- SEARCH -->
+  <div id="searchBar" style="display:none;">
+    <div class="search-wrap">
+      <span class="search-icon">&#128269;</span>
+      <input type="text" id="searchInput" placeholder="Search verses, references, categories..." autocomplete="off">
     </div>
   </div>
-</header>
 
-<nav>
-  <div class="nav-inner">
-    <button class="tab active" data-view="daily">Daily Card</button>
-    <button class="tab" data-view="browse">Browse</button>
-    <button class="tab" data-view="all">All Verses</button>
-    <button class="tab" data-view="favorites">Favorites &#9829;</button>
-  </div>
-</nav>
+  <!-- MAIN SCROLL AREA -->
+  <div class="scroll-area" id="mainContent"></div>
 
-<div class="search-bar" id="searchBar" style="display:none;">
-  <div class="search-wrap">
-    <span class="search-icon">&#128269;</span>
-    <input type="text" id="searchInput" placeholder="Search by verse, reference, or keyword..." autocomplete="off">
-  </div>
-</div>
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="nav-item active" data-view="daily">
+      <span class="nav-icon">&#9728;</span>
+      <span>Today</span>
+    </button>
+    <button class="nav-item" data-view="browse">
+      <span class="nav-icon">&#9783;</span>
+      <span>Browse</span>
+    </button>
+    <button class="nav-item center-btn" id="addBtn" style="display:none;" title="Add verse">
+      <span class="nav-icon">&#43;</span>
+    </button>
+    <button class="nav-item" data-view="all">
+      <span class="nav-icon">&#9776;</span>
+      <span>All</span>
+    </button>
+    <button class="nav-item" data-view="favorites">
+      <span class="nav-icon">&#9825;</span>
+      <span>Saved</span>
+    </button>
+  </nav>
 
-<main id="mainContent"></main>
-<button class="fab" id="addBtn" title="Add a verse" style="display:none;">&#43;</button>
+</div><!-- end app-shell -->
 
+<!-- ADD VERSE MODAL -->
 <div class="modal-overlay" id="modalOverlay" style="display:none;">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-title">Add a Verse</div>
     <label>Reference (e.g. John 3:16)</label>
-    <input type="text" id="newRef" placeholder="Book chapter:verse">
+    <input type="text" id="newRef" placeholder="Book chapter:verse" maxlength="60">
     <label>Verse Text</label>
-    <textarea id="newText" placeholder="Type or paste the verse here..."></textarea>
+    <textarea id="newText" placeholder="Type or paste the verse here..." maxlength="2000"></textarea>
     <label>Category</label>
     <select id="newCat"></select>
-    <div style="margin-top:0.75rem;">
-      <div style="font-size:0.75rem;color:var(--ink-light);margin-bottom:0.4rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">Or add a new category</div>
+    <div style="margin-top:1rem;">
+      <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.5rem;">Or create a new category</div>
       <div class="new-cat-row">
-        <input type="text" id="newCatInput" placeholder="New category name...">
+        <input type="text" id="newCatInput" placeholder="New category name..." maxlength="50">
         <button class="btn btn-primary" onclick="addCategory()">Add</button>
       </div>
     </div>
@@ -207,13 +448,11 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// SUPABASE
 const SUPA_URL = "https://lbdjclsoayhnesavsnam.supabase.co";
 const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxiZGpjbHNvYXlobmVzYXZzbmFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NzY0ODIsImV4cCI6MjA5NzI1MjQ4Mn0.Kk1OPpRfot2TetIf-GzSexnYsmHpuyWxT2r2BfsR62A";
 const { createClient } = supabase;
 const db = createClient(SUPA_URL, SUPA_KEY);
 
-// BASE DATA
 const BASE_VERSES = [
   { ref:"Deuteronomy 8:18", text:"And you shall remember the LORD your God, for it is He who gives you power to get wealth, that He may establish His covenant which He swore to your fathers, as it is this day.", cat:"Prosperity" },
   { ref:"Psalm 35:27", text:"Let them shout for joy and be glad, who favor my righteous cause; And let them say continually, 'Let the LORD be magnified, who has pleasure in the prosperity of His servant.'", cat:"Prosperity" },
@@ -264,295 +503,244 @@ const BASE_VERSES = [
 ];
 const BASE_CATS = ["Prosperity","Tithing & Giving","Wisdom","Provision","Breakthrough"];
 
-// APP STATE
-let currentUser = null;
-let cloudFavs = [];
-let cloudVerses = [];
-let cloudCats = [];
-let isDark = localStorage.getItem("seed_dark") === "true";
-let searchVisible = false, searchQuery = "", selectedCat = "All", currentView = "daily";
-let authMode = "login"; // or "signup"
+let currentUser=null, cloudFavs=[], cloudVerses=[], cloudCats=[];
+let isDark=localStorage.getItem("seed_dark")==="true";
+let searchVisible=false, searchQuery="", selectedCat="All", currentView="daily";
+let authMode="login";
 
-if (isDark) document.body.classList.add("dark");
+function getVerses(){return[...BASE_VERSES,...cloudVerses];}
+function getCategories(){return["All",...BASE_CATS,...cloudCats];}
+function isFav(ref){return cloudFavs.includes(ref);}
+if(isDark){document.body.classList.add("dark");document.getElementById("darkToggle").textContent="☀️";}
 
-// HELPERS
-function getVerses() { return [...BASE_VERSES, ...cloudVerses]; }
-function getCategories() { return ["All", ...BASE_CATS, ...cloudCats]; }
-function isFav(ref) { return cloudFavs.includes(ref); }
+function sanitize(str){const el=document.createElement("div");el.textContent=str;return el.innerHTML;}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2400);}
 
-function showToast(msg) {
-  const t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  clearTimeout(t._timer); t._timer = setTimeout(() => t.classList.remove("show"), 2400);
+function getDailyVerse(){
+  const v=getVerses(); const now=new Date();
+  const start=new Date(now.getFullYear(),0,0);
+  const day=Math.floor((now-start)/86400000);
+  return v[((now.getFullYear()*1000)+day)%v.length];
 }
 
-// DAILY VERSE
-function getDailyVerse() {
-  const verses = getVerses();
-  const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  const dayOfYear = Math.floor((now - start) / 86400000);
-  const seed = (now.getFullYear() * 1000) + dayOfYear;
-  return verses[seed % verses.length];
-}
-
-// CLOUD OPS
-async function loadUserData() {
-  const [favRes, verseRes, catRes] = await Promise.all([
+async function loadUserData(){
+  const [fr,vr,cr]=await Promise.all([
     db.from("favorites").select("verse_ref"),
     db.from("custom_verses").select("*").order("created_at"),
     db.from("custom_categories").select("name").order("created_at"),
   ]);
-  cloudFavs = (favRes.data || []).map(r => r.verse_ref);
-  cloudVerses = (verseRes.data || []).map(r => ({ ref: r.ref, text: r.text, cat: r.cat }));
-  cloudCats = (catRes.data || []).map(r => r.name);
+  cloudFavs=(fr.data||[]).map(r=>r.verse_ref);
+  cloudVerses=(vr.data||[]).map(r=>({ref:r.ref,text:r.text,cat:r.cat}));
+  cloudCats=(cr.data||[]).map(r=>r.name);
 }
 
-async function toggleFav(ref) {
-  if (isFav(ref)) {
-    cloudFavs = cloudFavs.filter(r => r !== ref);
-    await db.from("favorites").delete().eq("verse_ref", ref).eq("user_id", currentUser.id);
-    showToast("Removed from Favorites");
-  } else {
-    cloudFavs.push(ref);
-    await db.from("favorites").insert({ user_id: currentUser.id, verse_ref: ref });
-    showToast("Added to Favorites");
-  }
+async function toggleFav(ref){
+  if(isFav(ref)){cloudFavs=cloudFavs.filter(r=>r!==ref);await db.from("favorites").delete().eq("verse_ref",ref).eq("user_id",currentUser.id);showToast("Removed from Saved");}
+  else{cloudFavs.push(ref);await db.from("favorites").insert({user_id:currentUser.id,verse_ref:ref});showToast("Saved!");}
   render();
 }
+async function toggleFlashFav(){const v=getDailyVerse();await toggleFav(v.ref);renderDaily();}
 
-async function toggleFlashFav() {
-  const v = getDailyVerse();
-  await toggleFav(v.ref);
-  renderFlash();
+function renderDaily(){
+  const v=getDailyVerse();
+  const now=new Date();
+  const day=now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+  const total=getVerses().length; const favCount=cloudFavs.length;
+  document.getElementById("mainContent").innerHTML=`
+    <div class="daily-greeting">
+      <div class="greeting-label">Verse of the Day</div>
+      <div class="greeting-date">${sanitize(day)}</div>
+    </div>
+    <div class="verse-hero">
+      <div class="vh-cat"><span class="vh-ornament">✦</span>${sanitize(v.cat)}</div>
+      <div class="vh-text">"${sanitize(v.text)}"</div>
+      <div class="vh-footer">
+        <div class="vh-ref">${sanitize(v.ref)} &middot; NKJV</div>
+        <button class="fav-circle ${isFav(v.ref)?"active":""}" onclick="toggleFlashFav()" title="${isFav(v.ref)?"Remove from saved":"Save verse"}">${isFav(v.ref)?"&#9829;":"&#9825;"}</button>
+      </div>
+    </div>
+    <div class="quick-stats">
+      <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Total Verses</div></div>
+      <div class="stat-card"><div class="stat-num">${favCount}</div><div class="stat-label">Saved Verses</div></div>
+    </div>`;
 }
 
-function renderFlash() {
-  const v = getDailyVerse();
-  const card = document.getElementById("flashcard");
-  const favBtn = document.getElementById("fcFav");
-  if (!card) return;
-  card.innerHTML = `<div class="flashcard-ornament">&#10022;</div><div class="flashcard-cat">${v.cat}</div><div class="flashcard-text">"${v.text}"</div><div class="flashcard-ref">${v.ref} &middot; NKJV</div>`;
-  if (favBtn) { favBtn.className = "fc-fav" + (isFav(v.ref) ? " active" : ""); favBtn.innerHTML = isFav(v.ref) ? "&#9829;" : "&#9825;"; }
+function renderVerseCard(v){
+  const sr=v.ref.replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  return`<div class="verse-card"><div class="vc-top"><div class="vc-ref">${sanitize(v.ref)}</div><span class="vc-cat">${sanitize(v.cat)}</span></div><div class="vc-text">"${sanitize(v.text)}"</div><div class="vc-bottom"><button class="fav-btn ${isFav(v.ref)?"active":""}" onclick="toggleFav('${sr}')">${isFav(v.ref)?"&#9829;":"&#9825;"}</button></div></div>`;
 }
 
-// VERSE CARD
-function renderVerseCard(v) {
-  const sr = v.ref.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-  return `<div class="verse-card"><div class="verse-ref"><span>${v.ref} &middot; NKJV</span><span class="verse-category-tag">${v.cat}</span></div><div class="verse-text">"${v.text}"</div><div class="verse-actions"><button class="fav-btn ${isFav(v.ref) ? "active" : ""}" onclick="toggleFav('${sr}')">${isFav(v.ref) ? "&#9829;" : "&#9825;"}</button></div></div>`;
-}
-
-function getFilteredVerses() {
-  let list = getVerses();
-  if (currentView === "favorites") list = list.filter(v => isFav(v.ref));
-  if (currentView === "browse" && selectedCat !== "All") list = list.filter(v => v.cat === selectedCat);
-  if (searchQuery) { const q = searchQuery.toLowerCase(); list = list.filter(v => v.ref.toLowerCase().includes(q) || v.text.toLowerCase().includes(q) || v.cat.toLowerCase().includes(q)); }
+function getFiltered(){
+  let list=getVerses();
+  if(currentView==="favorites")list=list.filter(v=>isFav(v.ref));
+  if(currentView==="browse"&&selectedCat!=="All")list=list.filter(v=>v.cat===selectedCat);
+  if(searchQuery){const q=searchQuery.toLowerCase();list=list.filter(v=>v.ref.toLowerCase().includes(q)||v.text.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q));}
   return list;
 }
 
-// MAIN RENDER
-function render() {
-  const main = document.getElementById("mainContent");
-  if (!currentUser) { renderAuth(); return; }
-
-  if (currentView === "daily") {
-    const now = new Date();
-    const dateStr = now.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric" });
-    main.innerHTML = `<div class="flashcard-section"><div class="flashcard-label">Verse of the Day &middot; ${dateStr}</div><div class="flashcard-wrap"><div class="flashcard" id="flashcard"></div></div><div class="flashcard-controls"><button class="fc-fav" id="fcFav" onclick="toggleFlashFav()" title="Add to Favorites">&#9825;</button></div></div>`;
-    renderFlash(); return;
+function render(){
+  const main=document.getElementById("mainContent");
+  if(!currentUser){renderAuth();return;}
+  if(currentView==="daily"){renderDaily();return;}
+  const list=getFiltered();
+  let html="";
+  if(currentView==="browse"){
+    html+=`<div class="page-title">Browse</div><div class="page-sub">Filter by category</div>`;
+    html+=`<div class="chips-scroll">`;
+    getCategories().forEach(cat=>{html+=`<button class="chip ${selectedCat===cat?"active":""}" onclick="selectCat('${cat.replace(/'/g,"\\'")}')">${sanitize(cat)}</button>`;});
+    html+=`</div>`;
+    html+=`<div class="sec-header"><span class="sec-title">${selectedCat==="All"?"All verses":sanitize(selectedCat)}</span><span class="sec-title">${list.length} verse${list.length!==1?"s":""}</span></div>`;
   }
-
-  let html = ""; const list = getFilteredVerses();
-  if (currentView === "browse") {
-    html += `<div class="category-chips">`;
-    getCategories().forEach(cat => { html += `<button class="chip ${selectedCat === cat ? "active" : ""}" onclick="selectCat('${cat.replace(/'/g, "\\'")}')">${cat}</button>`; });
-    html += `</div>`;
-    html += `<div class="section-label">${selectedCat === "All" ? "All Categories" : selectedCat} &middot; ${list.length} verse${list.length !== 1 ? "s" : ""}</div>`;
+  if(currentView==="all"){html+=`<div class="page-title">All Verses</div><div class="page-sub">${list.length} NKJV verses on financial blessing</div>`;}
+  if(currentView==="favorites"){html+=`<div class="page-title">Saved</div><div class="page-sub">${list.length} verse${list.length!==1?"s":""} saved</div>`;}
+  if(list.length===0){
+    html+=currentView==="favorites"?`<div class="empty">Nothing saved yet. Tap &#9825; on any verse to save it here.</div>`:`<div class="empty">No verses found.</div>`;
+  }else{
+    html+=`<div class="verse-list">`;list.forEach(v=>{html+=renderVerseCard(v);});html+=`</div>`;
   }
-  if (currentView === "all") html += `<div class="section-label">All ${list.length} Verses &middot; NKJV</div>`;
-  if (currentView === "favorites") html += `<div class="section-label">Your Favorites &middot; ${list.length} verse${list.length !== 1 ? "s" : ""}</div>`;
-  if (list.length === 0) { html += currentView === "favorites" ? `<div class="empty">No favorites yet. Tap &#9825; on any verse to save it here.</div>` : `<div class="empty">No verses found.</div>`; }
-  else { html += `<div class="verse-grid">`; list.forEach(v => { html += renderVerseCard(v); }); html += `</div>`; }
-  main.innerHTML = html;
+  main.innerHTML=html;
 }
 
-function selectCat(cat) { selectedCat = cat; render(); }
+function selectCat(cat){selectedCat=cat;render();}
 
-// AUTH SCREEN
-function renderAuth() {
-  const main = document.getElementById("mainContent");
-  const isLogin = authMode === "login";
-  main.innerHTML = `
-    <div class="auth-screen">
+function renderAuth(){
+  const main=document.getElementById("mainContent");
+  const isLogin=authMode==="login";
+  main.innerHTML=`
+    <div class="auth-wrap">
+      <div class="auth-hero">
+        <div class="auth-logo">Seed<span>.</span></div>
+        <div class="auth-tagline">NKJV verses on financial blessing,<br>provision, and wisdom.</div>
+      </div>
       <div class="auth-card">
-        <div class="auth-title">${isLogin ? "Welcome back" : "Create your account"}</div>
-        <div class="auth-subtitle">${isLogin ? "Sign in to access your saved verses and favorites." : "Sign up to save your verses and favorites to the cloud."}</div>
-        <label class="auth-label">Email</label>
-        <input class="auth-input" type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
-        <label class="auth-label">Password</label>
-        <input class="auth-input" type="password" id="authPassword" placeholder="${isLogin ? "Your password" : "Choose a password (min 6 characters)"}" autocomplete="${isLogin ? "current-password" : "new-password"}">
-        <div id="authMsg"></div>
-        <button class="auth-btn" id="authSubmit" onclick="handleAuth()">${isLogin ? "Sign In" : "Sign Up"}</button>
-        <div class="auth-switch">
-          ${isLogin ? "Don't have an account? <a onclick=\"switchAuth('signup')\">Sign up</a>" : "Already have an account? <a onclick=\"switchAuth('login')\">Sign in</a>"}
+        <div class="auth-card-title">${isLogin?"Welcome back":"Create account"}</div>
+        <div class="auth-card-sub">${isLogin?"Sign in to access your saved verses.":"Sign up to save verses to the cloud."}</div>
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <input class="auth-input" type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
         </div>
+        <div class="auth-field">
+          <label class="auth-label">Password</label>
+          <input class="auth-input" type="password" id="authPassword" placeholder="${isLogin?"Your password":"Min. 6 characters"}" autocomplete="${isLogin?"current-password":"new-password"}">
+        </div>
+        <div id="authMsg"></div>
+        <button class="auth-btn" id="authSubmit" onclick="handleAuth()">${isLogin?"Sign In":"Sign Up"}</button>
+        <div class="auth-switch">${isLogin?"Don't have an account? <a onclick=\"switchAuth('signup')\">Sign up</a>":"Already have an account? <a onclick=\"switchAuth('login')\">Sign in</a>"}</div>
       </div>
     </div>`;
-  setTimeout(() => { const e = document.getElementById("authEmail"); if (e) e.focus(); }, 100);
+  setTimeout(()=>{const e=document.getElementById("authEmail");if(e)e.focus();},100);
 }
 
-function switchAuth(mode) { authMode = mode; render(); }
+function switchAuth(mode){authMode=mode;render();}
 
-async function handleAuth() {
-  const email = document.getElementById("authEmail").value.trim();
-  const password = document.getElementById("authPassword").value;
-  const btn = document.getElementById("authSubmit");
-  const msg = document.getElementById("authMsg");
-  if (!email || !password) { msg.innerHTML = `<div class="auth-error">Please enter your email and password.</div>`; return; }
-  btn.disabled = true; btn.textContent = authMode === "login" ? "Signing in..." : "Creating account...";
-  msg.innerHTML = "";
-  let result;
-  if (authMode === "login") {
-    result = await db.auth.signInWithPassword({ email, password });
-  } else {
-    result = await db.auth.signUp({ email, password });
-  }
-  if (result.error) {
-    msg.innerHTML = `<div class="auth-error">${result.error.message}</div>`;
-    btn.disabled = false; btn.textContent = authMode === "login" ? "Sign In" : "Sign Up";
-  } else if (authMode === "signup" && !result.data.session) {
-    msg.innerHTML = `<div class="auth-success">Check your email to confirm your account, then sign in.</div>`;
-    btn.disabled = false; btn.textContent = "Sign Up";
-  }
+async function handleAuth(){
+  const email=document.getElementById("authEmail").value.trim();
+  const password=document.getElementById("authPassword").value;
+  const btn=document.getElementById("authSubmit");
+  const msg=document.getElementById("authMsg");
+  if(!email||!password){msg.innerHTML=`<div class="auth-error">Please enter your email and password.</div>`;return;}
+  btn.disabled=true;btn.textContent=authMode==="login"?"Signing in...":"Creating account...";msg.innerHTML="";
+  const result=authMode==="login"?await db.auth.signInWithPassword({email,password}):await db.auth.signUp({email,password});
+  if(result.error){msg.innerHTML=`<div class="auth-error">${result.error.message}</div>`;btn.disabled=false;btn.textContent=authMode==="login"?"Sign In":"Sign Up";}
+  else if(authMode==="signup"&&!result.data.session){msg.innerHTML=`<div class="auth-success">Check your email to confirm, then sign in.</div>`;btn.disabled=false;btn.textContent="Sign Up";}
 }
 
-async function signOut() {
+async function signOut(){
   await db.auth.signOut();
-  currentUser = null; cloudFavs = []; cloudVerses = []; cloudCats = [];
-  document.getElementById("userPill").style.display = "none";
-  document.getElementById("signOutBtn").style.display = "none";
-  document.getElementById("addBtn").style.display = "none";
+  currentUser=null;cloudFavs=[];cloudVerses=[];cloudCats=[];
+  document.getElementById("userPill").style.display="none";
+  document.getElementById("signOutBtn").style.display="none";
+  document.getElementById("addBtn").style.display="none";
   render();
 }
 
-// ADD VERSE MODAL
-function openModal() { populateCatSelect(); document.getElementById("newRef").value = ""; document.getElementById("newText").value = ""; document.getElementById("newCatInput").value = ""; document.getElementById("modalOverlay").style.display = "flex"; }
-function closeModal() { document.getElementById("modalOverlay").style.display = "none"; }
-function populateCatSelect() { const sel = document.getElementById("newCat"); sel.innerHTML = ""; [...BASE_CATS, ...cloudCats].forEach(cat => { const opt = document.createElement("option"); opt.value = cat; opt.textContent = cat; sel.appendChild(opt); }); }
+function openModal(){populateCatSelect();document.getElementById("newRef").value="";document.getElementById("newText").value="";document.getElementById("newCatInput").value="";document.getElementById("modalOverlay").style.display="flex";}
+function closeModal(){document.getElementById("modalOverlay").style.display="none";}
+function populateCatSelect(){const sel=document.getElementById("newCat");sel.innerHTML="";[...BASE_CATS,...cloudCats].forEach(cat=>{const o=document.createElement("option");o.value=cat;o.textContent=cat;sel.appendChild(o);});}
 
-async function addCategory() {
-  const input = document.getElementById("newCatInput");
-  const name = input.value.trim();
-  if (!name) return showToast("Please enter a category name.");
-  if ([...BASE_CATS, ...cloudCats].map(c => c.toLowerCase()).includes(name.toLowerCase())) return showToast("That category already exists.");
-  const { error } = await db.from("custom_categories").insert({ user_id: currentUser.id, name });
-  if (error) return showToast("Error saving category.");
-  cloudCats.push(name); input.value = ""; populateCatSelect();
-  document.getElementById("newCat").value = name;
-  showToast(`Category "${name}" added.`);
+async function addCategory(){
+  const input=document.getElementById("newCatInput");const name=input.value.trim();
+  if(!name)return showToast("Enter a category name.");
+  if([...BASE_CATS,...cloudCats].map(c=>c.toLowerCase()).includes(name.toLowerCase()))return showToast("Category already exists.");
+  const{error}=await db.from("custom_categories").insert({user_id:currentUser.id,name});
+  if(error)return showToast("Error saving category.");
+  cloudCats.push(name);input.value="";populateCatSelect();document.getElementById("newCat").value=name;showToast(`"${name}" added.`);
 }
 
-async function saveVerse() {
-  const ref = document.getElementById("newRef").value.trim();
-  const text = document.getElementById("newText").value.trim();
-  const cat = document.getElementById("newCat").value;
-  if (!ref) return showToast("Please enter a verse reference.");
-  if (!text) return showToast("Please enter the verse text.");
-  if (getVerses().find(v => v.ref.toLowerCase() === ref.toLowerCase())) return showToast("That reference already exists.");
-  const { error } = await db.from("custom_verses").insert({ user_id: currentUser.id, ref, text, cat });
-  if (error) return showToast("Error saving verse.");
-  cloudVerses.push({ ref, text, cat }); closeModal();
-  showToast(`"${ref}" added to ${cat}.`); render();
+async function saveVerse(){
+  const ref=document.getElementById("newRef").value.trim();
+  const text=document.getElementById("newText").value.trim();
+  const cat=document.getElementById("newCat").value;
+  if(!ref)return showToast("Enter a verse reference.");
+  if(!text)return showToast("Enter the verse text.");
+  if(getVerses().find(v=>v.ref.toLowerCase()===ref.toLowerCase()))return showToast("That reference already exists.");
+  const{error}=await db.from("custom_verses").insert({user_id:currentUser.id,ref,text,cat});
+  if(error)return showToast("Error saving verse.");
+  cloudVerses.push({ref,text,cat});closeModal();showToast(`"${ref}" added.`);render();
 }
 
 // EVENTS
-document.getElementById("modalOverlay").addEventListener("click", e => { if (e.target === document.getElementById("modalOverlay")) closeModal(); });
-document.querySelectorAll(".tab").forEach(tab => { tab.addEventListener("click", () => { document.querySelectorAll(".tab").forEach(t => t.classList.remove("active")); tab.classList.add("active"); currentView = tab.dataset.view; searchQuery = ""; document.getElementById("searchInput").value = ""; render(); }); });
-document.getElementById("searchToggle").addEventListener("click", () => { searchVisible = !searchVisible; document.getElementById("searchBar").style.display = searchVisible ? "block" : "none"; document.getElementById("searchToggle").classList.toggle("active", searchVisible); if (searchVisible) document.getElementById("searchInput").focus(); });
-document.getElementById("searchInput").addEventListener("input", e => { searchQuery = e.target.value; if (searchQuery && currentView === "daily") { currentView = "all"; document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.view === "all")); } render(); });
-document.getElementById("darkToggle").addEventListener("click", () => { isDark = !isDark; document.body.classList.toggle("dark", isDark); localStorage.setItem("seed_dark", isDark); document.getElementById("darkToggle").textContent = isDark ? "☀️" : "🌙"; });
-if (isDark) document.getElementById("darkToggle").textContent = "☀️";
-document.getElementById("addBtn").addEventListener("click", openModal);
-document.getElementById("signOutBtn").addEventListener("click", signOut);
-
-// ONE-TIME MIGRATION from localStorage to Supabase
-async function migrateFromLocalStorage(userId) {
-  const migrated = localStorage.getItem("seed_migrated");
-  if (migrated) return; // already done
-
-  let didMigrate = false;
-
-  // Migrate favorites
-  const oldFavs = JSON.parse(localStorage.getItem("seed_favs") || "[]");
-  if (oldFavs.length > 0) {
-    // Only insert refs not already in cloud
-    const newFavs = oldFavs.filter(ref => !cloudFavs.includes(ref));
-    if (newFavs.length > 0) {
-      const rows = newFavs.map(ref => ({ user_id: userId, verse_ref: ref }));
-      await db.from("favorites").upsert(rows, { onConflict: "user_id,verse_ref" });
-      cloudFavs = [...cloudFavs, ...newFavs];
-      didMigrate = true;
-    }
-  }
-
-  // Migrate custom verses
-  const oldVerses = JSON.parse(localStorage.getItem("seed_custom_verses") || "[]");
-  if (oldVerses.length > 0) {
-    const existingRefs = cloudVerses.map(v => v.ref.toLowerCase());
-    const newVerses = oldVerses.filter(v => !existingRefs.includes(v.ref.toLowerCase()));
-    if (newVerses.length > 0) {
-      const rows = newVerses.map(v => ({ user_id: userId, ref: v.ref, text: v.text, cat: v.cat }));
-      await db.from("custom_verses").insert(rows);
-      cloudVerses = [...cloudVerses, ...newVerses];
-      didMigrate = true;
-    }
-  }
-
-  // Migrate custom categories
-  const oldCats = JSON.parse(localStorage.getItem("seed_custom_cats") || "[]");
-  if (oldCats.length > 0) {
-    const existingCats = cloudCats.map(c => c.toLowerCase());
-    const newCats = oldCats.filter(c => !existingCats.includes(c.toLowerCase()));
-    if (newCats.length > 0) {
-      const rows = newCats.map(name => ({ user_id: userId, name }));
-      await db.from("custom_categories").upsert(rows, { onConflict: "user_id,name" });
-      cloudCats = [...cloudCats, ...newCats];
-      didMigrate = true;
-    }
-  }
-
-  // Mark migration done and clear old localStorage data
-  localStorage.setItem("seed_migrated", "true");
-  localStorage.removeItem("seed_favs");
-  localStorage.removeItem("seed_custom_verses");
-  localStorage.removeItem("seed_custom_cats");
-  localStorage.removeItem("seed_flash_date");
-  localStorage.removeItem("seed_flash_order");
-  localStorage.removeItem("seed_flash_idx");
-
-  if (didMigrate) showToast("Your saved verses and favorites have been moved to the cloud.");
-}
-
-// AUTH STATE LISTENER
-db.auth.onAuthStateChange(async (event, session) => {
-  if (session) {
-    currentUser = session.user;
-    document.getElementById("mainContent").innerHTML = `<div class="loading"><div class="spinner"></div><br>Loading your verses...</div>`;
-    await loadUserData();
-    await migrateFromLocalStorage(currentUser.id);
-    const pill = document.getElementById("userPill");
-    pill.textContent = currentUser.email.split("@")[0];
-    pill.style.display = "inline-block";
-    document.getElementById("signOutBtn").style.display = "flex";
-    document.getElementById("addBtn").style.display = "flex";
-  } else {
-    currentUser = null;
+document.getElementById("modalOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("modalOverlay"))closeModal();});
+document.querySelectorAll(".nav-item[data-view]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentView=btn.dataset.view;
+    searchQuery="";document.getElementById("searchInput").value="";
+    if(searchVisible){searchVisible=false;document.getElementById("searchBar").style.display="none";document.getElementById("searchToggle").classList.remove("active");}
+    render();
+  });
+});
+document.getElementById("searchToggle").addEventListener("click",()=>{
+  searchVisible=!searchVisible;
+  document.getElementById("searchBar").style.display=searchVisible?"block":"none";
+  document.getElementById("searchToggle").classList.toggle("active",searchVisible);
+  if(searchVisible)document.getElementById("searchInput").focus();
+});
+document.getElementById("searchInput").addEventListener("input",e=>{
+  searchQuery=e.target.value;
+  if(searchQuery&&currentView==="daily"){
+    currentView="all";
+    document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view==="all"));
   }
   render();
 });
+document.getElementById("darkToggle").addEventListener("click",()=>{
+  isDark=!isDark;document.body.classList.toggle("dark",isDark);
+  localStorage.setItem("seed_dark",isDark);
+  document.getElementById("darkToggle").textContent=isDark?"☀️":"🌙";
+});
+document.getElementById("addBtn").addEventListener("click",openModal);
+document.getElementById("signOutBtn").addEventListener("click",signOut);
 
-// SERVICE WORKER
-if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(e => console.log("SW failed", e)); }); }
+// AUTH STATE
+db.auth.onAuthStateChange(async(event,session)=>{
+  if(event==="SIGNED_OUT"||event==="USER_DELETED"){
+    currentUser=null;cloudFavs=[];cloudVerses=[];cloudCats=[];
+    document.getElementById("userPill").style.display="none";
+    document.getElementById("signOutBtn").style.display="none";
+    document.getElementById("addBtn").style.display="none";
+    render();return;
+  }
+  if(session&&(event==="SIGNED_IN"||event==="TOKEN_REFRESHED")){
+    currentUser=session.user;
+    document.getElementById("mainContent").innerHTML=`<div class="loading"><div class="spinner"></div><span>Loading your verses...</span></div>`;
+    await loadUserData();
+    const pill=document.getElementById("userPill");
+    pill.textContent=currentUser.email.split("@")[0];
+    pill.style.display="inline-block";
+    document.getElementById("signOutBtn").style.display="flex";
+    document.getElementById("addBtn").style.display="flex";
+    render();
+  }else if(!session){currentUser=null;render();}
+});
+
+(async()=>{
+  const{data:{session}}=await db.auth.getSession();
+  if(!session){currentUser=null;render();}
+})();
+
+if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(e=>console.log("SW failed",e));});}
 </script>
 </body>
 </html>
