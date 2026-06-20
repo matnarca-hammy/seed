@@ -713,6 +713,22 @@ document.getElementById("darkToggle").addEventListener("click",()=>{
 document.getElementById("addBtn").addEventListener("click",openModal);
 document.getElementById("signOutBtn").addEventListener("click",signOut);
 
+// Show logged-in UI chrome without wiping content
+function applyUserUI(user){
+  currentUser=user;
+  const pill=document.getElementById("userPill");
+  pill.textContent=user.email.split("@")[0];
+  pill.style.display="inline-block";
+  document.getElementById("signOutBtn").style.display="flex";
+  document.getElementById("addBtn").style.display="flex";
+}
+
+// Load with a timeout so loading never gets permanently stuck
+async function loadUserDataSafe(){
+  const timeout=new Promise(resolve=>setTimeout(resolve,6000));
+  await Promise.race([loadUserData(),timeout]);
+}
+
 // AUTH STATE
 db.auth.onAuthStateChange(async(event,session)=>{
   if(event==="SIGNED_OUT"||event==="USER_DELETED"){
@@ -722,24 +738,37 @@ db.auth.onAuthStateChange(async(event,session)=>{
     document.getElementById("addBtn").style.display="none";
     render();return;
   }
-  if(session&&(event==="SIGNED_IN"||event==="TOKEN_REFRESHED")){
-    currentUser=session.user;
+  // Fresh login — show loader and fetch data
+  if(event==="SIGNED_IN"&&session){
+    applyUserUI(session.user);
     document.getElementById("mainContent").innerHTML=`<div class="loading"><div class="spinner"></div><span>Loading your verses...</span></div>`;
-    await loadUserData();
-    const pill=document.getElementById("userPill");
-    pill.textContent=currentUser.email.split("@")[0];
-    pill.style.display="inline-block";
-    document.getElementById("signOutBtn").style.display="flex";
-    document.getElementById("addBtn").style.display="flex";
-    render();
-  }else if(!session){currentUser=null;render();}
+    await loadUserDataSafe();
+    render();return;
+  }
+  // App resumed from background — refresh silently, no loader
+  if(event==="TOKEN_REFRESHED"&&session){
+    applyUserUI(session.user);
+    await loadUserDataSafe();
+    render();return;
+  }
 });
 
+// On page load — check session directly, never rely solely on the listener
 (async()=>{
-  const{data:{session}}=await db.auth.getSession();
-  if(!session){currentUser=null;render();}
+  try{
+    const{data:{session}}=await db.auth.getSession();
+    if(session){
+      applyUserUI(session.user);
+      document.getElementById("mainContent").innerHTML=`<div class="loading"><div class="spinner"></div><span>Loading your verses...</span></div>`;
+      await loadUserDataSafe();
+      render();
+    }else{
+      currentUser=null;render();
+    }
+  }catch(e){
+    currentUser=null;render();
+  }
 })();
-
 if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(e=>console.log("SW failed",e));});}
 </script>
 </body>
