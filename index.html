@@ -403,11 +403,14 @@ body {
     <div class="header-logo">Seed<span>.</span></div>
     <div class="header-right">
       <button class="hbtn" id="searchToggle" title="Search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <!-- Tabler: search -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>
       </button>
       <button class="hbtn" id="darkToggle" title="Toggle mode">
-        <svg id="darkIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg id="lightIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <!-- Tabler: moon (shown in light mode) -->
+        <svg id="darkIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/></svg>
+        <!-- Tabler: sun (shown in dark mode) -->
+        <svg id="lightIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/></svg>
       </button>
       <span class="user-pill" id="userPill" style="display:none;"></span>
       <button class="logout-btn" id="signOutBtn" style="display:none;">Logout</button>
@@ -418,7 +421,7 @@ body {
   <div id="searchBar" style="display:none;">
     <div class="search-wrap">
       <span class="search-icon">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>
       </span>
       <input type="text" id="searchInput" placeholder="Search verses, references, categories..." autocomplete="off">
     </div>
@@ -429,22 +432,27 @@ body {
 
   <nav class="bottom-nav" id="bottomNav">
     <button class="nav-item active" data-view="daily">
-      <span class="nav-icon">&#9728;</span>
+      <!-- Tabler: sun -->
+      <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/></svg></span>
       <span class="nav-label">Today</span>
     </button>
     <button class="nav-item" data-view="browse">
-      <span class="nav-icon">&#9783;</span>
+      <!-- Tabler: layout-grid -->
+      <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/></svg></span>
       <span class="nav-label">Browse</span>
     </button>
     <button class="nav-item center-btn" id="addBtn" style="display:none;" title="Add verse">
-      <span class="nav-icon">&#43;</span>
+      <!-- Tabler: plus -->
+      <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg></span>
     </button>
     <button class="nav-item" data-view="all">
-      <span class="nav-icon">&#9776;</span>
+      <!-- Tabler: list -->
+      <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l11 0"/><path d="M9 12l11 0"/><path d="M9 18l11 0"/><path d="M5 6l0 .01"/><path d="M5 12l0 .01"/><path d="M5 18l0 .01"/></svg></span>
       <span class="nav-label">All</span>
     </button>
     <button class="nav-item" data-view="favorites">
-      <span class="nav-icon">&#9825;</span>
+      <!-- Tabler: heart -->
+      <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg></span>
       <span class="nav-label">Saved</span>
     </button>
   </nav>
@@ -587,7 +595,12 @@ function renderDaily(){
       <div class="vh-text">"${sanitize(v.text)}"</div>
       <div class="vh-footer">
         <div class="vh-ref">${sanitize(v.ref)} &middot; NKJV</div>
-        <button class="fav-circle ${isFav(v.ref)?"active":""}" onclick="toggleFlashFav()" title="${isFav(v.ref)?"Remove from saved":"Save verse"}">${isFav(v.ref)?"&#9829;":"&#9825;"}</button>
+        <button class="fav-circle ${isFav(v.ref)?"active":""}" onclick="toggleFlashFav()" title="${isFav(v.ref)?"Remove from saved":"Save verse"}">
+          ${isFav(v.ref)
+            ? `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 .927 -9.215z"/></svg>`
+            : `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>`
+          }
+        </button>
       </div>
     </div>
     <div class="quick-stats">
@@ -598,7 +611,9 @@ function renderDaily(){
 
 function renderVerseCard(v){
   const sr=v.ref.replace(/\\/g,"\\\\").replace(/'/g,"\\'");
-  return`<div class="verse-card"><div class="vc-top"><div class="vc-ref">${sanitize(v.ref)}</div><span class="vc-cat">${sanitize(v.cat)}</span></div><div class="vc-text">"${sanitize(v.text)}"</div><div class="vc-bottom"><button class="fav-btn ${isFav(v.ref)?"active":""}" onclick="toggleFav('${sr}')">${isFav(v.ref)?"&#9829;":"&#9825;"}</button></div></div>`;
+  const heartFilled=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 .927 -9.215z"/></svg>`;
+  const heartEmpty=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>`;
+  return`<div class="verse-card"><div class="vc-top"><div class="vc-ref">${sanitize(v.ref)}</div><span class="vc-cat">${sanitize(v.cat)}</span></div><div class="vc-text">"${sanitize(v.text)}"</div><div class="vc-bottom"><button class="fav-btn ${isFav(v.ref)?"active":""}" onclick="toggleFav('${sr}')">${isFav(v.ref)?heartFilled:heartEmpty}</button></div></div>`;
 }
 
 // Extract book name from verse reference e.g. "Proverbs 10:22" => "Proverbs"
@@ -770,11 +785,16 @@ document.getElementById("searchInput").addEventListener("input",e=>{
   }
   render();
 });
+function applyDarkIcons(){
+  document.getElementById("darkIcon").style.display=isDark?"none":"block";
+  document.getElementById("lightIcon").style.display=isDark?"block":"none";
+}
 document.getElementById("darkToggle").addEventListener("click",()=>{
   isDark=!isDark;document.body.classList.toggle("dark",isDark);
   localStorage.setItem("seed_dark",isDark);
-  document.getElementById("darkToggle").textContent=isDark?"☀️":"🌙";
+  applyDarkIcons();
 });
+applyDarkIcons();
 document.getElementById("addBtn").addEventListener("click",openModal);
 document.getElementById("signOutBtn").addEventListener("click",signOut);
 
