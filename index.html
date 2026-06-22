@@ -30,8 +30,6 @@
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
   --shadow-lg: 0 12px 32px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.05);
-  --nav-h: 72px;
-  --header-h: 60px;
   --radius: 16px;
   --radius-sm: 10px;
   --radius-lg: 24px;
@@ -128,7 +126,7 @@ body {
 .search-icon { position:absolute; left:0.9rem; top:50%; transform:translateY(-50%); color:var(--ink3); font-size:0.95rem; pointer-events:none; }
 
 /* ── SCROLL AREA ── */
-.scroll-area { flex:1; overflow-y:auto; padding:1.25rem 1.25rem calc(var(--nav-h) + 1.5rem); }
+.scroll-area { flex:1; overflow-y:auto; padding:1.25rem 1.25rem calc(56px + env(safe-area-inset-bottom) + 1rem); }
 
 /* ── BOTTOM NAV ── */
 .bottom-nav {
@@ -136,36 +134,63 @@ body {
   width:100%; max-width:480px;
   background:var(--card);
   border-top:1px solid var(--border);
-  height:var(--nav-h);
-  display:flex; align-items:center; justify-content:space-around;
-  padding: 0 0.5rem;
+  display:flex; align-items:stretch; justify-content:space-around;
   padding-bottom:env(safe-area-inset-bottom);
   z-index:50;
   box-shadow:0 -4px 20px rgba(0,0,0,0.06);
+  height:calc(56px + env(safe-area-inset-bottom));
 }
 .nav-item {
   flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:0.28rem; cursor:pointer; padding:0.5rem 0;
+  gap:0.22rem; cursor:pointer; padding:0.5rem 0;
   border:none; background:none; color:var(--ink3);
-  font-family:'Inter',sans-serif; font-size:0.65rem; font-weight:500;
+  font-family:'Inter',sans-serif; font-size:0.6rem; font-weight:500;
   letter-spacing:0.02em; transition:color 0.15s;
-  position:relative;
+  position:relative; overflow:hidden;
 }
 .nav-item.active { color:var(--gold); }
+.nav-item.active::after {
+  content:''; position:absolute; top:0; left:20%; right:20%;
+  height:2.5px; background:var(--gold); border-radius:0 0 3px 3px;
+}
 .nav-icon {
-  font-size:1.3rem; line-height:1;
+  font-size:1.2rem; line-height:1;
   transition:transform 0.2s;
 }
-.nav-item.active .nav-icon { transform:scale(1.1); }
+.nav-item.active .nav-icon { transform:scale(1.15); }
+.nav-label { line-height:1; }
 .nav-item.center-btn {
   background:var(--gold); color:#fff !important;
-  border-radius:50%; width:52px; height:52px; flex:none;
-  margin-top:-20px;
-  box-shadow:0 4px 16px rgba(196,154,42,0.45);
-  font-size:0; padding:0;
+  border-radius:50%; width:48px; height:48px; flex:none;
+  align-self:center;
+  margin-bottom:calc(env(safe-area-inset-bottom) * 0.5);
+  box-shadow:0 4px 16px rgba(196,154,42,0.5);
+  font-size:0; padding:0; gap:0;
+  overflow:visible;
 }
-.nav-item.center-btn .nav-icon { font-size:1.5rem; color:#fff; transform:none; }
-.nav-item.center-btn:hover { background:var(--gold); filter:brightness(1.1); }
+.nav-item.center-btn::after { display:none; }
+.nav-item.center-btn .nav-icon { font-size:1.4rem; color:#fff; transform:none; }
+.nav-item.center-btn:hover { filter:brightness(1.1); }
+
+/* ── FILTER DROPDOWNS ── */
+.filter-row { display:flex; gap:0.6rem; margin-bottom:1.1rem; flex-wrap:wrap; }
+.filter-pill {
+  display:flex; align-items:center; gap:0.4rem;
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:50px; padding:0.4rem 0.9rem;
+  font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:500;
+  color:var(--ink2); cursor:pointer;
+  box-shadow:var(--shadow-sm);
+  transition:border-color 0.15s, background 0.15s;
+  position:relative;
+}
+.filter-pill.has-filter { border-color:var(--gold); background:var(--gold-bg); color:var(--gold); font-weight:600; }
+.filter-pill select {
+  position:absolute; inset:0; opacity:0; cursor:pointer;
+  width:100%; border:none; background:none;
+  font-size:1rem;
+}
+.filter-arrow { font-size:0.65rem; opacity:0.6; }
 
 /* ── PAGE TITLE ── */
 .page-title { font-family:'Lora',serif; font-size:1.5rem; font-weight:700; color:var(--ink); margin-bottom:0.25rem; }
@@ -377,8 +402,13 @@ body {
   <header class="app-header" id="appHeader">
     <div class="header-logo">Seed<span>.</span></div>
     <div class="header-right">
-      <button class="hbtn" id="searchToggle" title="Search">&#128269;</button>
-      <button class="hbtn" id="darkToggle" title="Toggle mode">&#127768;</button>
+      <button class="hbtn" id="searchToggle" title="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="hbtn" id="darkToggle" title="Toggle mode">
+        <svg id="darkIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="lightIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
       <span class="user-pill" id="userPill" style="display:none;"></span>
       <button class="logout-btn" id="signOutBtn" style="display:none;">Logout</button>
     </div>
@@ -387,7 +417,9 @@ body {
   <!-- SEARCH -->
   <div id="searchBar" style="display:none;">
     <div class="search-wrap">
-      <span class="search-icon">&#128269;</span>
+      <span class="search-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
       <input type="text" id="searchInput" placeholder="Search verses, references, categories..." autocomplete="off">
     </div>
   </div>
@@ -395,26 +427,25 @@ body {
   <!-- MAIN SCROLL AREA -->
   <div class="scroll-area" id="mainContent"></div>
 
-  <!-- BOTTOM NAV -->
   <nav class="bottom-nav" id="bottomNav">
     <button class="nav-item active" data-view="daily">
       <span class="nav-icon">&#9728;</span>
-      <span>Today</span>
+      <span class="nav-label">Today</span>
     </button>
     <button class="nav-item" data-view="browse">
       <span class="nav-icon">&#9783;</span>
-      <span>Browse</span>
+      <span class="nav-label">Browse</span>
     </button>
     <button class="nav-item center-btn" id="addBtn" style="display:none;" title="Add verse">
       <span class="nav-icon">&#43;</span>
     </button>
     <button class="nav-item" data-view="all">
       <span class="nav-icon">&#9776;</span>
-      <span>All</span>
+      <span class="nav-label">All</span>
     </button>
     <button class="nav-item" data-view="favorites">
       <span class="nav-icon">&#9825;</span>
-      <span>Saved</span>
+      <span class="nav-label">Saved</span>
     </button>
   </nav>
 
@@ -505,7 +536,7 @@ const BASE_CATS = ["Prosperity","Tithing & Giving","Wisdom","Provision","Breakth
 
 let currentUser=null, cloudFavs=[], cloudVerses=[], cloudCats=[];
 let isDark=localStorage.getItem("seed_dark")==="true";
-let searchVisible=false, searchQuery="", selectedCat="All", currentView="daily";
+let searchVisible=false, searchQuery="", selectedCat="All", selectedBook="All", currentView="daily";
 let authMode="login";
 
 function getVerses(){return[...BASE_VERSES,...cloudVerses];}
@@ -570,11 +601,42 @@ function renderVerseCard(v){
   return`<div class="verse-card"><div class="vc-top"><div class="vc-ref">${sanitize(v.ref)}</div><span class="vc-cat">${sanitize(v.cat)}</span></div><div class="vc-text">"${sanitize(v.text)}"</div><div class="vc-bottom"><button class="fav-btn ${isFav(v.ref)?"active":""}" onclick="toggleFav('${sr}')">${isFav(v.ref)?"&#9829;":"&#9825;"}</button></div></div>`;
 }
 
+// Extract book name from verse reference e.g. "Proverbs 10:22" => "Proverbs"
+function getBook(ref){ return ref.replace(/\s+\d.*$/,"").trim(); }
+function getBooks(){
+  const books=[...new Set(getVerses().map(v=>getBook(v.ref)))].sort();
+  return["All",...books];
+}
+function selectCat(val){ selectedCat=val; render(); }
+function selectBook(val){ selectedBook=val; render(); }
+
+function filterRowHTML(){
+  const cats=["All",...BASE_CATS,...cloudCats];
+  const books=getBooks();
+  const catActive=selectedCat!=="All";
+  const bookActive=selectedBook!=="All";
+  return`<div class="filter-row">
+    <div class="filter-pill ${catActive?"has-filter":""}">
+      &#9965; ${catActive?sanitize(selectedCat):"Category"} <span class="filter-arrow">&#9660;</span>
+      <select onchange="selectCat(this.value)">
+        ${cats.map(c=>`<option value="${c}" ${selectedCat===c?"selected":""}>${c}</option>`).join("")}
+      </select>
+    </div>
+    <div class="filter-pill ${bookActive?"has-filter":""}">
+      &#128214; ${bookActive?sanitize(selectedBook):"Book"} <span class="filter-arrow">&#9660;</span>
+      <select onchange="selectBook(this.value)">
+        ${books.map(b=>`<option value="${b}" ${selectedBook===b?"selected":""}>${b}</option>`).join("")}
+      </select>
+    </div>
+  </div>`;
+}
+
 function getFiltered(){
   let list=getVerses();
-  if(currentView==="favorites")list=list.filter(v=>isFav(v.ref));
-  if(currentView==="browse"&&selectedCat!=="All")list=list.filter(v=>v.cat===selectedCat);
-  if(searchQuery){const q=searchQuery.toLowerCase();list=list.filter(v=>v.ref.toLowerCase().includes(q)||v.text.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q));}
+  if(currentView==="favorites") list=list.filter(v=>isFav(v.ref));
+  if(selectedCat!=="All") list=list.filter(v=>v.cat===selectedCat);
+  if(selectedBook!=="All") list=list.filter(v=>getBook(v.ref)===selectedBook);
+  if(searchQuery){ const q=searchQuery.toLowerCase(); list=list.filter(v=>v.ref.toLowerCase().includes(q)||v.text.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q)); }
   return list;
 }
 
@@ -585,23 +647,25 @@ function render(){
   const list=getFiltered();
   let html="";
   if(currentView==="browse"){
-    html+=`<div class="page-title">Browse</div><div class="page-sub">Filter by category</div>`;
-    html+=`<div class="chips-scroll">`;
-    getCategories().forEach(cat=>{html+=`<button class="chip ${selectedCat===cat?"active":""}" onclick="selectCat('${cat.replace(/'/g,"\\'")}')">${sanitize(cat)}</button>`;});
-    html+=`</div>`;
-    html+=`<div class="sec-header"><span class="sec-title">${selectedCat==="All"?"All verses":sanitize(selectedCat)}</span><span class="sec-title">${list.length} verse${list.length!==1?"s":""}</span></div>`;
+    html+=`<div class="page-title">Browse</div><div class="page-sub">Filter by category or book</div>`;
+    html+=filterRowHTML();
   }
-  if(currentView==="all"){html+=`<div class="page-title">All Verses</div><div class="page-sub">${list.length} NKJV verses on financial blessing</div>`;}
-  if(currentView==="favorites"){html+=`<div class="page-title">Saved</div><div class="page-sub">${list.length} verse${list.length!==1?"s":""} saved</div>`;}
+  if(currentView==="all"){
+    html+=`<div class="page-title">All Verses</div><div class="page-sub">${list.length} NKJV verses</div>`;
+    html+=filterRowHTML();
+  }
+  if(currentView==="favorites"){
+    html+=`<div class="page-title">Saved</div><div class="page-sub">${list.length} verse${list.length!==1?"s":""} saved</div>`;
+    html+=filterRowHTML();
+  }
+  html+=`<div class="sec-header"><span class="sec-title">Results</span><span class="sec-title">${list.length} verse${list.length!==1?"s":""}</span></div>`;
   if(list.length===0){
-    html+=currentView==="favorites"?`<div class="empty">Nothing saved yet. Tap &#9825; on any verse to save it here.</div>`:`<div class="empty">No verses found.</div>`;
+    html+=currentView==="favorites"?`<div class="empty">Nothing saved yet. Tap &#9825; on any verse to save it here.</div>`:`<div class="empty">No verses found for these filters.</div>`;
   }else{
     html+=`<div class="verse-list">`;list.forEach(v=>{html+=renderVerseCard(v);});html+=`</div>`;
   }
   main.innerHTML=html;
 }
-
-function selectCat(cat){selectedCat=cat;render();}
 
 function renderAuth(){
   const main=document.getElementById("mainContent");
@@ -686,7 +750,8 @@ document.querySelectorAll(".nav-item[data-view]").forEach(btn=>{
     document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
     currentView=btn.dataset.view;
-    searchQuery="";document.getElementById("searchInput").value="";
+    searchQuery="";selectedCat="All";selectedBook="All";
+    document.getElementById("searchInput").value="";
     if(searchVisible){searchVisible=false;document.getElementById("searchBar").style.display="none";document.getElementById("searchToggle").classList.remove("active");}
     render();
   });
