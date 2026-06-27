@@ -433,6 +433,7 @@ async function loadUserData(){
     db.from("favorites").select("id,base_verse_id,custom_verse_id").eq("user_id",currentUser.id),
     db.from("verse_of_week").select("*").eq("user_id",currentUser.id).eq("week_number",week).eq("year",year).maybeSingle(),
   ]);
+  // Assign categories FIRST so getCatName works correctly when mapping verses
   categories=catRes.data||[];
   baseVerses=(baseRes.data||[]).map(v=>({...v,cat:getCatName(v.cat_id)}));
   customVerses=(customRes.data||[]).map(v=>({...v,cat:getCatName(v.cat_id)}));
@@ -634,20 +635,22 @@ function renderVerseCard(v){
   </div>`;
 }
 
-// FILTER ROW — uses category NAMES as values (bug fix #1)
+// FILTER ROW — uses category NAMES as values, raw not sanitized to preserve & characters
 function filterRowHTML(){
   const cats=getCategoryNames();
   const books=getBooks();
   const catActive=selectedCat!=="All";
   const bookActive=selectedBook!=="All";
+  const catOptions=cats.map(c=>`<option value="${c.replace(/"/g,'&quot;')}" ${selectedCat===c?"selected":""}>${sanitize(c)}</option>`).join("");
+  const bookOptions=books.map(b=>`<option value="${b.replace(/"/g,'&quot;')}" ${selectedBook===b?"selected":""}>${sanitize(b)}</option>`).join("");
   return`<div class="filter-row">
     <div class="filter-pill ${catActive?"has-filter":""}">
       ${catActive?sanitize(selectedCat):"Category"} <span class="filter-arrow">&#9660;</span>
-      <select onchange="selectCat(this.value)">${cats.map(c=>`<option value="${sanitize(c)}" ${selectedCat===c?"selected":""}>${sanitize(c)}</option>`).join("")}</select>
+      <select onchange="selectCat(this.value)">${catOptions}</select>
     </div>
     <div class="filter-pill ${bookActive?"has-filter":""}">
       ${bookActive?sanitize(selectedBook):"Book"} <span class="filter-arrow">&#9660;</span>
-      <select onchange="selectBook(this.value)">${books.map(b=>`<option value="${sanitize(b)}" ${selectedBook===b?"selected":""}>${sanitize(b)}</option>`).join("")}</select>
+      <select onchange="selectBook(this.value)">${bookOptions}</select>
     </div>
   </div>`;
 }
