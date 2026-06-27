@@ -14,410 +14,224 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
-  --bg: #FAFAF7;
-  --bg2: #F3F1EA;
-  --card: #FFFFFF;
-  --card2: #F7F5EE;
-  --border: #E8E4D8;
-  --ink: #1A1208;
-  --ink2: #4A3F2A;
-  --ink3: #9A8E78;
-  --gold: #C49A2A;
-  --gold-bg: #FBF3DC;
-  --gold-border: #E8D48A;
-  --accent: #C49A2A;
-  --red: #A03020;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
-  --shadow-lg: 0 12px 32px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.05);
-  --radius: 16px;
-  --radius-sm: 10px;
-  --radius-lg: 24px;
+  --bg:#FAFAF7; --bg2:#F3F1EA; --card:#FFFFFF; --card2:#F7F5EE;
+  --border:#E8E4D8; --ink:#1A1208; --ink2:#4A3F2A; --ink3:#9A8E78;
+  --gold:#C49A2A; --gold-bg:#FBF3DC; --gold-border:#E8D48A;
+  --red:#A03020; --green:#2A6A3A;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:0 12px 32px rgba(0,0,0,0.10),0 4px 8px rgba(0,0,0,0.05);
+  --radius:16px; --radius-sm:10px; --radius-lg:24px;
 }
 .dark {
-  --bg: #100E08;
-  --bg2: #1A1610;
-  --card: #1E1A12;
-  --card2: #252018;
-  --border: #302A1E;
-  --ink: #F0EAD8;
-  --ink2: #C8B890;
-  --ink3: #7A6E58;
-  --gold: #D4A830;
-  --gold-bg: #2A2010;
-  --gold-border: #4A3A18;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-  --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+  --bg:#100E08; --bg2:#1A1610; --card:#1E1A12; --card2:#252018;
+  --border:#302A1E; --ink:#F0EAD8; --ink2:#C8B890; --ink3:#7A6E58;
+  --gold:#D4A830; --gold-bg:#2A2010; --gold-border:#4A3A18;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg:0 12px 32px rgba(0,0,0,0.5);
 }
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html { height:100%; }
-body {
-  font-family:'Inter',system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--ink);
-  min-height:100vh;
-  min-height:100dvh;
-  transition:background 0.25s,color 0.25s;
-  overscroll-behavior:none;
-}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{height:100%;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;min-height:100dvh;transition:background 0.25s,color 0.25s;overscroll-behavior:none;}
 
 /* ── APP SHELL ── */
-.app-shell { display:flex; flex-direction:column; min-height:100vh; min-height:100dvh; max-width:480px; margin:0 auto; position:relative; }
+.app-shell{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;max-width:480px;margin:0 auto;position:relative;}
 
 /* ── HEADER ── */
-.app-header {
-  position:sticky; top:0; z-index:50;
-  background:var(--bg);
-  padding: 0 1.25rem;
-  height:var(--header-h);
-  display:flex; align-items:center; justify-content:space-between;
-  border-bottom:1px solid var(--border);
-}
-.header-logo {
-  font-family:'Lora',serif;
-  font-size:1.5rem; font-weight:700;
-  color:var(--gold);
-  letter-spacing:0.02em;
-  font-style:italic;
-}
-.header-logo span { color:var(--red); font-style:normal; }
-.header-right { display:flex; align-items:center; gap:0.5rem; }
-.hbtn {
-  background:var(--card2); border:1px solid var(--border);
-  border-radius:50%; width:36px; height:36px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; font-size:1rem;
-  transition:background 0.15s, border-color 0.15s;
-  color:var(--ink2);
-}
-.hbtn:hover, .hbtn.active { background:var(--gold-bg); border-color:var(--gold-border); color:var(--gold); }
-.logout-btn {
-  background:var(--card2); border:1px solid var(--border);
-  border-radius:20px; padding:0.3rem 0.85rem;
-  font-family:'Inter',sans-serif; font-size:0.75rem; font-weight:600;
-  color:var(--ink2); cursor:pointer;
-  transition:background 0.15s, color 0.15s;
-}
-.logout-btn:hover { background:var(--red); color:#fff; border-color:var(--red); }
-.user-pill {
-  font-size:0.72rem; font-weight:600; color:var(--ink3);
-  background:var(--card2); border:1px solid var(--border);
-  border-radius:20px; padding:0.25rem 0.7rem;
-  max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
+.app-header{position:sticky;top:0;z-index:100;background:var(--bg);padding:0 1.25rem;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.header-logo{font-family:'Lora',serif;font-size:1.5rem;font-weight:700;color:var(--gold);letter-spacing:0.02em;font-style:italic;}
+.header-logo span{color:var(--red);font-style:normal;}
+.header-right{display:flex;align-items:center;gap:0.5rem;position:relative;}
+.hbtn{background:var(--card2);border:1px solid var(--border);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.15s,border-color 0.15s;color:var(--ink2);}
+.hbtn:hover,.hbtn.active{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold);}
+
+/* ── HAMBURGER DROPDOWN ── */
+.hamburger-menu{position:absolute;top:calc(100% + 0.5rem);right:0;width:220px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);overflow:hidden;z-index:200;display:none;}
+.hamburger-menu.open{display:block;}
+.hm-user{padding:0.85rem 1rem;border-bottom:1px solid var(--border);font-size:0.78rem;color:var(--ink3);font-weight:500;}
+.hm-user strong{display:block;font-size:0.88rem;color:var(--ink);font-weight:600;margin-bottom:0.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hm-item{display:flex;align-items:center;gap:0.65rem;padding:0.75rem 1rem;font-size:0.88rem;color:var(--ink2);cursor:pointer;transition:background 0.15s;border:none;background:none;width:100%;font-family:'Inter',sans-serif;font-weight:500;}
+.hm-item:hover{background:var(--bg2);}
+.hm-item svg{flex-shrink:0;color:var(--ink3);}
+.hm-item.danger{color:var(--red);}
+.hm-item.danger svg{color:var(--red);}
+.hm-divider{height:1px;background:var(--border);}
 
 /* ── SEARCH BAR ── */
-.search-wrap {
-  margin: 0.75rem 1.25rem 0;
-  position:relative;
-}
-.search-wrap input {
-  width:100%; background:var(--card);
-  border:1.5px solid var(--border); border-radius:50px;
-  padding:0.65rem 1rem 0.65rem 2.6rem;
-  font-family:'Inter',sans-serif; font-size:0.9rem;
-  color:var(--ink); outline:none;
-  transition:border-color 0.2s, box-shadow 0.2s;
-  box-shadow:var(--shadow-sm);
-}
-.search-wrap input::placeholder { color:var(--ink3); }
-.search-wrap input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(196,154,42,0.12); }
-.search-icon { position:absolute; left:0.9rem; top:50%; transform:translateY(-50%); color:var(--ink3); font-size:0.95rem; pointer-events:none; }
+.search-wrap{margin:0.75rem 1.25rem 0;position:relative;}
+.search-wrap input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:50px;padding:0.65rem 1rem 0.65rem 2.6rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow-sm);}
+.search-wrap input::placeholder{color:var(--ink3);}
+.search-wrap input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,42,0.12);}
+.search-icon{position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;}
 
 /* ── SCROLL AREA ── */
-.scroll-area { flex:1; overflow-y:auto; padding:1.25rem 1.25rem calc(56px + env(safe-area-inset-bottom) + 1rem); }
+.scroll-area{flex:1;overflow-y:auto;padding:1.25rem 1.25rem calc(56px + env(safe-area-inset-bottom) + 1rem);}
 
 /* ── BOTTOM NAV ── */
-.bottom-nav {
-  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
-  width:100%; max-width:480px;
-  background:var(--card);
-  border-top:1px solid var(--border);
-  display:flex; align-items:stretch; justify-content:space-around;
-  padding-bottom:env(safe-area-inset-bottom);
-  z-index:50;
-  box-shadow:0 -4px 20px rgba(0,0,0,0.06);
-  height:calc(56px + env(safe-area-inset-bottom));
-}
-.nav-item {
-  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:0.22rem; cursor:pointer; padding:0.5rem 0;
-  border:none; background:none; color:var(--ink3);
-  font-family:'Inter',sans-serif; font-size:0.6rem; font-weight:500;
-  letter-spacing:0.02em; transition:color 0.15s;
-  position:relative; overflow:hidden;
-}
-.nav-item.active { color:var(--gold); }
-.nav-item.active::after {
-  content:''; position:absolute; top:0; left:20%; right:20%;
-  height:2.5px; background:var(--gold); border-radius:0 0 3px 3px;
-}
-.nav-icon {
-  font-size:1.2rem; line-height:1;
-  transition:transform 0.2s;
-}
-.nav-item.active .nav-icon { transform:scale(1.15); }
-.nav-label { line-height:1; }
-.nav-item.center-btn {
-  background:var(--gold); color:#fff !important;
-  border-radius:50%; width:48px; height:48px; flex:none;
-  align-self:center;
-  margin-bottom:calc(env(safe-area-inset-bottom) * 0.5);
-  box-shadow:0 4px 16px rgba(196,154,42,0.5);
-  font-size:0; padding:0; gap:0;
-  overflow:visible;
-}
-.nav-item.center-btn::after { display:none; }
-.nav-item.center-btn .nav-icon { font-size:1.4rem; color:#fff; transform:none; }
-.nav-item.center-btn:hover { filter:brightness(1.1); }
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--card);border-top:1px solid var(--border);display:flex;align-items:stretch;justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);z-index:50;box-shadow:0 -4px 20px rgba(0,0,0,0.06);height:calc(56px + env(safe-area-inset-bottom));}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.22rem;cursor:pointer;padding:0.5rem 0;border:none;background:none;color:var(--ink3);font-family:'Inter',sans-serif;font-size:0.6rem;font-weight:500;letter-spacing:0.02em;transition:color 0.15s;position:relative;overflow:hidden;}
+.nav-item.active{color:var(--gold);}
+.nav-item.active::after{content:'';position:absolute;top:0;left:20%;right:20%;height:2.5px;background:var(--gold);border-radius:0 0 3px 3px;}
+.nav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
+.nav-item.active .nav-icon{transform:scale(1.15);}
+.nav-label{line-height:1;}
+.nav-item.center-btn{background:var(--gold);color:#fff!important;border-radius:50%;width:48px;height:48px;flex:none;align-self:center;margin-bottom:calc(env(safe-area-inset-bottom)*0.5);box-shadow:0 4px 16px rgba(196,154,42,0.5);font-size:0;padding:0;gap:0;overflow:visible;}
+.nav-item.center-btn::after{display:none;}
+.nav-item.center-btn .nav-icon{color:#fff;transform:none;}
+.nav-item.center-btn:hover{filter:brightness(1.1);}
 
-/* ── FILTER DROPDOWNS ── */
-.filter-row { display:flex; gap:0.6rem; margin-bottom:1.1rem; flex-wrap:wrap; }
-.filter-pill {
-  display:flex; align-items:center; gap:0.4rem;
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:50px; padding:0.4rem 0.9rem;
-  font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:500;
-  color:var(--ink2); cursor:pointer;
-  box-shadow:var(--shadow-sm);
-  transition:border-color 0.15s, background 0.15s;
-  position:relative;
-}
-.filter-pill.has-filter { border-color:var(--gold); background:var(--gold-bg); color:var(--gold); font-weight:600; }
-.filter-pill select {
-  position:absolute; inset:0; opacity:0; cursor:pointer;
-  width:100%; border:none; background:none;
-  font-size:1rem;
-}
-.filter-arrow { font-size:0.65rem; opacity:0.6; }
+/* ── FILTER ROW ── */
+.filter-row{display:flex;gap:0.6rem;margin-bottom:1.1rem;flex-wrap:wrap;}
+.filter-pill{display:flex;align-items:center;gap:0.4rem;background:var(--card);border:1.5px solid var(--border);border-radius:50px;padding:0.4rem 0.9rem;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:500;color:var(--ink2);cursor:pointer;box-shadow:var(--shadow-sm);transition:border-color 0.15s,background 0.15s;position:relative;}
+.filter-pill.has-filter{border-color:var(--gold);background:var(--gold-bg);color:var(--gold);font-weight:600;}
+.filter-pill select{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;border:none;background:none;font-size:1rem;}
+.filter-arrow{font-size:0.65rem;opacity:0.6;}
 
 /* ── PAGE TITLE ── */
-.page-title { font-family:'Lora',serif; font-size:1.5rem; font-weight:700; color:var(--ink); margin-bottom:0.25rem; }
-.page-sub { font-size:0.8rem; color:var(--ink3); margin-bottom:1.25rem; }
+.page-title{font-family:'Lora',serif;font-size:1.5rem;font-weight:700;color:var(--ink);margin-bottom:0.25rem;}
+.page-sub{font-size:0.8rem;color:var(--ink3);margin-bottom:1.25rem;}
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;margin-top:0.25rem;}
+.sec-title{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);}
 
-/* ── DAILY CARD ── */
-.daily-greeting { margin-bottom:1.5rem; }
-.daily-greeting .greeting-label {
-  font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;
-  color:var(--ink3); margin-bottom:0.2rem;
-}
-.daily-greeting .greeting-date { font-family:'Lora',serif; font-size:1.3rem; font-weight:600; color:var(--ink); }
-
-.verse-hero {
-  background:linear-gradient(145deg, #FBF5E0 0%, #F0E8C8 60%, #EAE0B8 100%);
-  border:1px solid var(--gold-border);
-  border-radius:var(--radius-lg);
-  padding:2rem 1.75rem 1.75rem;
-  box-shadow:var(--shadow-lg);
-  position:relative; overflow:hidden;
-  margin-bottom:1rem;
-}
-.dark .verse-hero { background:linear-gradient(145deg,#2A2210 0%,#221A08 100%); }
-.verse-hero::before {
-  content:''; position:absolute; top:-30px; right:-30px;
-  width:120px; height:120px;
-  background:radial-gradient(circle, rgba(196,154,42,0.12) 0%, transparent 70%);
-  border-radius:50%;
-}
-.vh-cat {
-  display:inline-flex; align-items:center; gap:0.35rem;
-  background:rgba(196,154,42,0.12); border:1px solid var(--gold-border);
-  border-radius:20px; padding:0.25rem 0.75rem;
-  font-size:0.68rem; font-weight:600; color:var(--gold);
-  letter-spacing:0.08em; text-transform:uppercase;
-  margin-bottom:1.25rem;
-}
-.vh-ornament { opacity:0.4; font-size:0.85rem; }
-.vh-text {
-  font-family:'Lora',serif;
-  font-size:1.2rem; line-height:1.75;
-  color:var(--ink); font-style:italic; font-weight:400;
-  margin-bottom:1.5rem;
-}
-.vh-footer { display:flex; align-items:center; justify-content:space-between; }
-.vh-ref {
-  font-size:0.78rem; font-weight:700;
-  color:var(--gold); letter-spacing:0.08em; text-transform:uppercase;
-}
-.fav-circle {
-  width:38px; height:38px; border-radius:50%;
-  background:var(--card); border:1px solid var(--border);
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; font-size:1.1rem; color:var(--ink3);
-  box-shadow:var(--shadow-sm);
-  transition:background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
-}
-.fav-circle:hover { transform:scale(1.1); }
-.fav-circle.active { background:rgba(160,48,32,0.08); border-color:rgba(160,48,32,0.2); color:var(--red); }
+/* ── DAILY HERO CARD ── */
+.daily-greeting{margin-bottom:1.5rem;}
+.greeting-label{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.2rem;}
+.greeting-date{font-family:'Lora',serif;font-size:1.3rem;font-weight:600;color:var(--ink);}
+.verse-hero{background:linear-gradient(145deg,#FBF5E0 0%,#F0E8C8 60%,#EAE0B8 100%);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:2rem 1.75rem 1.75rem;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;margin-bottom:1rem;}
+.dark .verse-hero{background:linear-gradient(145deg,#2A2210 0%,#221A08 100%);}
+.verse-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(196,154,42,0.12) 0%,transparent 70%);border-radius:50%;}
+.vh-cat{display:inline-flex;align-items:center;gap:0.35rem;background:rgba(196,154,42,0.12);border:1px solid var(--gold-border);border-radius:20px;padding:0.25rem 0.75rem;font-size:0.68rem;font-weight:600;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.25rem;}
+.vh-text{font-family:'Lora',serif;font-size:1.2rem;line-height:1.75;color:var(--ink);font-style:italic;font-weight:400;margin-bottom:1.5rem;}
+.vh-footer{display:flex;align-items:center;justify-content:space-between;}
+.vh-ref{font-size:0.78rem;font-weight:700;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;}
+.fav-circle{width:38px;height:38px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink3);box-shadow:var(--shadow-sm);transition:background 0.15s,color 0.15s,border-color 0.15s,transform 0.1s;}
+.fav-circle:hover{transform:scale(1.1);}
+.fav-circle.active{background:rgba(160,48,32,0.08);border-color:rgba(160,48,32,0.2);color:var(--red);}
 
 /* ── QUICK STATS ── */
-.quick-stats { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.25rem; }
-.stat-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:var(--radius); padding:1rem;
-  box-shadow:var(--shadow-sm);
-}
-.stat-num { font-family:'Lora',serif; font-size:1.6rem; font-weight:700; color:var(--gold); line-height:1; margin-bottom:0.25rem; }
-.stat-label { font-size:0.72rem; color:var(--ink3); font-weight:500; }
-
-/* ── SECTION HEADER ── */
-.sec-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.85rem; margin-top:1.5rem; }
-.sec-title { font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink3); }
-
-/* ── CATEGORY CHIPS ── */
-.chips-scroll { display:flex; gap:0.5rem; overflow-x:auto; scrollbar-width:none; padding-bottom:0.25rem; margin-bottom:1rem; }
-.chips-scroll::-webkit-scrollbar { display:none; }
-.chip {
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:50px; padding:0.4rem 1rem;
-  font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:500;
-  color:var(--ink2); cursor:pointer; white-space:nowrap;
-  transition:all 0.15s; box-shadow:var(--shadow-sm);
-}
-.chip:hover { border-color:var(--gold-border); color:var(--gold); background:var(--gold-bg); }
-.chip.active { background:var(--gold); color:#fff; border-color:var(--gold); box-shadow:0 2px 8px rgba(196,154,42,0.3); }
+.quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow-sm);}
+.stat-num{font-family:'Lora',serif;font-size:1.6rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:0.25rem;}
+.stat-label{font-size:0.72rem;color:var(--ink3);font-weight:500;}
 
 /* ── VERSE CARDS ── */
-.verse-list { display:flex; flex-direction:column; gap:0.75rem; }
-.verse-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:var(--radius); padding:1.1rem 1.2rem;
-  box-shadow:var(--shadow-sm);
-  transition:box-shadow 0.2s, transform 0.15s;
-  position:relative;
-}
-.verse-card:active { transform:scale(0.99); }
-.vc-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:0.6rem; gap:0.5rem; }
-.vc-ref { font-size:0.72rem; font-weight:700; color:var(--gold); letter-spacing:0.06em; text-transform:uppercase; }
-.vc-cat { font-size:0.62rem; font-weight:600; background:var(--gold-bg); color:var(--gold); border:1px solid var(--gold-border); border-radius:6px; padding:0.15rem 0.45rem; letter-spacing:0.04em; white-space:nowrap; }
-.vc-text { font-family:'Lora',serif; font-size:0.95rem; line-height:1.7; color:var(--ink2); font-style:italic; margin-bottom:0.75rem; }
-.vc-bottom { display:flex; justify-content:flex-end; }
-.fav-btn {
-  background:none; border:none; cursor:pointer;
-  color:var(--ink3); font-size:1.1rem; padding:0.2rem;
-  transition:color 0.15s, transform 0.1s;
-}
-.fav-btn:hover { transform:scale(1.2); }
-.fav-btn.active { color:var(--red); }
+.verse-list{display:flex;flex-direction:column;gap:0.75rem;}
+.verse-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.2rem;box-shadow:var(--shadow-sm);transition:box-shadow 0.2s,transform 0.15s;}
+.verse-card:active{transform:scale(0.99);}
+.vc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.6rem;gap:0.5rem;}
+.vc-ref{font-size:0.72rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;}
+.vc-cat{font-size:0.62rem;font-weight:600;background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border);border-radius:6px;padding:0.15rem 0.45rem;letter-spacing:0.04em;white-space:nowrap;}
+.vc-text{font-family:'Lora',serif;font-size:0.95rem;line-height:1.7;color:var(--ink2);font-style:italic;margin-bottom:0.75rem;}
+.vc-bottom{display:flex;justify-content:flex-end;}
+.fav-btn{background:none;border:none;cursor:pointer;color:var(--ink3);padding:0.2rem;transition:color 0.15s,transform 0.1s;}
+.fav-btn:hover{transform:scale(1.2);}
+.fav-btn.active{color:var(--red);}
 
-/* ── EMPTY ── */
-.empty { text-align:center; padding:3rem 1rem; color:var(--ink3); font-style:italic; font-size:0.95rem; }
+/* ── SKELETON SCREENS ── */
+.skeleton{background:linear-gradient(90deg,var(--card2) 25%,var(--border) 50%,var(--card2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-hero{height:280px;border-radius:var(--radius-lg);margin-bottom:1rem;}
+.skel-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1rem;}
+.skel-stat{height:80px;border-radius:var(--radius);}
+.skel-card{height:110px;border-radius:var(--radius);margin-bottom:0.75rem;}
+.skel-line{height:14px;border-radius:4px;margin-bottom:0.5rem;}
+.skel-line.short{width:40%;}
+.skel-line.med{width:65%;}
+.skel-title{height:28px;border-radius:6px;width:50%;margin-bottom:0.4rem;}
+.skel-sub{height:14px;border-radius:4px;width:70%;margin-bottom:1.25rem;}
 
-/* ── AUTH SCREEN ── */
-.auth-wrap { padding:2rem 1.25rem; }
-.auth-hero { text-align:center; margin-bottom:2rem; }
-.auth-logo { font-family:'Lora',serif; font-size:2.5rem; font-weight:700; color:var(--gold); font-style:italic; margin-bottom:0.5rem; }
-.auth-logo span { color:var(--red); font-style:normal; }
-.auth-tagline { font-size:0.88rem; color:var(--ink3); line-height:1.5; }
-.auth-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.75rem 1.5rem; box-shadow:var(--shadow-md); }
-.auth-card-title { font-family:'Lora',serif; font-size:1.2rem; font-weight:700; color:var(--ink); margin-bottom:0.25rem; }
-.auth-card-sub { font-size:0.82rem; color:var(--ink3); margin-bottom:1.5rem; }
-.auth-field { margin-bottom:1rem; }
-.auth-label { display:block; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink3); margin-bottom:0.4rem; }
-.auth-input {
-  width:100%; background:var(--bg2);
-  border:1.5px solid var(--border); border-radius:var(--radius-sm);
-  padding:0.75rem 1rem; font-family:'Inter',sans-serif; font-size:0.95rem;
-  color:var(--ink); outline:none;
-  transition:border-color 0.2s, box-shadow 0.2s;
-}
-.auth-input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(196,154,42,0.12); }
-.auth-btn {
-  width:100%; margin-top:0.5rem;
-  background:var(--gold); color:#fff; border:none;
-  border-radius:50px; padding:0.9rem;
-  font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:700;
-  cursor:pointer; letter-spacing:0.02em;
-  box-shadow:0 4px 16px rgba(196,154,42,0.35);
-  transition:filter 0.15s, transform 0.1s;
-}
-.auth-btn:hover { filter:brightness(1.08); }
-.auth-btn:active { transform:scale(0.98); }
-.auth-btn:disabled { opacity:0.55; cursor:not-allowed; }
-.auth-switch { margin-top:1.25rem; text-align:center; font-size:0.84rem; color:var(--ink3); }
-.auth-switch a { color:var(--gold); cursor:pointer; font-weight:600; }
-.auth-error { margin-top:0.85rem; padding:0.6rem 0.9rem; background:rgba(160,48,32,0.07); border:1px solid rgba(160,48,32,0.2); border-radius:8px; font-size:0.82rem; color:var(--red); }
-.auth-success { margin-top:0.85rem; padding:0.6rem 0.9rem; background:rgba(50,120,50,0.07); border:1px solid rgba(50,120,50,0.2); border-radius:8px; font-size:0.82rem; color:#276027; }
+/* ── AUTH ── */
+.auth-wrap{padding:2rem 1.25rem;}
+.auth-hero{text-align:center;margin-bottom:2rem;}
+.auth-logo{font-family:'Lora',serif;font-size:2.5rem;font-weight:700;color:var(--gold);font-style:italic;margin-bottom:0.5rem;}
+.auth-logo span{color:var(--red);font-style:normal;}
+.auth-tagline{font-size:0.88rem;color:var(--ink3);line-height:1.5;}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem 1.5rem;box-shadow:var(--shadow-md);}
+.auth-card-title{font-family:'Lora',serif;font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:0.25rem;}
+.auth-card-sub{font-size:0.82rem;color:var(--ink3);margin-bottom:1.5rem;}
+.auth-field{margin-bottom:1rem;}
+.auth-label{display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.4rem;}
+.auth-input{width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.95rem;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.auth-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,42,0.12);}
+.auth-btn{width:100%;margin-top:0.5rem;background:var(--gold);color:#fff;border:none;border-radius:50px;padding:0.9rem;font-family:'Inter',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;letter-spacing:0.02em;box-shadow:0 4px 16px rgba(196,154,42,0.35);transition:filter 0.15s,transform 0.1s;}
+.auth-btn:hover{filter:brightness(1.08);}
+.auth-btn:active{transform:scale(0.98);}
+.auth-btn:disabled{opacity:0.55;cursor:not-allowed;}
+.auth-switch{margin-top:1.25rem;text-align:center;font-size:0.84rem;color:var(--ink3);}
+.auth-switch a{color:var(--gold);cursor:pointer;font-weight:600;}
+.auth-error{margin-top:0.85rem;padding:0.6rem 0.9rem;background:rgba(160,48,32,0.07);border:1px solid rgba(160,48,32,0.2);border-radius:8px;font-size:0.82rem;color:var(--red);}
+.auth-success{margin-top:0.85rem;padding:0.6rem 0.9rem;background:rgba(42,106,58,0.07);border:1px solid rgba(42,106,58,0.2);border-radius:8px;font-size:0.82rem;color:var(--green);}
 
 /* ── MODAL ── */
-.modal-overlay { position:fixed; inset:0; background:rgba(10,8,4,0.5); z-index:200; display:flex; align-items:flex-end; justify-content:center; backdrop-filter:blur(3px); }
-.modal {
-  background:var(--bg); border:1px solid var(--border);
-  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
-  padding:1.5rem 1.5rem 2.5rem;
-  width:100%; max-width:480px;
-  box-shadow:var(--shadow-lg);
-  max-height:90vh; overflow-y:auto;
-}
-.modal-handle { width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 1.25rem; }
-.modal-title { font-family:'Lora',serif; font-size:1.15rem; font-weight:700; color:var(--ink); margin-bottom:1.25rem; }
-.modal label { display:block; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink3); margin-bottom:0.4rem; margin-top:1rem; }
-.modal label:first-of-type { margin-top:0; }
-.modal input,.modal textarea,.modal select {
-  width:100%; background:var(--card2); border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); padding:0.7rem 0.9rem;
-  font-family:'Inter',sans-serif; font-size:0.9rem; color:var(--ink);
-  outline:none; transition:border-color 0.2s; resize:vertical;
-}
-.modal input:focus,.modal textarea:focus,.modal select:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(196,154,42,0.1); }
-.modal textarea { min-height:90px; }
-.modal-actions { display:flex; gap:0.75rem; margin-top:1.5rem; }
-.btn { font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:600; padding:0.7rem 1.25rem; border-radius:50px; border:none; cursor:pointer; transition:all 0.15s; flex:1; }
-.btn-primary { background:var(--gold); color:#fff; box-shadow:0 2px 8px rgba(196,154,42,0.3); }
-.btn-primary:hover { filter:brightness(1.08); }
-.btn-ghost { background:var(--card2); border:1.5px solid var(--border); color:var(--ink2); }
-.btn-ghost:hover { background:var(--bg2); }
-.new-cat-row { display:flex; gap:0.5rem; align-items:center; margin-top:0.5rem; }
-.new-cat-row input { flex:1; margin:0; }
-.new-cat-row .btn { flex:none; padding:0.65rem 1rem; font-size:0.8rem; white-space:nowrap; }
+.modal-overlay{position:fixed;inset:0;background:rgba(10,8,4,0.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px);}
+.modal{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:1.5rem 1.5rem 2.5rem;width:100%;max-width:480px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 1.25rem;}
+.modal-title{font-family:'Lora',serif;font-size:1.15rem;font-weight:700;color:var(--ink);margin-bottom:1.25rem;}
+.modal label{display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.4rem;margin-top:1rem;}
+.modal label:first-of-type{margin-top:0;}
+.modal input,.modal textarea,.modal select{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:border-color 0.2s;resize:vertical;}
+.modal input:focus,.modal textarea:focus,.modal select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,42,0.1);}
+.modal textarea{min-height:90px;}
+.modal-actions{display:flex;gap:0.75rem;margin-top:1.5rem;}
+.btn{font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:600;padding:0.7rem 1.25rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.15s;flex:1;}
+.btn-primary{background:var(--gold);color:#fff;box-shadow:0 2px 8px rgba(196,154,42,0.3);}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-ghost{background:var(--card2);border:1.5px solid var(--border);color:var(--ink2);}
+.btn-ghost:hover{background:var(--bg2);}
+.new-cat-row{display:flex;gap:0.5rem;align-items:center;margin-top:0.5rem;}
+.new-cat-row input{flex:1;margin:0;}
+.new-cat-row .btn{flex:none;padding:0.65rem 1rem;font-size:0.8rem;white-space:nowrap;}
+.modal-error{margin-top:0.75rem;padding:0.55rem 0.85rem;background:rgba(160,48,32,0.07);border:1px solid rgba(160,48,32,0.2);border-radius:8px;font-size:0.82rem;color:var(--red);}
+.modal-success{margin-top:0.75rem;padding:0.55rem 0.85rem;background:rgba(42,106,58,0.07);border:1px solid rgba(42,106,58,0.2);border-radius:8px;font-size:0.82rem;color:var(--green);}
 
-/* ── LOADING ── */
-.loading { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 1rem; gap:1rem; color:var(--ink3); font-size:0.9rem; }
-.spinner { width:28px; height:28px; border:2.5px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.65s linear infinite; }
-@keyframes spin { to { transform:rotate(360deg); } }
+/* ── ADMIN BADGE ── */
+.admin-badge{display:inline-flex;align-items:center;gap:0.3rem;background:rgba(196,154,42,0.12);border:1px solid var(--gold-border);border-radius:6px;padding:0.15rem 0.5rem;font-size:0.65rem;font-weight:700;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-left:0.5rem;}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:3rem 1rem;color:var(--ink3);font-style:italic;font-size:0.95rem;}
 
 /* ── TOAST ── */
-.toast {
-  position:fixed; bottom:calc(var(--nav-h) + 1rem); left:50%;
-  transform:translateX(-50%) translateY(20px);
-  background:var(--ink); color:var(--bg);
-  font-family:'Inter',sans-serif; font-size:0.84rem; font-weight:500;
-  padding:0.65rem 1.25rem; border-radius:50px;
-  box-shadow:var(--shadow-lg); opacity:0;
-  transition:transform 0.25s ease, opacity 0.25s ease;
-  z-index:300; white-space:nowrap; pointer-events:none;
-}
-.toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
-
-@media (min-width:481px) {
-  .bottom-nav { border-radius:0; }
-}
+.toast{position:fixed;bottom:calc(56px + env(safe-area-inset-bottom) + 1rem);left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:500;padding:0.65rem 1.25rem;border-radius:50px;box-shadow:var(--shadow-lg);opacity:0;transition:transform 0.25s ease,opacity 0.25s ease;z-index:300;white-space:nowrap;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 </style>
 </head>
 <body>
 <div class="app-shell">
 
   <!-- HEADER -->
-  <header class="app-header" id="appHeader">
+  <header class="app-header">
     <div class="header-logo">Seed<span>.</span></div>
     <div class="header-right">
+      <!-- Search -->
       <button class="hbtn" id="searchToggle" title="Search">
-        <!-- Tabler: search -->
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>
       </button>
-      <button class="hbtn" id="darkToggle" title="Toggle mode">
-        <!-- Tabler: moon (shown in light mode) -->
-        <svg id="darkIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/></svg>
-        <!-- Tabler: sun (shown in dark mode) -->
-        <svg id="lightIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/></svg>
+      <!-- Hamburger -->
+      <button class="hbtn" id="hamburgerBtn" title="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 6l16 0"/><path d="M4 12l16 0"/><path d="M4 18l16 0"/></svg>
       </button>
-      <span class="user-pill" id="userPill" style="display:none;"></span>
-      <button class="logout-btn" id="signOutBtn" style="display:none;">Logout</button>
+      <!-- Dropdown menu -->
+      <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="hm-user" id="hmUser">
+          <strong id="hmEmail">—</strong>
+          Signed in
+        </div>
+        <button class="hm-item" id="darkToggle">
+          <svg id="darkIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/></svg>
+          <svg id="lightIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/></svg>
+          <span id="darkLabel">Dark Mode</span>
+        </button>
+        <div class="hm-divider"></div>
+        <button class="hm-item danger" id="signOutBtn" style="display:none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M9 12h12l-3 -3m0 6l3 -3"/></svg>
+          Logout
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- SEARCH -->
+  <!-- SEARCH BAR -->
   <div id="searchBar" style="display:none;">
     <div class="search-wrap">
       <span class="search-icon">
@@ -427,43 +241,38 @@ body {
     </div>
   </div>
 
-  <!-- MAIN SCROLL AREA -->
+  <!-- MAIN -->
   <div class="scroll-area" id="mainContent"></div>
 
-  <nav class="bottom-nav" id="bottomNav">
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
     <button class="nav-item active" data-view="daily">
-      <!-- Tabler: sun -->
       <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/></svg></span>
       <span class="nav-label">Today</span>
     </button>
     <button class="nav-item" data-view="browse">
-      <!-- Tabler: layout-grid -->
       <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/></svg></span>
       <span class="nav-label">Browse</span>
     </button>
     <button class="nav-item center-btn" id="addBtn" style="display:none;" title="Add verse">
-      <!-- Tabler: plus -->
       <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg></span>
     </button>
-    <button class="nav-item" data-view="all">
-      <!-- Tabler: list -->
-      <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l11 0"/><path d="M9 12l11 0"/><path d="M9 18l11 0"/><path d="M5 6l0 .01"/><path d="M5 12l0 .01"/><path d="M5 18l0 .01"/></svg></span>
-      <span class="nav-label">All</span>
+    <button class="nav-item" data-view="myverses">
+      <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18"/><path d="M13 8l2 0"/><path d="M13 12l2 0"/></svg></span>
+      <span class="nav-label">My Verses</span>
     </button>
     <button class="nav-item" data-view="favorites">
-      <!-- Tabler: heart -->
       <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg></span>
       <span class="nav-label">Saved</span>
     </button>
   </nav>
-
-</div><!-- end app-shell -->
+</div>
 
 <!-- ADD VERSE MODAL -->
 <div class="modal-overlay" id="modalOverlay" style="display:none;">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">Add a Verse</div>
+    <div class="modal-title" id="modalTitle">Add a Verse</div>
     <label>Reference (e.g. John 3:16)</label>
     <input type="text" id="newRef" placeholder="Book chapter:verse" maxlength="60">
     <label>Verse Text</label>
@@ -476,10 +285,12 @@ body {
         <input type="text" id="newCatInput" placeholder="New category name..." maxlength="50">
         <button class="btn btn-primary" onclick="addCategory()">Add</button>
       </div>
+      <div id="catMsg"></div>
     </div>
+    <div id="verseMsg"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveVerse()">Save Verse</button>
+      <button class="btn btn-primary" id="saveVerseBtn" onclick="saveVerse()">Save Verse</button>
     </div>
   </div>
 </div>
@@ -487,201 +298,229 @@ body {
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPA_URL = "https://lbdjclsoayhnesavsnam.supabase.co";
-const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxiZGpjbHNvYXlobmVzYXZzbmFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NzY0ODIsImV4cCI6MjA5NzI1MjQ4Mn0.Kk1OPpRfot2TetIf-GzSexnYsmHpuyWxT2r2BfsR62A";
-const { createClient } = supabase;
-const db = createClient(SUPA_URL, SUPA_KEY);
+const SUPA_URL="https://lbdjclsoayhnesavsnam.supabase.co";
+const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxiZGpjbHNvYXlobmVzYXZzbmFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NzY0ODIsImV4cCI6MjA5NzI1MjQ4Mn0.Kk1OPpRfot2TetIf-GzSexnYsmHpuyWxT2r2BfsR62A";
+const ADMIN_EMAIL="matnarca@gmail.com";
+const{createClient}=supabase;
+const db=createClient(SUPA_URL,SUPA_KEY);
 
-const BASE_VERSES = [
-  { ref:"Deuteronomy 8:18", text:"And you shall remember the LORD your God, for it is He who gives you power to get wealth, that He may establish His covenant which He swore to your fathers, as it is this day.", cat:"Prosperity" },
-  { ref:"Psalm 35:27", text:"Let them shout for joy and be glad, who favor my righteous cause; And let them say continually, 'Let the LORD be magnified, who has pleasure in the prosperity of His servant.'", cat:"Prosperity" },
-  { ref:"3 John 1:2", text:"Beloved, I pray that you may prosper in all things and be in health, just as your soul prospers.", cat:"Prosperity" },
-  { ref:"Jeremiah 29:11", text:"For I know the thoughts that I think toward you, says the LORD, thoughts of peace and not of evil, to give you a future and a hope.", cat:"Prosperity" },
-  { ref:"Psalm 1:3", text:"He shall be like a tree planted by the rivers of water, that brings forth its fruit in its season, whose leaf also shall not wither; and whatever he does shall prosper.", cat:"Prosperity" },
-  { ref:"Isaiah 48:17", text:"Thus says the LORD, your Redeemer, the Holy One of Israel: 'I am the LORD your God, who teaches you to profit, who leads you by the way you should go.'", cat:"Prosperity" },
-  { ref:"Psalm 112:3", text:"Wealth and riches will be in his house, and his righteousness endures forever.", cat:"Prosperity" },
-  { ref:"Deuteronomy 28:11", text:"And the LORD will grant you plenty of goods, in the fruit of your body, in the increase of your livestock, and in the produce of your ground, in the land of which the LORD swore to your fathers to give you.", cat:"Prosperity" },
-  { ref:"Proverbs 10:22", text:"The blessing of the LORD makes one rich, and He adds no sorrow with it.", cat:"Prosperity" },
-  { ref:"Psalm 68:19", text:"Blessed be the Lord, who daily loads us with benefits, the God of our salvation!", cat:"Prosperity" },
-  { ref:"Malachi 3:10", text:"'Bring all the tithes into the storehouse, that there may be food in My house, and try Me now in this,' says the LORD of hosts, 'If I will not open for you the windows of heaven and pour out for you such blessing that there will not be room enough to receive it.'", cat:"Tithing & Giving" },
-  { ref:"2 Corinthians 9:6-7", text:"But this I say: He who sows sparingly will also reap sparingly, and he who sows bountifully will also reap bountifully. So let each one give as he purposes in his heart, not grudgingly or of necessity; for God loves a cheerful giver.", cat:"Tithing & Giving" },
-  { ref:"Proverbs 3:9-10", text:"Honor the LORD with your possessions, and with the firstfruits of all your increase; so your barns will be filled with plenty, and your vats will overflow with new wine.", cat:"Tithing & Giving" },
-  { ref:"Luke 6:38", text:"Give, and it will be given to you: good measure, pressed down, shaken together, and running over will be put into your bosom. For with the same measure that you use, it will be measured back to you.", cat:"Tithing & Giving" },
-  { ref:"2 Corinthians 9:8", text:"And God is able to make all grace abound toward you, that you, always having all sufficiency in all things, may have an abundance for every good work.", cat:"Tithing & Giving" },
-  { ref:"Proverbs 11:24-25", text:"There is one who scatters, yet increases more; and there is one who withholds more than is right, but it leads to poverty. The generous soul will be made rich, and he who waters will also be watered himself.", cat:"Tithing & Giving" },
-  { ref:"Ecclesiastes 11:1", text:"Cast your bread upon the waters, for you will find it after many days.", cat:"Tithing & Giving" },
-  { ref:"Malachi 3:11", text:"'And I will rebuke the devourer for your sakes, so that he will not destroy the fruit of your ground, nor shall the vine fail to bear fruit for you in the field,' says the LORD of hosts.", cat:"Tithing & Giving" },
-  { ref:"Proverbs 21:5", text:"The plans of the diligent lead surely to plenty, but those of everyone who is hasty, surely to poverty.", cat:"Wisdom" },
-  { ref:"Proverbs 13:11", text:"Wealth gained by dishonesty will be diminished, but he who gathers by labor will increase.", cat:"Wisdom" },
-  { ref:"Proverbs 22:7", text:"The rich rules over the poor, and the borrower is servant to the lender.", cat:"Wisdom" },
-  { ref:"Proverbs 27:23-24", text:"Be diligent to know the state of your flocks, and attend to your herds; for riches are not forever, nor does a crown endure to all generations.", cat:"Wisdom" },
-  { ref:"Proverbs 24:3-4", text:"Through wisdom a house is built, and by understanding it is established; by knowledge the rooms are filled with all precious and pleasant riches.", cat:"Wisdom" },
-  { ref:"Ecclesiastes 5:10", text:"He who loves silver will not be satisfied with silver; nor he who loves abundance, with increase. This also is vanity.", cat:"Wisdom" },
-  { ref:"Proverbs 28:20", text:"A faithful man will abound with blessings, but he who hastens to be rich will not go unpunished.", cat:"Wisdom" },
-  { ref:"1 Timothy 6:6", text:"Now godliness with contentment is great gain.", cat:"Wisdom" },
-  { ref:"Proverbs 22:4", text:"By humility and the fear of the LORD are riches and honor and life.", cat:"Wisdom" },
-  { ref:"Proverbs 14:23", text:"In all labor there is profit, but idle chatter leads only to poverty.", cat:"Wisdom" },
-  { ref:"Philippians 4:19", text:"And my God shall supply all your need according to His riches in glory by Christ Jesus.", cat:"Provision" },
-  { ref:"Matthew 6:33", text:"But seek first the kingdom of God and His righteousness, and all these things shall be added to you.", cat:"Provision" },
-  { ref:"Psalm 23:1", text:"The LORD is my shepherd; I shall not want.", cat:"Provision" },
-  { ref:"Isaiah 58:11", text:"The LORD will guide you continually, and satisfy your soul in drought, and strengthen your bones; you shall be like a watered garden, and like a spring of water, whose waters do not fail.", cat:"Provision" },
-  { ref:"Matthew 7:11", text:"If you then, being evil, know how to give good gifts to your children, how much more will your Father who is in heaven give good things to those who ask Him!", cat:"Provision" },
-  { ref:"Psalm 34:10", text:"The young lions lack and suffer hunger; but those who seek the LORD shall not lack any good thing.", cat:"Provision" },
-  { ref:"Deuteronomy 2:7", text:"For the LORD your God has blessed you in all the work of your hand. He knows your trudging through this great wilderness. These forty years the LORD your God has been with you; you have lacked nothing.", cat:"Provision" },
-  { ref:"Genesis 22:14", text:"And Abraham called the name of the place, The-LORD-Will-Provide; as it is said to this day, 'In the Mount of the LORD it shall be provided.'", cat:"Provision" },
-  { ref:"2 Corinthians 9:10", text:"Now may He who supplies seed to the sower, and bread for food, supply and multiply the seed you have sown and increase the fruits of your righteousness.", cat:"Provision" },
-  { ref:"Psalm 37:25", text:"I have been young, and now am old; yet I have not seen the righteous forsaken, nor his descendants begging bread.", cat:"Provision" },
-  { ref:"Joshua 1:8", text:"This Book of the Law shall not depart from your mouth, but you shall meditate in it day and night, that you may observe to do according to all that is written in it. For then you will make your way prosperous, and then you will have good success.", cat:"Breakthrough" },
-  { ref:"Psalm 5:12", text:"For You, O LORD, will bless the righteous; with favor You will surround him as with a shield.", cat:"Breakthrough" },
-  { ref:"Numbers 6:24-26", text:"The LORD bless you and keep you; the LORD make His face shine upon you, and be gracious to you; the LORD lift up His countenance upon you, and give you peace.", cat:"Breakthrough" },
-  { ref:"Deuteronomy 28:12", text:"The LORD will open to you His good treasure, the heavens, to give the rain to your land in its season, and to bless all the work of your hand. You shall lend to many nations, but you shall not borrow.", cat:"Breakthrough" },
-  { ref:"Isaiah 60:5", text:"Then you shall see and become radiant, and your heart shall swell with joy; because the abundance of the sea shall be turned to you, the wealth of the Gentiles shall come to you.", cat:"Breakthrough" },
-  { ref:"Proverbs 13:22", text:"A good man leaves an inheritance to his children's children, but the wealth of the sinner is stored up for the righteous.", cat:"Breakthrough" },
-  { ref:"Ecclesiastes 2:26", text:"For God gives wisdom and knowledge and joy to a man who is good in His sight; but to the sinner He gives the work of gathering and collecting, that he may give to him who is good before God.", cat:"Breakthrough" },
-  { ref:"Haggai 2:8", text:"'The silver is Mine, and the gold is Mine,' says the LORD of hosts.", cat:"Breakthrough" },
-];
-const BASE_CATS = ["Prosperity","Tithing & Giving","Wisdom","Provision","Breakthrough"];
-
-let currentUser=null, cloudFavs=[], cloudVerses=[], cloudCats=[];
+// STATE
+let currentUser=null;
+let baseVerses=[],customVerses=[],categories=[],favBaseIds=[],favCustomIds=[];
 let isDark=localStorage.getItem("seed_dark")==="true";
-let searchVisible=false, searchQuery="", selectedCat="All", selectedBook="All", currentView="daily";
-let authMode="login";
+let searchVisible=false,searchQuery="",selectedCat="All",selectedBook="All",currentView="daily";
+let authMode="login",isAdmin=false,isAddingBase=false;
 
-function getVerses(){return[...BASE_VERSES,...cloudVerses];}
-function getCategories(){return["All",...BASE_CATS,...cloudCats];}
-function isFav(ref){return cloudFavs.includes(ref);}
-if(isDark){document.body.classList.add("dark");document.getElementById("darkToggle").textContent="☀️";}
+if(isDark)document.body.classList.add("dark");
 
+// HELPERS
 function sanitize(str){const el=document.createElement("div");el.textContent=str;return el.innerHTML;}
-function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2400);}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2500);}
+function getBook(ref){return ref.replace(/\s+\d.*$/,"").trim();}
 
-function getDailyVerse(){
-  const v=getVerses(); const now=new Date();
-  const start=new Date(now.getFullYear(),0,0);
-  const day=Math.floor((now-start)/86400000);
-  return v[((now.getFullYear()*1000)+day)%v.length];
+function getAllVerses(){
+  return[
+    ...baseVerses.map(v=>({...v,source:"base"})),
+    ...customVerses.map(v=>({...v,source:"custom"}))
+  ];
+}
+function getCatName(catId){
+  const c=categories.find(x=>x.id===catId);
+  return c?c.name:"—";
+}
+function isFav(v){
+  if(v.source==="base")return favBaseIds.includes(v.id);
+  return favCustomIds.includes(v.id);
+}
+function getBooks(){
+  return["All",...new Set(getAllVerses().map(v=>getBook(v.ref))).keys()].sort((a,b)=>a==="All"?-1:a.localeCompare(b));
+}
+function getCategoryNames(){
+  return["All",...categories.map(c=>c.name)];
 }
 
+// SKELETONS
+function skelDaily(){
+  return`<div class="daily-greeting"><div class="skeleton skel-line med" style="margin-bottom:0.4rem;"></div><div class="skeleton skel-title"></div></div><div class="skeleton skel-hero"></div><div class="skel-stats"><div class="skeleton skel-stat"></div><div class="skeleton skel-stat"></div></div>`;
+}
+function skelList(n=4){
+  return Array(n).fill(0).map(()=>`<div class="skeleton skel-card"></div>`).join("");
+}
+function skelPage(){
+  return`<div class="skeleton skel-title"></div><div class="skeleton skel-sub"></div>${skelList()}`;
+}
+
+// LOAD DATA
 async function loadUserData(){
-  const [fr,vr,cr]=await Promise.all([
-    db.from("favorites").select("verse_ref"),
-    db.from("custom_verses").select("*").order("created_at"),
-    db.from("custom_categories").select("name").order("created_at"),
+  const[catRes,baseRes,customRes,favRes]=await Promise.all([
+    db.from("categories").select("id,name,is_base").order("name"),
+    db.from("verses").select("id,ref,text,cat_id,translation").order("ref"),
+    db.from("custom_verses").select("id,ref,text,cat_id").eq("user_id",currentUser.id).order("created_at"),
+    db.from("favorites").select("id,base_verse_id,custom_verse_id").eq("user_id",currentUser.id),
   ]);
-  cloudFavs=(fr.data||[]).map(r=>r.verse_ref);
-  cloudVerses=(vr.data||[]).map(r=>({ref:r.ref,text:r.text,cat:r.cat}));
-  cloudCats=(cr.data||[]).map(r=>r.name);
+  categories=catRes.data||[];
+  baseVerses=(baseRes.data||[]).map(v=>({...v,cat:getCatName(v.cat_id)}));
+  customVerses=(customRes.data||[]).map(v=>({...v,cat:getCatName(v.cat_id)}));
+  const favs=favRes.data||[];
+  favBaseIds=favs.filter(f=>f.base_verse_id).map(f=>f.base_verse_id);
+  favCustomIds=favs.filter(f=>f.custom_verse_id).map(f=>f.custom_verse_id);
 }
 
-async function toggleFav(ref){
-  if(isFav(ref)){cloudFavs=cloudFavs.filter(r=>r!==ref);await db.from("favorites").delete().eq("verse_ref",ref).eq("user_id",currentUser.id);showToast("Removed from Saved");}
-  else{cloudFavs.push(ref);await db.from("favorites").insert({user_id:currentUser.id,verse_ref:ref});showToast("Saved!");}
+async function loadUserDataSafe(){
+  const timeout=new Promise(resolve=>setTimeout(resolve,6000));
+  await Promise.race([loadUserData(),timeout]);
+}
+
+// FAVORITES
+async function toggleFav(v){
+  if(isFav(v)){
+    if(v.source==="base"){
+      favBaseIds=favBaseIds.filter(id=>id!==v.id);
+      await db.from("favorites").delete().eq("user_id",currentUser.id).eq("base_verse_id",v.id);
+    }else{
+      favCustomIds=favCustomIds.filter(id=>id!==v.id);
+      await db.from("favorites").delete().eq("user_id",currentUser.id).eq("custom_verse_id",v.id);
+    }
+    showToast("Removed from Saved");
+  }else{
+    if(v.source==="base"){
+      favBaseIds.push(v.id);
+      await db.from("favorites").insert({user_id:currentUser.id,base_verse_id:v.id});
+    }else{
+      favCustomIds.push(v.id);
+      await db.from("favorites").insert({user_id:currentUser.id,custom_verse_id:v.id});
+    }
+    showToast("Saved!");
+  }
   render();
 }
-async function toggleFlashFav(){const v=getDailyVerse();await toggleFav(v.ref);renderDaily();}
 
+// DAILY VERSE
+function getDailyVerse(){
+  const all=getAllVerses();
+  if(!all.length)return null;
+  const now=new Date();
+  const start=new Date(now.getFullYear(),0,0);
+  const day=Math.floor((now-start)/86400000);
+  return all[((now.getFullYear()*1000)+day)%all.length];
+}
+
+// SVG HEARTS
+const heartFilled=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 .927 -9.215z"/></svg>`;
+const heartEmpty=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>`;
+
+// RENDER DAILY
 function renderDaily(){
   const v=getDailyVerse();
   const now=new Date();
-  const day=now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
-  const total=getVerses().length; const favCount=cloudFavs.length;
+  const dateStr=now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+  if(!v){document.getElementById("mainContent").innerHTML=skelDaily();return;}
+  const favd=isFav(v);
   document.getElementById("mainContent").innerHTML=`
     <div class="daily-greeting">
       <div class="greeting-label">Verse of the Day</div>
-      <div class="greeting-date">${sanitize(day)}</div>
+      <div class="greeting-date">${sanitize(dateStr)}</div>
     </div>
     <div class="verse-hero">
-      <div class="vh-cat"><span class="vh-ornament">✦</span>${sanitize(v.cat)}</div>
+      <div class="vh-cat">${sanitize(v.cat)}</div>
       <div class="vh-text">"${sanitize(v.text)}"</div>
       <div class="vh-footer">
         <div class="vh-ref">${sanitize(v.ref)} &middot; NKJV</div>
-        <button class="fav-circle ${isFav(v.ref)?"active":""}" onclick="toggleFlashFav()" title="${isFav(v.ref)?"Remove from saved":"Save verse"}">
-          ${isFav(v.ref)
-            ? `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 .927 -9.215z"/></svg>`
-            : `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>`
-          }
-        </button>
+        <button class="fav-circle ${favd?"active":""}" onclick="toggleDailyFav()" title="${favd?"Remove":"Save"}">${favd?heartFilled:heartEmpty}</button>
       </div>
     </div>
     <div class="quick-stats">
-      <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Total Verses</div></div>
-      <div class="stat-card"><div class="stat-num">${favCount}</div><div class="stat-label">Saved Verses</div></div>
+      <div class="stat-card"><div class="stat-num">${baseVerses.length}</div><div class="stat-label">Base Verses</div></div>
+      <div class="stat-card"><div class="stat-num">${favBaseIds.length+favCustomIds.length}</div><div class="stat-label">Saved Verses</div></div>
     </div>`;
 }
 
+async function toggleDailyFav(){
+  const v=getDailyVerse();
+  if(!v)return;
+  await toggleFav(v);
+  renderDaily();
+}
+
+// RENDER VERSE CARD
 function renderVerseCard(v){
-  const sr=v.ref.replace(/\\/g,"\\\\").replace(/'/g,"\\'");
-  const heartFilled=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 .927 -9.215z"/></svg>`;
-  const heartEmpty=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>`;
-  return`<div class="verse-card"><div class="vc-top"><div class="vc-ref">${sanitize(v.ref)}</div><span class="vc-cat">${sanitize(v.cat)}</span></div><div class="vc-text">"${sanitize(v.text)}"</div><div class="vc-bottom"><button class="fav-btn ${isFav(v.ref)?"active":""}" onclick="toggleFav('${sr}')">${isFav(v.ref)?heartFilled:heartEmpty}</button></div></div>`;
+  const favd=isFav(v);
+  const sid=JSON.stringify({id:v.id,source:v.source}).replace(/"/g,"&quot;");
+  return`<div class="verse-card"><div class="vc-top"><div class="vc-ref">${sanitize(v.ref)}</div><span class="vc-cat">${sanitize(v.cat)}</span></div><div class="vc-text">"${sanitize(v.text)}"</div><div class="vc-bottom"><button class="fav-btn ${favd?"active":""}" onclick="toggleFavById('${v.id}','${v.source}')">${favd?heartFilled:heartEmpty}</button></div></div>`;
 }
 
-// Extract book name from verse reference e.g. "Proverbs 10:22" => "Proverbs"
-function getBook(ref){ return ref.replace(/\s+\d.*$/,"").trim(); }
-function getBooks(){
-  const books=[...new Set(getVerses().map(v=>getBook(v.ref)))].sort();
-  return["All",...books];
+async function toggleFavById(id,source){
+  const all=getAllVerses();
+  const v=all.find(x=>x.id===id&&x.source===source);
+  if(v)await toggleFav(v);
 }
-function selectCat(val){ selectedCat=val; render(); }
-function selectBook(val){ selectedBook=val; render(); }
 
+// FILTER ROW
 function filterRowHTML(){
-  const cats=["All",...BASE_CATS,...cloudCats];
+  const cats=getCategoryNames();
   const books=getBooks();
   const catActive=selectedCat!=="All";
   const bookActive=selectedBook!=="All";
   return`<div class="filter-row">
     <div class="filter-pill ${catActive?"has-filter":""}">
-      &#9965; ${catActive?sanitize(selectedCat):"Category"} <span class="filter-arrow">&#9660;</span>
-      <select onchange="selectCat(this.value)">
-        ${cats.map(c=>`<option value="${c}" ${selectedCat===c?"selected":""}>${c}</option>`).join("")}
-      </select>
+      ${catActive?sanitize(selectedCat):"Category"} <span class="filter-arrow">&#9660;</span>
+      <select onchange="selectCat(this.value)">${cats.map(c=>`<option value="${sanitize(c)}" ${selectedCat===c?"selected":""}>${sanitize(c)}</option>`).join("")}</select>
     </div>
     <div class="filter-pill ${bookActive?"has-filter":""}">
-      &#128214; ${bookActive?sanitize(selectedBook):"Book"} <span class="filter-arrow">&#9660;</span>
-      <select onchange="selectBook(this.value)">
-        ${books.map(b=>`<option value="${b}" ${selectedBook===b?"selected":""}>${b}</option>`).join("")}
-      </select>
+      ${bookActive?sanitize(selectedBook):"Book"} <span class="filter-arrow">&#9660;</span>
+      <select onchange="selectBook(this.value)">${books.map(b=>`<option value="${sanitize(b)}" ${selectedBook===b?"selected":""}>${sanitize(b)}</option>`).join("")}</select>
     </div>
   </div>`;
 }
+function selectCat(v){selectedCat=v;render();}
+function selectBook(v){selectedBook=v;render();}
 
-function getFiltered(){
-  let list=getVerses();
-  if(currentView==="favorites") list=list.filter(v=>isFav(v.ref));
-  if(selectedCat!=="All") list=list.filter(v=>v.cat===selectedCat);
-  if(selectedBook!=="All") list=list.filter(v=>getBook(v.ref)===selectedBook);
-  if(searchQuery){ const q=searchQuery.toLowerCase(); list=list.filter(v=>v.ref.toLowerCase().includes(q)||v.text.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q)); }
+function getFiltered(list){
+  if(selectedCat!=="All")list=list.filter(v=>v.cat===selectedCat);
+  if(selectedBook!=="All")list=list.filter(v=>getBook(v.ref)===selectedBook);
+  if(searchQuery){const q=searchQuery.toLowerCase();list=list.filter(v=>v.ref.toLowerCase().includes(q)||v.text.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q));}
   return list;
 }
 
+// MAIN RENDER
 function render(){
   const main=document.getElementById("mainContent");
   if(!currentUser){renderAuth();return;}
   if(currentView==="daily"){renderDaily();return;}
-  const list=getFiltered();
+
+  let list=[];
   let html="";
+
   if(currentView==="browse"){
+    list=getFiltered(getAllVerses());
     html+=`<div class="page-title">Browse</div><div class="page-sub">Filter by category or book</div>`;
     html+=filterRowHTML();
   }
-  if(currentView==="all"){
-    html+=`<div class="page-title">All Verses</div><div class="page-sub">${list.length} NKJV verses</div>`;
+  if(currentView==="myverses"){
+    list=getFiltered(customVerses.map(v=>({...v,source:"custom"})));
+    html+=`<div class="page-title">My Verses</div><div class="page-sub">${customVerses.length} verse${customVerses.length!==1?"s":""} added by you</div>`;
     html+=filterRowHTML();
   }
   if(currentView==="favorites"){
-    html+=`<div class="page-title">Saved</div><div class="page-sub">${list.length} verse${list.length!==1?"s":""} saved</div>`;
+    const all=getAllVerses();
+    list=getFiltered(all.filter(v=>isFav(v)));
+    html+=`<div class="page-title">Saved</div><div class="page-sub">${favBaseIds.length+favCustomIds.length} verse${favBaseIds.length+favCustomIds.length!==1?"s":""} saved</div>`;
     html+=filterRowHTML();
   }
+
   html+=`<div class="sec-header"><span class="sec-title">Results</span><span class="sec-title">${list.length} verse${list.length!==1?"s":""}</span></div>`;
+
   if(list.length===0){
-    html+=currentView==="favorites"?`<div class="empty">Nothing saved yet. Tap &#9825; on any verse to save it here.</div>`:`<div class="empty">No verses found for these filters.</div>`;
+    if(currentView==="favorites")html+=`<div class="empty">Nothing saved yet. Tap the heart on any verse to save it here.</div>`;
+    else if(currentView==="myverses")html+=`<div class="empty">No verses added yet. Tap + to add your first verse.</div>`;
+    else html+=`<div class="empty">No verses found for these filters.</div>`;
   }else{
-    html+=`<div class="verse-list">`;list.forEach(v=>{html+=renderVerseCard(v);});html+=`</div>`;
+    html+=`<div class="verse-list">${list.map(v=>renderVerseCard(v)).join("")}</div>`;
   }
   main.innerHTML=html;
 }
 
+// AUTH
 function renderAuth(){
   const main=document.getElementById("mainContent");
   const isLogin=authMode==="login";
@@ -694,14 +533,8 @@ function renderAuth(){
       <div class="auth-card">
         <div class="auth-card-title">${isLogin?"Welcome back":"Create account"}</div>
         <div class="auth-card-sub">${isLogin?"Sign in to access your saved verses.":"Sign up to save verses to the cloud."}</div>
-        <div class="auth-field">
-          <label class="auth-label">Email</label>
-          <input class="auth-input" type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
-        </div>
-        <div class="auth-field">
-          <label class="auth-label">Password</label>
-          <input class="auth-input" type="password" id="authPassword" placeholder="${isLogin?"Your password":"Min. 6 characters"}" autocomplete="${isLogin?"current-password":"new-password"}">
-        </div>
+        <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" id="authEmail" placeholder="you@example.com" autocomplete="email"></div>
+        <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" type="password" id="authPassword" placeholder="${isLogin?"Your password":"Min. 6 characters"}" autocomplete="${isLogin?"current-password":"new-password"}"></div>
         <div id="authMsg"></div>
         <button class="auth-btn" id="authSubmit" onclick="handleAuth()">${isLogin?"Sign In":"Sign Up"}</button>
         <div class="auth-switch">${isLogin?"Don't have an account? <a onclick=\"switchAuth('signup')\">Sign up</a>":"Already have an account? <a onclick=\"switchAuth('login')\">Sign in</a>"}</div>
@@ -709,9 +542,7 @@ function renderAuth(){
     </div>`;
   setTimeout(()=>{const e=document.getElementById("authEmail");if(e)e.focus();},100);
 }
-
 function switchAuth(mode){authMode=mode;render();}
-
 async function handleAuth(){
   const email=document.getElementById("authEmail").value.trim();
   const password=document.getElementById("authPassword").value;
@@ -724,42 +555,145 @@ async function handleAuth(){
   else if(authMode==="signup"&&!result.data.session){msg.innerHTML=`<div class="auth-success">Check your email to confirm, then sign in.</div>`;btn.disabled=false;btn.textContent="Sign Up";}
 }
 
+// SIGN OUT
 async function signOut(){
+  closeHamburger();
   await db.auth.signOut();
-  currentUser=null;cloudFavs=[];cloudVerses=[];cloudCats=[];
-  document.getElementById("userPill").style.display="none";
+  currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];isAdmin=false;
   document.getElementById("signOutBtn").style.display="none";
   document.getElementById("addBtn").style.display="none";
   render();
 }
 
-function openModal(){populateCatSelect();document.getElementById("newRef").value="";document.getElementById("newText").value="";document.getElementById("newCatInput").value="";document.getElementById("modalOverlay").style.display="flex";}
-function closeModal(){document.getElementById("modalOverlay").style.display="none";}
-function populateCatSelect(){const sel=document.getElementById("newCat");sel.innerHTML="";[...BASE_CATS,...cloudCats].forEach(cat=>{const o=document.createElement("option");o.value=cat;o.textContent=cat;sel.appendChild(o);});}
+// HAMBURGER
+function closeHamburger(){
+  document.getElementById("hamburgerMenu").classList.remove("open");
+  document.getElementById("hamburgerBtn").classList.remove("active");
+}
+document.getElementById("hamburgerBtn").addEventListener("click",e=>{
+  e.stopPropagation();
+  const menu=document.getElementById("hamburgerMenu");
+  const isOpen=menu.classList.toggle("open");
+  document.getElementById("hamburgerBtn").classList.toggle("active",isOpen);
+});
+document.addEventListener("click",e=>{
+  if(!document.getElementById("hamburgerMenu").contains(e.target)&&e.target!==document.getElementById("hamburgerBtn")){
+    closeHamburger();
+  }
+});
 
-async function addCategory(){
-  const input=document.getElementById("newCatInput");const name=input.value.trim();
-  if(!name)return showToast("Enter a category name.");
-  if([...BASE_CATS,...cloudCats].map(c=>c.toLowerCase()).includes(name.toLowerCase()))return showToast("Category already exists.");
-  const{error}=await db.from("custom_categories").insert({user_id:currentUser.id,name});
-  if(error)return showToast("Error saving category.");
-  cloudCats.push(name);input.value="";populateCatSelect();document.getElementById("newCat").value=name;showToast(`"${name}" added.`);
+// DARK MODE
+function applyDarkIcons(){
+  document.getElementById("darkIcon").style.display=isDark?"none":"block";
+  document.getElementById("lightIcon").style.display=isDark?"block":"none";
+  document.getElementById("darkLabel").textContent=isDark?"Light Mode":"Dark Mode";
+}
+document.getElementById("darkToggle").addEventListener("click",()=>{
+  isDark=!isDark;document.body.classList.toggle("dark",isDark);
+  localStorage.setItem("seed_dark",isDark);applyDarkIcons();
+});
+applyDarkIcons();
+
+// MODAL
+function openModal(addBase=false){
+  isAddingBase=addBase;
+  document.getElementById("modalTitle").textContent=addBase?"Add Base Verse":"Add My Verse";
+  populateCatSelect();
+  document.getElementById("newRef").value="";
+  document.getElementById("newText").value="";
+  document.getElementById("newCatInput").value="";
+  document.getElementById("verseMsg").innerHTML="";
+  document.getElementById("catMsg").innerHTML="";
+  document.getElementById("modalOverlay").style.display="flex";
+}
+function closeModal(){document.getElementById("modalOverlay").style.display="none";}
+
+function populateCatSelect(){
+  const sel=document.getElementById("newCat");
+  sel.innerHTML="";
+  categories.forEach(c=>{
+    const o=document.createElement("option");
+    o.value=c.id;o.textContent=c.name;sel.appendChild(o);
+  });
 }
 
+// ADD CATEGORY — with duplicate check
+async function addCategory(){
+  const input=document.getElementById("newCatInput");
+  const name=input.value.trim();
+  const msg=document.getElementById("catMsg");
+  msg.innerHTML="";
+  if(!name){msg.innerHTML=`<div class="modal-error">Enter a category name.</div>`;return;}
+
+  // Duplicate check against Supabase
+  const{data:existing}=await db.from("categories").select("id").ilike("name",name).maybeSingle();
+  if(existing){msg.innerHTML=`<div class="modal-error">"${sanitize(name)}" already exists as a category.</div>`;return;}
+
+  const{data,error}=await db.from("categories").insert({name,is_base:isAdmin&&isAddingBase}).select().single();
+  if(error){msg.innerHTML=`<div class="modal-error">Error saving category.</div>`;return;}
+
+  categories.push({id:data.id,name:data.name,is_base:data.is_base});
+  input.value="";populateCatSelect();
+  document.getElementById("newCat").value=data.id;
+  msg.innerHTML=`<div class="modal-success">"${sanitize(name)}" added.</div>`;
+}
+
+// ADD VERSE — with duplicate check
 async function saveVerse(){
   const ref=document.getElementById("newRef").value.trim();
   const text=document.getElementById("newText").value.trim();
-  const cat=document.getElementById("newCat").value;
-  if(!ref)return showToast("Enter a verse reference.");
-  if(!text)return showToast("Enter the verse text.");
-  if(getVerses().find(v=>v.ref.toLowerCase()===ref.toLowerCase()))return showToast("That reference already exists.");
-  const{error}=await db.from("custom_verses").insert({user_id:currentUser.id,ref,text,cat});
-  if(error)return showToast("Error saving verse.");
-  cloudVerses.push({ref,text,cat});closeModal();showToast(`"${ref}" added.`);render();
+  const catId=document.getElementById("newCat").value;
+  const msg=document.getElementById("verseMsg");
+  const btn=document.getElementById("saveVerseBtn");
+  msg.innerHTML="";
+  if(!ref){msg.innerHTML=`<div class="modal-error">Enter a verse reference.</div>`;return;}
+  if(!text){msg.innerHTML=`<div class="modal-error">Enter the verse text.</div>`;return;}
+  if(!catId){msg.innerHTML=`<div class="modal-error">Select a category.</div>`;return;}
+
+  // Duplicate check against both tables
+  btn.disabled=true;btn.textContent="Checking...";
+  const[baseCheck,customCheck]=await Promise.all([
+    db.from("verses").select("id").ilike("ref",ref).maybeSingle(),
+    db.from("custom_verses").select("id").ilike("ref",ref).eq("user_id",currentUser.id).maybeSingle(),
+  ]);
+  btn.disabled=false;btn.textContent="Save Verse";
+  if(baseCheck.data||customCheck.data){
+    msg.innerHTML=`<div class="modal-error">"${sanitize(ref)}" already exists.</div>`;return;
+  }
+
+  btn.disabled=true;btn.textContent="Saving...";
+  if(isAddingBase&&isAdmin){
+    // Insert into shared verses table
+    const{data,error}=await db.from("verses").insert({ref,text,cat_id:catId,translation:"NKJV"}).select().single();
+    if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
+    baseVerses.push({...data,cat:getCatName(catId),source:"base"});
+  }else{
+    // Insert into user's custom_verses
+    const{data,error}=await db.from("custom_verses").insert({user_id:currentUser.id,ref,text,cat_id:catId,cat:getCatName(catId)}).select().single();
+    if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
+    customVerses.push({...data,cat:getCatName(catId),source:"custom"});
+  }
+  btn.disabled=false;btn.textContent="Save Verse";
+  closeModal();showToast(`"${ref}" added.`);render();
 }
 
-// EVENTS
-document.getElementById("modalOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("modalOverlay"))closeModal();});
+// SEARCH
+document.getElementById("searchToggle").addEventListener("click",()=>{
+  searchVisible=!searchVisible;
+  document.getElementById("searchBar").style.display=searchVisible?"block":"none";
+  document.getElementById("searchToggle").classList.toggle("active",searchVisible);
+  if(searchVisible)document.getElementById("searchInput").focus();
+});
+document.getElementById("searchInput").addEventListener("input",e=>{
+  searchQuery=e.target.value;
+  if(searchQuery&&currentView==="daily"){
+    currentView="browse";
+    document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view==="browse"));
+  }
+  render();
+});
+
+// NAV
 document.querySelectorAll(".nav-item[data-view]").forEach(btn=>{
   btn.addEventListener("click",()=>{
     document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.remove("active"));
@@ -771,66 +705,44 @@ document.querySelectorAll(".nav-item[data-view]").forEach(btn=>{
     render();
   });
 });
-document.getElementById("searchToggle").addEventListener("click",()=>{
-  searchVisible=!searchVisible;
-  document.getElementById("searchBar").style.display=searchVisible?"block":"none";
-  document.getElementById("searchToggle").classList.toggle("active",searchVisible);
-  if(searchVisible)document.getElementById("searchInput").focus();
-});
-document.getElementById("searchInput").addEventListener("input",e=>{
-  searchQuery=e.target.value;
-  if(searchQuery&&currentView==="daily"){
-    currentView="all";
-    document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view==="all"));
+
+// ADD BTN — admin gets choice, regular users go straight to custom
+document.getElementById("addBtn").addEventListener("click",()=>{
+  if(isAdmin){
+    // Show choice via modal title toggle — default to base for admin
+    openModal(true);
+  }else{
+    openModal(false);
   }
-  render();
 });
-function applyDarkIcons(){
-  document.getElementById("darkIcon").style.display=isDark?"none":"block";
-  document.getElementById("lightIcon").style.display=isDark?"block":"none";
-}
-document.getElementById("darkToggle").addEventListener("click",()=>{
-  isDark=!isDark;document.body.classList.toggle("dark",isDark);
-  localStorage.setItem("seed_dark",isDark);
-  applyDarkIcons();
-});
-applyDarkIcons();
-document.getElementById("addBtn").addEventListener("click",openModal);
+
+// Admin toggle in modal — if admin, show toggle between base and personal
+document.getElementById("modalOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("modalOverlay"))closeModal();});
 document.getElementById("signOutBtn").addEventListener("click",signOut);
 
-// Show logged-in UI chrome without wiping content
+// APPLY USER UI
 function applyUserUI(user){
   currentUser=user;
-  const pill=document.getElementById("userPill");
-  pill.textContent=user.email.split("@")[0];
-  pill.style.display="inline-block";
+  isAdmin=user.email===ADMIN_EMAIL;
+  document.getElementById("hmEmail").textContent=user.email;
   document.getElementById("signOutBtn").style.display="flex";
   document.getElementById("addBtn").style.display="flex";
-}
-
-// Load with a timeout so loading never gets permanently stuck
-async function loadUserDataSafe(){
-  const timeout=new Promise(resolve=>setTimeout(resolve,6000));
-  await Promise.race([loadUserData(),timeout]);
 }
 
 // AUTH STATE
 db.auth.onAuthStateChange(async(event,session)=>{
   if(event==="SIGNED_OUT"||event==="USER_DELETED"){
-    currentUser=null;cloudFavs=[];cloudVerses=[];cloudCats=[];
-    document.getElementById("userPill").style.display="none";
+    currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];isAdmin=false;
     document.getElementById("signOutBtn").style.display="none";
     document.getElementById("addBtn").style.display="none";
     render();return;
   }
-  // Fresh login — show loader and fetch data
   if(event==="SIGNED_IN"&&session){
     applyUserUI(session.user);
-    document.getElementById("mainContent").innerHTML=`<div class="loading"><div class="spinner"></div><span>Loading your verses...</span></div>`;
+    document.getElementById("mainContent").innerHTML=skelDaily();
     await loadUserDataSafe();
     render();return;
   }
-  // App resumed from background — refresh silently, no loader
   if(event==="TOKEN_REFRESHED"&&session){
     applyUserUI(session.user);
     await loadUserDataSafe();
@@ -838,22 +750,18 @@ db.auth.onAuthStateChange(async(event,session)=>{
   }
 });
 
-// On page load — check session directly, never rely solely on the listener
 (async()=>{
   try{
     const{data:{session}}=await db.auth.getSession();
     if(session){
       applyUserUI(session.user);
-      document.getElementById("mainContent").innerHTML=`<div class="loading"><div class="spinner"></div><span>Loading your verses...</span></div>`;
+      document.getElementById("mainContent").innerHTML=skelDaily();
       await loadUserDataSafe();
       render();
-    }else{
-      currentUser=null;render();
-    }
-  }catch(e){
-    currentUser=null;render();
-  }
+    }else{currentUser=null;render();}
+  }catch(e){currentUser=null;render();}
 })();
+
 if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(e=>console.log("SW failed",e));});}
 </script>
 </body>
