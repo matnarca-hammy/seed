@@ -13,20 +13,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --bg:#FAFAF7; --bg2:#F3F1EA; --card:#FFFFFF; --card2:#F7F5EE;
-  --border:#E8E4D8; --ink:#1A1208; --ink2:#4A3F2A; --ink3:#9A8E78;
-  --gold:#C49A2A; --gold-bg:#FBF3DC; --gold-border:#E8D48A;
-  --red:#A03020; --green:#2A6A3A;
+:root{
+  --bg:#FAFAF7;--bg2:#F3F1EA;--card:#FFFFFF;--card2:#F7F5EE;
+  --border:#E8E4D8;--ink:#1A1208;--ink2:#4A3F2A;--ink3:#9A8E78;
+  --gold:#C49A2A;--gold-bg:#FBF3DC;--gold-border:#E8D48A;
+  --red:#A03020;--green:#2A6A3A;--blue:#1A5A8A;
   --shadow-sm:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
   --shadow-md:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);
   --shadow-lg:0 12px 32px rgba(0,0,0,0.10),0 4px 8px rgba(0,0,0,0.05);
-  --radius:16px; --radius-sm:10px; --radius-lg:24px;
+  --radius:16px;--radius-sm:10px;--radius-lg:24px;
 }
-.dark {
-  --bg:#100E08; --bg2:#1A1610; --card:#1E1A12; --card2:#252018;
-  --border:#302A1E; --ink:#F0EAD8; --ink2:#C8B890; --ink3:#7A6E58;
-  --gold:#D4A830; --gold-bg:#2A2010; --gold-border:#4A3A18;
+.dark{
+  --bg:#100E08;--bg2:#1A1610;--card:#1E1A12;--card2:#252018;
+  --border:#302A1E;--ink:#F0EAD8;--ink2:#C8B890;--ink3:#7A6E58;
+  --gold:#D4A830;--gold-bg:#2A2010;--gold-border:#4A3A18;
   --shadow-sm:0 1px 3px rgba(0,0,0,0.3);
   --shadow-md:0 4px 12px rgba(0,0,0,0.4);
   --shadow-lg:0 12px 32px rgba(0,0,0,0.5);
@@ -34,11 +34,9 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{height:100%;}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;min-height:100dvh;transition:background 0.25s,color 0.25s;overscroll-behavior:none;}
-
-/* ── APP SHELL ── */
 .app-shell{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;max-width:480px;margin:0 auto;position:relative;}
 
-/* ── HEADER ── */
+/* HEADER */
 .app-header{position:sticky;top:0;z-index:100;background:var(--bg);padding:0 1.25rem;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
 .header-logo{font-family:'Lora',serif;font-size:1.5rem;font-weight:700;color:var(--gold);letter-spacing:0.02em;font-style:italic;}
 .header-logo span{color:var(--red);font-style:normal;}
@@ -46,29 +44,33 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .hbtn{background:var(--card2);border:1px solid var(--border);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.15s,border-color 0.15s;color:var(--ink2);}
 .hbtn:hover,.hbtn.active{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold);}
 
-/* ── HAMBURGER DROPDOWN ── */
-.hamburger-menu{position:absolute;top:calc(100% + 0.5rem);right:0;width:220px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);overflow:hidden;z-index:200;display:none;}
+/* HAMBURGER DROPDOWN */
+.hamburger-menu{position:absolute;top:calc(100% + 0.5rem);right:0;width:240px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);overflow:hidden;z-index:200;display:none;animation:fadeDown 0.15s ease;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 .hamburger-menu.open{display:block;}
-.hm-user{padding:0.85rem 1rem;border-bottom:1px solid var(--border);font-size:0.78rem;color:var(--ink3);font-weight:500;}
-.hm-user strong{display:block;font-size:0.88rem;color:var(--ink);font-weight:600;margin-bottom:0.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.hm-item{display:flex;align-items:center;gap:0.65rem;padding:0.75rem 1rem;font-size:0.88rem;color:var(--ink2);cursor:pointer;transition:background 0.15s;border:none;background:none;width:100%;font-family:'Inter',sans-serif;font-weight:500;}
+.hm-user{padding:0.85rem 1rem;border-bottom:1px solid var(--border);}
+.hm-user-email{font-size:0.82rem;color:var(--ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:0.25rem;}
+.hm-user-meta{display:flex;align-items:center;gap:0.4rem;}
+.hm-signed-in{font-size:0.72rem;color:var(--ink3);}
+.admin-badge{display:inline-flex;align-items:center;background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:4px;padding:0.1rem 0.4rem;font-size:0.62rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;}
+.hm-item{display:flex;align-items:center;gap:0.65rem;padding:0.75rem 1rem;font-size:0.88rem;color:var(--ink2);cursor:pointer;transition:background 0.15s;border:none;background:none;width:100%;font-family:'Inter',sans-serif;font-weight:500;text-align:left;}
 .hm-item:hover{background:var(--bg2);}
 .hm-item svg{flex-shrink:0;color:var(--ink3);}
 .hm-item.danger{color:var(--red);}
 .hm-item.danger svg{color:var(--red);}
 .hm-divider{height:1px;background:var(--border);}
 
-/* ── SEARCH BAR ── */
+/* SEARCH */
 .search-wrap{margin:0.75rem 1.25rem 0;position:relative;}
 .search-wrap input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:50px;padding:0.65rem 1rem 0.65rem 2.6rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow-sm);}
 .search-wrap input::placeholder{color:var(--ink3);}
 .search-wrap input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,42,0.12);}
 .search-icon{position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;}
 
-/* ── SCROLL AREA ── */
+/* SCROLL */
 .scroll-area{flex:1;overflow-y:auto;padding:1.25rem 1.25rem calc(56px + env(safe-area-inset-bottom) + 1rem);}
 
-/* ── BOTTOM NAV ── */
+/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--card);border-top:1px solid var(--border);display:flex;align-items:stretch;justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);z-index:50;box-shadow:0 -4px 20px rgba(0,0,0,0.06);height:calc(56px + env(safe-area-inset-bottom));}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.22rem;cursor:pointer;padding:0.5rem 0;border:none;background:none;color:var(--ink3);font-family:'Inter',sans-serif;font-size:0.6rem;font-weight:500;letter-spacing:0.02em;transition:color 0.15s;position:relative;overflow:hidden;}
 .nav-item.active{color:var(--gold);}
@@ -81,41 +83,64 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .nav-item.center-btn .nav-icon{color:#fff;transform:none;}
 .nav-item.center-btn:hover{filter:brightness(1.1);}
 
-/* ── FILTER ROW ── */
+/* FILTER */
 .filter-row{display:flex;gap:0.6rem;margin-bottom:1.1rem;flex-wrap:wrap;}
 .filter-pill{display:flex;align-items:center;gap:0.4rem;background:var(--card);border:1.5px solid var(--border);border-radius:50px;padding:0.4rem 0.9rem;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:500;color:var(--ink2);cursor:pointer;box-shadow:var(--shadow-sm);transition:border-color 0.15s,background 0.15s;position:relative;}
 .filter-pill.has-filter{border-color:var(--gold);background:var(--gold-bg);color:var(--gold);font-weight:600;}
 .filter-pill select{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;border:none;background:none;font-size:1rem;}
 .filter-arrow{font-size:0.65rem;opacity:0.6;}
 
-/* ── PAGE TITLE ── */
+/* PAGE TITLE */
 .page-title{font-family:'Lora',serif;font-size:1.5rem;font-weight:700;color:var(--ink);margin-bottom:0.25rem;}
 .page-sub{font-size:0.8rem;color:var(--ink3);margin-bottom:1.25rem;}
 .sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;margin-top:0.25rem;}
 .sec-title{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);}
 
-/* ── DAILY HERO CARD ── */
-.daily-greeting{margin-bottom:1.5rem;}
+/* DAILY CARD */
+.daily-greeting{margin-bottom:1.25rem;}
 .greeting-label{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.2rem;}
 .greeting-date{font-family:'Lora',serif;font-size:1.3rem;font-weight:600;color:var(--ink);}
 .verse-hero{background:linear-gradient(145deg,#FBF5E0 0%,#F0E8C8 60%,#EAE0B8 100%);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:2rem 1.75rem 1.75rem;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;margin-bottom:1rem;}
 .dark .verse-hero{background:linear-gradient(145deg,#2A2210 0%,#221A08 100%);}
 .verse-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(196,154,42,0.12) 0%,transparent 70%);border-radius:50%;}
-.vh-cat{display:inline-flex;align-items:center;gap:0.35rem;background:rgba(196,154,42,0.12);border:1px solid var(--gold-border);border-radius:20px;padding:0.25rem 0.75rem;font-size:0.68rem;font-weight:600;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.25rem;}
-.vh-text{font-family:'Lora',serif;font-size:1.2rem;line-height:1.75;color:var(--ink);font-style:italic;font-weight:400;margin-bottom:1.5rem;}
+.vh-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.75rem;}
+.vh-cat{display:inline-flex;align-items:center;background:rgba(196,154,42,0.12);border:1px solid var(--gold-border);border-radius:20px;padding:0.25rem 0.75rem;font-size:0.68rem;font-weight:600;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.25rem;}
+.vh-text{font-family:'Lora',serif;font-size:1.15rem;line-height:1.75;color:var(--ink);font-style:italic;font-weight:400;margin-bottom:1.5rem;}
 .vh-footer{display:flex;align-items:center;justify-content:space-between;}
 .vh-ref{font-size:0.78rem;font-weight:700;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;}
-.fav-circle{width:38px;height:38px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink3);box-shadow:var(--shadow-sm);transition:background 0.15s,color 0.15s,border-color 0.15s,transform 0.1s;}
+.vh-actions{display:flex;align-items:center;gap:0.5rem;}
+.fav-circle{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink3);box-shadow:var(--shadow-sm);transition:all 0.15s;}
 .fav-circle:hover{transform:scale(1.1);}
 .fav-circle.active{background:rgba(160,48,32,0.08);border-color:rgba(160,48,32,0.2);color:var(--red);}
+.vow-circle{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink3);box-shadow:var(--shadow-sm);transition:all 0.15s;}
+.vow-circle:hover{transform:scale(1.1);}
+.vow-circle.active{background:rgba(26,90,138,0.08);border-color:rgba(26,90,138,0.2);color:var(--blue);}
 
-/* ── QUICK STATS ── */
-.quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+/* VOW CARD */
+.vow-card{background:linear-gradient(145deg,#EDF4FA 0%,#E0EDF7 100%);border:1px solid #B8D4E8;border-radius:var(--radius-lg);padding:1.5rem 1.5rem 1.4rem;box-shadow:var(--shadow-md);margin-bottom:1rem;position:relative;overflow:hidden;}
+.dark .vow-card{background:linear-gradient(145deg,#0E1A24 0%,#0A1420 100%);border-color:#1A3A52;}
+.vow-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(26,90,138,0.1) 0%,transparent 70%);border-radius:50%;}
+.vow-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;}
+.vow-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);opacity:0.8;}
+.vow-change{font-size:0.72rem;font-weight:600;color:var(--blue);cursor:pointer;opacity:0.7;background:none;border:none;font-family:'Inter',sans-serif;padding:0;}
+.vow-change:hover{opacity:1;}
+.vow-empty{text-align:center;padding:0.5rem 0 0.25rem;}
+.vow-empty-text{font-size:0.88rem;color:var(--ink3);margin-bottom:0.85rem;line-height:1.5;}
+.vow-set-btn{display:inline-flex;align-items:center;gap:0.4rem;background:var(--blue);color:#fff;border:none;border-radius:50px;padding:0.55rem 1.1rem;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;transition:filter 0.15s;}
+.vow-set-btn:hover{filter:brightness(1.1);}
+.vow-cat{display:inline-flex;background:rgba(26,90,138,0.1);border:1px solid rgba(26,90,138,0.2);border-radius:20px;padding:0.2rem 0.65rem;font-size:0.65rem;font-weight:600;color:var(--blue);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.85rem;}
+.vow-text{font-family:'Lora',serif;font-size:0.98rem;line-height:1.7;color:var(--ink);font-style:italic;margin-bottom:1rem;}
+.vow-footer{display:flex;align-items:center;justify-content:space-between;}
+.vow-ref{font-size:0.72rem;font-weight:700;color:var(--blue);letter-spacing:0.06em;text-transform:uppercase;opacity:0.8;}
+.vow-reset{font-size:0.68rem;color:var(--ink3);font-style:italic;}
+
+/* STATS */
+.quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0;}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow-sm);}
 .stat-num{font-family:'Lora',serif;font-size:1.6rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:0.25rem;}
 .stat-label{font-size:0.72rem;color:var(--ink3);font-weight:500;}
 
-/* ── VERSE CARDS ── */
+/* VERSE CARDS */
 .verse-list{display:flex;flex-direction:column;gap:0.75rem;}
 .verse-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.2rem;box-shadow:var(--shadow-sm);transition:box-shadow 0.2s,transform 0.15s;}
 .verse-card:active{transform:scale(0.99);}
@@ -123,25 +148,36 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .vc-ref{font-size:0.72rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;}
 .vc-cat{font-size:0.62rem;font-weight:600;background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border);border-radius:6px;padding:0.15rem 0.45rem;letter-spacing:0.04em;white-space:nowrap;}
 .vc-text{font-family:'Lora',serif;font-size:0.95rem;line-height:1.7;color:var(--ink2);font-style:italic;margin-bottom:0.75rem;}
-.vc-bottom{display:flex;justify-content:flex-end;}
+.vc-bottom{display:flex;justify-content:flex-end;align-items:center;gap:0.4rem;}
 .fav-btn{background:none;border:none;cursor:pointer;color:var(--ink3);padding:0.2rem;transition:color 0.15s,transform 0.1s;}
 .fav-btn:hover{transform:scale(1.2);}
 .fav-btn.active{color:var(--red);}
+.vow-btn{background:none;border:none;cursor:pointer;color:var(--ink3);padding:0.2rem;transition:color 0.15s,transform 0.1s;display:flex;align-items:center;}
+.vow-btn:hover{transform:scale(1.2);}
+.vow-btn.active{color:var(--blue);}
 
-/* ── SKELETON SCREENS ── */
+/* SKELETONS */
 .skeleton{background:linear-gradient(90deg,var(--card2) 25%,var(--border) 50%,var(--card2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.skel-hero{height:280px;border-radius:var(--radius-lg);margin-bottom:1rem;}
-.skel-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1rem;}
+.skel-hero{height:260px;border-radius:var(--radius-lg);margin-bottom:1rem;}
+.skel-vow{height:160px;border-radius:var(--radius-lg);margin-bottom:1rem;}
+.skel-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
 .skel-stat{height:80px;border-radius:var(--radius);}
 .skel-card{height:110px;border-radius:var(--radius);margin-bottom:0.75rem;}
-.skel-line{height:14px;border-radius:4px;margin-bottom:0.5rem;}
-.skel-line.short{width:40%;}
-.skel-line.med{width:65%;}
 .skel-title{height:28px;border-radius:6px;width:50%;margin-bottom:0.4rem;}
 .skel-sub{height:14px;border-radius:4px;width:70%;margin-bottom:1.25rem;}
 
-/* ── AUTH ── */
+/* ADMIN CHOICE */
+.admin-choice{display:flex;flex-direction:column;gap:0.75rem;padding:0.25rem 0 0.5rem;}
+.choice-btn{display:flex;align-items:center;gap:0.85rem;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;text-align:left;}
+.choice-btn:hover{border-color:var(--gold);background:var(--gold-bg);}
+.choice-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.choice-icon.base{background:var(--gold-bg);color:var(--gold);}
+.choice-icon.personal{background:rgba(42,106,58,0.1);color:var(--green);}
+.choice-title{font-size:0.9rem;font-weight:600;color:var(--ink);margin-bottom:0.15rem;}
+.choice-sub{font-size:0.75rem;color:var(--ink3);}
+
+/* AUTH */
 .auth-wrap{padding:2rem 1.25rem;}
 .auth-hero{text-align:center;margin-bottom:2rem;}
 .auth-logo{font-family:'Lora',serif;font-size:2.5rem;font-weight:700;color:var(--gold);font-style:italic;margin-bottom:0.5rem;}
@@ -163,7 +199,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .auth-error{margin-top:0.85rem;padding:0.6rem 0.9rem;background:rgba(160,48,32,0.07);border:1px solid rgba(160,48,32,0.2);border-radius:8px;font-size:0.82rem;color:var(--red);}
 .auth-success{margin-top:0.85rem;padding:0.6rem 0.9rem;background:rgba(42,106,58,0.07);border:1px solid rgba(42,106,58,0.2);border-radius:8px;font-size:0.82rem;color:var(--green);}
 
-/* ── MODAL ── */
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(10,8,4,0.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px);}
 .modal{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:1.5rem 1.5rem 2.5rem;width:100%;max-width:480px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;}
 .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 1.25rem;}
@@ -177,6 +213,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .btn{font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:600;padding:0.7rem 1.25rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.15s;flex:1;}
 .btn-primary{background:var(--gold);color:#fff;box-shadow:0 2px 8px rgba(196,154,42,0.3);}
 .btn-primary:hover{filter:brightness(1.08);}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
 .btn-ghost{background:var(--card2);border:1.5px solid var(--border);color:var(--ink2);}
 .btn-ghost:hover{background:var(--bg2);}
 .new-cat-row{display:flex;gap:0.5rem;align-items:center;margin-top:0.5rem;}
@@ -185,14 +222,28 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .modal-error{margin-top:0.75rem;padding:0.55rem 0.85rem;background:rgba(160,48,32,0.07);border:1px solid rgba(160,48,32,0.2);border-radius:8px;font-size:0.82rem;color:var(--red);}
 .modal-success{margin-top:0.75rem;padding:0.55rem 0.85rem;background:rgba(42,106,58,0.07);border:1px solid rgba(42,106,58,0.2);border-radius:8px;font-size:0.82rem;color:var(--green);}
 
-/* ── ADMIN BADGE ── */
-.admin-badge{display:inline-flex;align-items:center;gap:0.3rem;background:rgba(196,154,42,0.12);border:1px solid var(--gold-border);border-radius:6px;padding:0.15rem 0.5rem;font-size:0.65rem;font-weight:700;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-left:0.5rem;}
+/* PICKER */
+.picker-search{margin-bottom:1rem;}
+.picker-search input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:50px;padding:0.65rem 1rem 0.65rem 2.5rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.picker-search input:focus{border-color:var(--gold);}
+.picker-search-icon{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;}
+.picker-search-wrap{position:relative;}
+.picker-list{max-height:55vh;overflow-y:auto;display:flex;flex-direction:column;gap:0.5rem;}
+.picker-item{background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.85rem 1rem;cursor:pointer;transition:all 0.15s;}
+.picker-item:hover{border-color:var(--gold);background:var(--gold-bg);}
+.picker-item-ref{font-size:0.72rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.3rem;}
+.picker-item-text{font-family:'Lora',serif;font-size:0.88rem;line-height:1.55;color:var(--ink2);font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 
-/* ── EMPTY ── */
+/* CONFIRM OVERLAY */
+.confirm-overlay{position:fixed;inset:0;background:rgba(10,8,4,0.5);z-index:300;display:flex;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(3px);}
+.confirm-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem 1.5rem;width:100%;max-width:340px;box-shadow:var(--shadow-lg);}
+.confirm-title{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:0.5rem;}
+.confirm-text{font-size:0.88rem;color:var(--ink3);line-height:1.5;margin-bottom:1.5rem;}
+.confirm-actions{display:flex;gap:0.75rem;}
+
+/* EMPTY / TOAST */
 .empty{text-align:center;padding:3rem 1rem;color:var(--ink3);font-style:italic;font-size:0.95rem;}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:calc(56px + env(safe-area-inset-bottom) + 1rem);left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:500;padding:0.65rem 1.25rem;border-radius:50px;box-shadow:var(--shadow-lg);opacity:0;transition:transform 0.25s ease,opacity 0.25s ease;z-index:300;white-space:nowrap;pointer-events:none;}
+.toast{position:fixed;bottom:calc(56px + env(safe-area-inset-bottom) + 1rem);left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:500;padding:0.65rem 1.25rem;border-radius:50px;box-shadow:var(--shadow-lg);opacity:0;transition:transform 0.25s ease,opacity 0.25s ease;z-index:400;white-space:nowrap;pointer-events:none;}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 </style>
 </head>
@@ -203,19 +254,19 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
   <header class="app-header">
     <div class="header-logo">Seed<span>.</span></div>
     <div class="header-right">
-      <!-- Search -->
       <button class="hbtn" id="searchToggle" title="Search">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>
       </button>
-      <!-- Hamburger -->
       <button class="hbtn" id="hamburgerBtn" title="Menu">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 6l16 0"/><path d="M4 12l16 0"/><path d="M4 18l16 0"/></svg>
       </button>
-      <!-- Dropdown menu -->
       <div class="hamburger-menu" id="hamburgerMenu">
-        <div class="hm-user" id="hmUser">
-          <strong id="hmEmail">—</strong>
-          Signed in
+        <div class="hm-user">
+          <div class="hm-user-email" id="hmEmail">—</div>
+          <div class="hm-user-meta">
+            <span class="hm-signed-in">Signed in</span>
+            <span class="admin-badge" id="adminBadge" style="display:none;">Admin</span>
+          </div>
         </div>
         <button class="hm-item" id="darkToggle">
           <svg id="darkIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/></svg>
@@ -231,7 +282,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
     </div>
   </header>
 
-  <!-- SEARCH BAR -->
+  <!-- SEARCH -->
   <div id="searchBar" style="display:none;">
     <div class="search-wrap">
       <span class="search-icon">
@@ -241,7 +292,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="scroll-area" id="mainContent"></div>
 
   <!-- BOTTOM NAV -->
@@ -254,7 +304,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
       <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/></svg></span>
       <span class="nav-label">Browse</span>
     </button>
-    <button class="nav-item center-btn" id="addBtn" style="display:none;" title="Add verse">
+    <button class="nav-item center-btn" id="addBtn" style="display:none;">
       <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg></span>
     </button>
     <button class="nav-item" data-view="myverses">
@@ -270,27 +320,38 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 
 <!-- ADD VERSE MODAL -->
 <div class="modal-overlay" id="modalOverlay" style="display:none;">
-  <div class="modal">
+  <div class="modal" id="modalInner">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modalTitle">Add a Verse</div>
-    <label>Reference (e.g. John 3:16)</label>
-    <input type="text" id="newRef" placeholder="Book chapter:verse" maxlength="60">
-    <label>Verse Text</label>
-    <textarea id="newText" placeholder="Type or paste the verse here..." maxlength="2000"></textarea>
-    <label>Category</label>
-    <select id="newCat"></select>
-    <div style="margin-top:1rem;">
-      <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.5rem;">Or create a new category</div>
-      <div class="new-cat-row">
-        <input type="text" id="newCatInput" placeholder="New category name..." maxlength="50">
-        <button class="btn btn-primary" onclick="addCategory()">Add</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- VERSE OF WEEK PICKER MODAL -->
+<div class="modal-overlay" id="vowPickerOverlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Set Verse of the Week</div>
+    <div class="picker-search">
+      <div class="picker-search-wrap">
+        <span class="picker-search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>
+        </span>
+        <input type="text" id="vowPickerSearch" placeholder="Search verses..." autocomplete="off">
       </div>
-      <div id="catMsg"></div>
     </div>
-    <div id="verseMsg"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" id="saveVerseBtn" onclick="saveVerse()">Save Verse</button>
+    <div class="picker-list" id="vowPickerList"></div>
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirmOverlay" style="display:none;">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirmTitle"></div>
+    <div class="confirm-text" id="confirmText"></div>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" onclick="resolveConfirm(false)">Cancel</button>
+      <button class="btn btn-primary" onclick="resolveConfirm(true)">Replace</button>
     </div>
   </div>
 </div>
@@ -307,9 +368,11 @@ const db=createClient(SUPA_URL,SUPA_KEY);
 // STATE
 let currentUser=null;
 let baseVerses=[],customVerses=[],categories=[],favBaseIds=[],favCustomIds=[];
+let vowData=null; // {id, base_verse_id, custom_verse_id, week_number, year}
 let isDark=localStorage.getItem("seed_dark")==="true";
 let searchVisible=false,searchQuery="",selectedCat="All",selectedBook="All",currentView="daily";
 let authMode="login",isAdmin=false,isAddingBase=false;
+let confirmResolve=null;
 
 if(isDark)document.body.classList.add("dark");
 
@@ -317,6 +380,13 @@ if(isDark)document.body.classList.add("dark");
 function sanitize(str){const el=document.createElement("div");el.textContent=str;return el.innerHTML;}
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2500);}
 function getBook(ref){return ref.replace(/\s+\d.*$/,"").trim();}
+function getWeekNumber(){
+  const d=new Date();const s=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+  s.setUTCDate(s.getUTCDate()+4-(s.getUTCDay()||7));
+  const y=new Date(Date.UTC(s.getUTCFullYear(),0,1));
+  return{week:Math.ceil((((s-y)/86400000)+1)/7),year:s.getUTCFullYear()};
+}
+function isSunday(){return new Date().getDay()===0;}
 
 function getAllVerses(){
   return[
@@ -325,38 +395,43 @@ function getAllVerses(){
   ];
 }
 function getCatName(catId){
-  const c=categories.find(x=>x.id===catId);
-  return c?c.name:"—";
+  const c=categories.find(x=>x.id===catId);return c?c.name:"—";
 }
 function isFav(v){
-  if(v.source==="base")return favBaseIds.includes(v.id);
-  return favCustomIds.includes(v.id);
+  return v.source==="base"?favBaseIds.includes(v.id):favCustomIds.includes(v.id);
 }
 function getBooks(){
-  return["All",...new Set(getAllVerses().map(v=>getBook(v.ref))).keys()].sort((a,b)=>a==="All"?-1:a.localeCompare(b));
+  const books=[...new Set(getAllVerses().map(v=>getBook(v.ref)))].sort();
+  return["All",...books];
 }
-function getCategoryNames(){
-  return["All",...categories.map(c=>c.name)];
-}
+function getCategoryNames(){return["All",...categories.map(c=>c.name)];}
 
-// SKELETONS
-function skelDaily(){
-  return`<div class="daily-greeting"><div class="skeleton skel-line med" style="margin-bottom:0.4rem;"></div><div class="skeleton skel-title"></div></div><div class="skeleton skel-hero"></div><div class="skel-stats"><div class="skeleton skel-stat"></div><div class="skeleton skel-stat"></div></div>`;
+// CURRENT VOW VERSE
+function getVowVerse(){
+  if(!vowData)return null;
+  const{week,year}=getWeekNumber();
+  if(vowData.week_number!==week||vowData.year!==year)return null;
+  const all=getAllVerses();
+  if(vowData.base_verse_id)return all.find(v=>v.id===vowData.base_verse_id&&v.source==="base")||null;
+  if(vowData.custom_verse_id)return all.find(v=>v.id===vowData.custom_verse_id&&v.source==="custom")||null;
+  return null;
 }
-function skelList(n=4){
-  return Array(n).fill(0).map(()=>`<div class="skeleton skel-card"></div>`).join("");
-}
-function skelPage(){
-  return`<div class="skeleton skel-title"></div><div class="skeleton skel-sub"></div>${skelList()}`;
+function isCurrentVow(v){
+  if(!vowData)return false;
+  const{week,year}=getWeekNumber();
+  if(vowData.week_number!==week||vowData.year!==year)return false;
+  return(v.source==="base"&&vowData.base_verse_id===v.id)||(v.source==="custom"&&vowData.custom_verse_id===v.id);
 }
 
 // LOAD DATA
 async function loadUserData(){
-  const[catRes,baseRes,customRes,favRes]=await Promise.all([
+  const{week,year}=getWeekNumber();
+  const[catRes,baseRes,customRes,favRes,vowRes]=await Promise.all([
     db.from("categories").select("id,name,is_base").order("name"),
     db.from("verses").select("id,ref,text,cat_id,translation").order("ref"),
     db.from("custom_verses").select("id,ref,text,cat_id").eq("user_id",currentUser.id).order("created_at"),
     db.from("favorites").select("id,base_verse_id,custom_verse_id").eq("user_id",currentUser.id),
+    db.from("verse_of_week").select("*").eq("user_id",currentUser.id).eq("week_number",week).eq("year",year).maybeSingle(),
   ]);
   categories=catRes.data||[];
   baseVerses=(baseRes.data||[]).map(v=>({...v,cat:getCatName(v.cat_id)}));
@@ -364,8 +439,8 @@ async function loadUserData(){
   const favs=favRes.data||[];
   favBaseIds=favs.filter(f=>f.base_verse_id).map(f=>f.base_verse_id);
   favCustomIds=favs.filter(f=>f.custom_verse_id).map(f=>f.custom_verse_id);
+  vowData=vowRes.data||null;
 }
-
 async function loadUserDataSafe(){
   const timeout=new Promise(resolve=>setTimeout(resolve,6000));
   await Promise.race([loadUserData(),timeout]);
@@ -374,88 +449,192 @@ async function loadUserDataSafe(){
 // FAVORITES
 async function toggleFav(v){
   if(isFav(v)){
-    if(v.source==="base"){
-      favBaseIds=favBaseIds.filter(id=>id!==v.id);
-      await db.from("favorites").delete().eq("user_id",currentUser.id).eq("base_verse_id",v.id);
-    }else{
-      favCustomIds=favCustomIds.filter(id=>id!==v.id);
-      await db.from("favorites").delete().eq("user_id",currentUser.id).eq("custom_verse_id",v.id);
-    }
+    if(v.source==="base"){favBaseIds=favBaseIds.filter(id=>id!==v.id);await db.from("favorites").delete().eq("user_id",currentUser.id).eq("base_verse_id",v.id);}
+    else{favCustomIds=favCustomIds.filter(id=>id!==v.id);await db.from("favorites").delete().eq("user_id",currentUser.id).eq("custom_verse_id",v.id);}
     showToast("Removed from Saved");
   }else{
-    if(v.source==="base"){
-      favBaseIds.push(v.id);
-      await db.from("favorites").insert({user_id:currentUser.id,base_verse_id:v.id});
-    }else{
-      favCustomIds.push(v.id);
-      await db.from("favorites").insert({user_id:currentUser.id,custom_verse_id:v.id});
-    }
+    if(v.source==="base"){favBaseIds.push(v.id);await db.from("favorites").insert({user_id:currentUser.id,base_verse_id:v.id});}
+    else{favCustomIds.push(v.id);await db.from("favorites").insert({user_id:currentUser.id,custom_verse_id:v.id});}
     showToast("Saved!");
   }
   render();
 }
+async function toggleFavById(id,source){
+  const v=getAllVerses().find(x=>x.id===id&&x.source===source);
+  if(v)await toggleFav(v);
+}
+
+// VERSE OF WEEK
+async function setVow(v){
+  const{week,year}=getWeekNumber();
+  const row={user_id:currentUser.id,week_number:week,year,base_verse_id:null,custom_verse_id:null};
+  if(v.source==="base")row.base_verse_id=v.id;
+  else row.custom_verse_id=v.id;
+  if(vowData){
+    const{data,error}=await db.from("verse_of_week").update(row).eq("id",vowData.id).select().single();
+    if(!error)vowData=data;
+  }else{
+    const{data,error}=await db.from("verse_of_week").insert(row).select().single();
+    if(!error)vowData=data;
+  }
+  showToast("Verse of the Week set!");
+  closeVowPicker();render();
+}
+async function setVowById(id,source){
+  const v=getAllVerses().find(x=>x.id===id&&x.source===source);
+  if(!v)return;
+  const existing=getVowVerse();
+  if(existing&&existing.id!==v.id){
+    const ok=await showConfirm("Replace Verse of the Week?",`"${v.ref}" will replace your current verse of the week.`);
+    if(!ok)return;
+  }
+  await setVow(v);
+}
+
+// CONFIRM DIALOG
+function showConfirm(title,text){
+  return new Promise(resolve=>{
+    confirmResolve=resolve;
+    document.getElementById("confirmTitle").textContent=title;
+    document.getElementById("confirmText").textContent=text;
+    document.getElementById("confirmOverlay").style.display="flex";
+  });
+}
+function resolveConfirm(val){
+  document.getElementById("confirmOverlay").style.display="none";
+  if(confirmResolve){confirmResolve(val);confirmResolve=null;}
+}
 
 // DAILY VERSE
 function getDailyVerse(){
-  const all=getAllVerses();
-  if(!all.length)return null;
+  const all=getAllVerses();if(!all.length)return null;
   const now=new Date();
   const start=new Date(now.getFullYear(),0,0);
   const day=Math.floor((now-start)/86400000);
   return all[((now.getFullYear()*1000)+day)%all.length];
 }
 
-// SVG HEARTS
+// SVG HEARTS + VOW ICON
 const heartFilled=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 .927 -9.215z"/></svg>`;
 const heartEmpty=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>`;
+const vowIcon=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/></svg>`;
+
+// SKELETONS
+function skelDaily(){
+  return`<div class="daily-greeting"><div class="skeleton" style="height:14px;width:35%;border-radius:4px;margin-bottom:0.4rem;"></div><div class="skeleton" style="height:26px;width:60%;border-radius:6px;"></div></div><div class="skeleton skel-hero"></div><div class="skeleton skel-vow"></div><div class="skel-stats"><div class="skeleton skel-stat"></div><div class="skeleton skel-stat"></div></div>`;
+}
+function skelList(n=4){return Array(n).fill(0).map(()=>`<div class="skeleton skel-card"></div>`).join("");}
+function skelPage(){return`<div class="skeleton skel-title"></div><div class="skeleton skel-sub"></div>${skelList()}`;}
 
 // RENDER DAILY
 function renderDaily(){
   const v=getDailyVerse();
+  const vow=getVowVerse();
   const now=new Date();
   const dateStr=now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
   if(!v){document.getElementById("mainContent").innerHTML=skelDaily();return;}
   const favd=isFav(v);
+  const isVow=isCurrentVow(v);
+  const{week}=getWeekNumber();
+  // VOW card
+  let vowHtml="";
+  if(vow){
+    const vowFavd=isFav(vow);
+    vowHtml=`
+      <div class="vow-card">
+        <div class="vow-header">
+          <div class="vow-label">Verse of the Week</div>
+          <button class="vow-change" onclick="openVowPicker()">Change</button>
+        </div>
+        <div class="vow-cat">${sanitize(vow.cat)}</div>
+        <div class="vow-text">"${sanitize(vow.text)}"</div>
+        <div class="vow-footer">
+          <div class="vow-ref">${sanitize(vow.ref)} &middot; NKJV</div>
+          <div style="display:flex;gap:0.4rem;">
+            <button class="fav-circle ${vowFavd?"active":""}" onclick="toggleFavById('${vow.id}','${vow.source}')" title="${vowFavd?"Remove from saved":"Save"}">${vowFavd?heartFilled:heartEmpty}</button>
+          </div>
+        </div>
+      </div>`;
+  }else{
+    const resetNote=isSunday()?'<div class="vow-reset">Resets every Sunday</div>':"";
+    vowHtml=`
+      <div class="vow-card">
+        <div class="vow-header"><div class="vow-label">Verse of the Week</div>${resetNote}</div>
+        <div class="vow-empty">
+          <div class="vow-empty-text">Choose a verse to meditate on this week.</div>
+          <button class="vow-set-btn" onclick="openVowPicker()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg>
+            Set Verse
+          </button>
+        </div>
+      </div>`;
+  }
+
   document.getElementById("mainContent").innerHTML=`
     <div class="daily-greeting">
       <div class="greeting-label">Verse of the Day</div>
       <div class="greeting-date">${sanitize(dateStr)}</div>
     </div>
     <div class="verse-hero">
+      <div class="vh-label">Today</div>
       <div class="vh-cat">${sanitize(v.cat)}</div>
       <div class="vh-text">"${sanitize(v.text)}"</div>
       <div class="vh-footer">
         <div class="vh-ref">${sanitize(v.ref)} &middot; NKJV</div>
-        <button class="fav-circle ${favd?"active":""}" onclick="toggleDailyFav()" title="${favd?"Remove":"Save"}">${favd?heartFilled:heartEmpty}</button>
+        <div class="vh-actions">
+          <button class="vow-circle ${isVow?"active":""}" onclick="setVowById('${v.id}','${v.source}')" title="Set as Verse of the Week">${vowIcon}</button>
+          <button class="fav-circle ${favd?"active":""}" onclick="toggleDailyFav()" title="${favd?"Remove":"Save"}">${favd?heartFilled:heartEmpty}</button>
+        </div>
       </div>
     </div>
+    ${vowHtml}
     <div class="quick-stats">
-      <div class="stat-card"><div class="stat-num">${baseVerses.length}</div><div class="stat-label">Base Verses</div></div>
+      <div class="stat-card"><div class="stat-num">${baseVerses.length+customVerses.length}</div><div class="stat-label">Total Verses</div></div>
       <div class="stat-card"><div class="stat-num">${favBaseIds.length+favCustomIds.length}</div><div class="stat-label">Saved Verses</div></div>
     </div>`;
 }
 
 async function toggleDailyFav(){
-  const v=getDailyVerse();
-  if(!v)return;
-  await toggleFav(v);
-  renderDaily();
+  const v=getDailyVerse();if(!v)return;
+  await toggleFav(v);renderDaily();
 }
+
+// VOW PICKER
+function openVowPicker(){
+  renderVowPicker("");
+  document.getElementById("vowPickerOverlay").style.display="flex";
+  document.getElementById("vowPickerSearch").value="";
+  document.getElementById("vowPickerSearch").focus();
+}
+function closeVowPicker(){document.getElementById("vowPickerOverlay").style.display="none";}
+function renderVowPicker(query){
+  let list=getAllVerses();
+  if(query){const q=query.toLowerCase();list=list.filter(v=>v.ref.toLowerCase().includes(q)||v.text.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q));}
+  const el=document.getElementById("vowPickerList");
+  if(!list.length){el.innerHTML=`<div class="empty">No verses found.</div>`;return;}
+  el.innerHTML=list.map(v=>`
+    <div class="picker-item" onclick="setVowById('${v.id}','${v.source}')">
+      <div class="picker-item-ref">${sanitize(v.ref)} &middot; ${sanitize(v.cat)}</div>
+      <div class="picker-item-text">${sanitize(v.text)}</div>
+    </div>`).join("");
+}
+document.getElementById("vowPickerSearch").addEventListener("input",e=>renderVowPicker(e.target.value));
+document.getElementById("vowPickerOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("vowPickerOverlay"))closeVowPicker();});
 
 // RENDER VERSE CARD
 function renderVerseCard(v){
-  const favd=isFav(v);
-  const sid=JSON.stringify({id:v.id,source:v.source}).replace(/"/g,"&quot;");
-  return`<div class="verse-card"><div class="vc-top"><div class="vc-ref">${sanitize(v.ref)}</div><span class="vc-cat">${sanitize(v.cat)}</span></div><div class="vc-text">"${sanitize(v.text)}"</div><div class="vc-bottom"><button class="fav-btn ${favd?"active":""}" onclick="toggleFavById('${v.id}','${v.source}')">${favd?heartFilled:heartEmpty}</button></div></div>`;
+  const favd=isFav(v);const vowActive=isCurrentVow(v);
+  return`<div class="verse-card">
+    <div class="vc-top"><div class="vc-ref">${sanitize(v.ref)}</div><span class="vc-cat">${sanitize(v.cat)}</span></div>
+    <div class="vc-text">"${sanitize(v.text)}"</div>
+    <div class="vc-bottom">
+      <button class="vow-btn ${vowActive?"active":""}" onclick="setVowById('${v.id}','${v.source}')" title="Set as Verse of the Week">${vowIcon}</button>
+      <button class="fav-btn ${favd?"active":""}" onclick="toggleFavById('${v.id}','${v.source}')">${favd?heartFilled:heartEmpty}</button>
+    </div>
+  </div>`;
 }
 
-async function toggleFavById(id,source){
-  const all=getAllVerses();
-  const v=all.find(x=>x.id===id&&x.source===source);
-  if(v)await toggleFav(v);
-}
-
-// FILTER ROW
+// FILTER ROW — uses category NAMES as values (bug fix #1)
 function filterRowHTML(){
   const cats=getCategoryNames();
   const books=getBooks();
@@ -487,29 +666,21 @@ function render(){
   const main=document.getElementById("mainContent");
   if(!currentUser){renderAuth();return;}
   if(currentView==="daily"){renderDaily();return;}
-
-  let list=[];
-  let html="";
-
+  let list=[],html="";
   if(currentView==="browse"){
     list=getFiltered(getAllVerses());
-    html+=`<div class="page-title">Browse</div><div class="page-sub">Filter by category or book</div>`;
-    html+=filterRowHTML();
+    html+=`<div class="page-title">Browse</div><div class="page-sub">Filter by category or book</div>${filterRowHTML()}`;
   }
   if(currentView==="myverses"){
     list=getFiltered(customVerses.map(v=>({...v,source:"custom"})));
-    html+=`<div class="page-title">My Verses</div><div class="page-sub">${customVerses.length} verse${customVerses.length!==1?"s":""} added by you</div>`;
-    html+=filterRowHTML();
+    html+=`<div class="page-title">My Verses</div><div class="page-sub">${customVerses.length} verse${customVerses.length!==1?"s":""} added by you</div>${filterRowHTML()}`;
   }
   if(currentView==="favorites"){
     const all=getAllVerses();
     list=getFiltered(all.filter(v=>isFav(v)));
-    html+=`<div class="page-title">Saved</div><div class="page-sub">${favBaseIds.length+favCustomIds.length} verse${favBaseIds.length+favCustomIds.length!==1?"s":""} saved</div>`;
-    html+=filterRowHTML();
+    html+=`<div class="page-title">Saved</div><div class="page-sub">${favBaseIds.length+favCustomIds.length} verse${favBaseIds.length+favCustomIds.length!==1?"s":""} saved</div>${filterRowHTML()}`;
   }
-
   html+=`<div class="sec-header"><span class="sec-title">Results</span><span class="sec-title">${list.length} verse${list.length!==1?"s":""}</span></div>`;
-
   if(list.length===0){
     if(currentView==="favorites")html+=`<div class="empty">Nothing saved yet. Tap the heart on any verse to save it here.</div>`;
     else if(currentView==="myverses")html+=`<div class="empty">No verses added yet. Tap + to add your first verse.</div>`;
@@ -528,7 +699,7 @@ function renderAuth(){
     <div class="auth-wrap">
       <div class="auth-hero">
         <div class="auth-logo">Seed<span>.</span></div>
-        <div class="auth-tagline">NKJV verses on financial blessing,<br>provision, and wisdom.</div>
+        <div class="auth-tagline">Rooted in the Word. Strengthened by truth.</div>
       </div>
       <div class="auth-card">
         <div class="auth-card-title">${isLogin?"Welcome back":"Create account"}</div>
@@ -554,12 +725,10 @@ async function handleAuth(){
   if(result.error){msg.innerHTML=`<div class="auth-error">${result.error.message}</div>`;btn.disabled=false;btn.textContent=authMode==="login"?"Sign In":"Sign Up";}
   else if(authMode==="signup"&&!result.data.session){msg.innerHTML=`<div class="auth-success">Check your email to confirm, then sign in.</div>`;btn.disabled=false;btn.textContent="Sign Up";}
 }
-
-// SIGN OUT
 async function signOut(){
   closeHamburger();
   await db.auth.signOut();
-  currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];isAdmin=false;
+  currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];vowData=null;isAdmin=false;
   document.getElementById("signOutBtn").style.display="none";
   document.getElementById("addBtn").style.display="none";
   render();
@@ -577,9 +746,9 @@ document.getElementById("hamburgerBtn").addEventListener("click",e=>{
   document.getElementById("hamburgerBtn").classList.toggle("active",isOpen);
 });
 document.addEventListener("click",e=>{
-  if(!document.getElementById("hamburgerMenu").contains(e.target)&&e.target!==document.getElementById("hamburgerBtn")){
-    closeHamburger();
-  }
+  const menu=document.getElementById("hamburgerMenu");
+  const btn=document.getElementById("hamburgerBtn");
+  if(!menu.contains(e.target)&&e.target!==btn)closeHamburger();
 });
 
 // DARK MODE
@@ -594,51 +763,86 @@ document.getElementById("darkToggle").addEventListener("click",()=>{
 });
 applyDarkIcons();
 
-// MODAL
+// ADD MODAL
 function openModal(addBase=false){
   isAddingBase=addBase;
-  document.getElementById("modalTitle").textContent=addBase?"Add Base Verse":"Add My Verse";
+  const overlay=document.getElementById("modalOverlay");
+  const body=document.getElementById("modalBody");
+  const title=document.getElementById("modalTitle");
+
+  if(isAdmin&&!addBase&&currentView!=="adminChoice"){
+    // Admin choice screen
+    title.textContent="Add a Verse";
+    body.innerHTML=`
+      <div class="admin-choice">
+        <button class="choice-btn" onclick="openModal(true)">
+          <div class="choice-icon base">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"/><path d="M11 13l9 -9"/><path d="M15 4h5v5"/></svg>
+          </div>
+          <div><div class="choice-title">Add Base Verse</div><div class="choice-sub">Visible to all users</div></div>
+        </button>
+        <button class="choice-btn" onclick="openModal('personal')">
+          <div class="choice-icon personal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18"/><path d="M13 8l2 0"/><path d="M13 12l2 0"/></svg>
+          </div>
+          <div><div class="choice-title">Add My Verse</div><div class="choice-sub">Only visible to you</div></div>
+        </button>
+      </div>
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button></div>`;
+    overlay.style.display="flex";return;
+  }
+
+  const actuallyBase=addBase===true;
+  title.textContent=actuallyBase?"Add Base Verse":"Add My Verse";
+  isAddingBase=actuallyBase;
+  body.innerHTML=`
+    <label>Reference (e.g. John 3:16)</label>
+    <input type="text" id="newRef" placeholder="Book chapter:verse" maxlength="60">
+    <label>Verse Text</label>
+    <textarea id="newText" placeholder="Type or paste the verse here..." maxlength="2000"></textarea>
+    <label>Category</label>
+    <select id="newCat"></select>
+    <div style="margin-top:1rem;">
+      <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.5rem;">Or create a new category</div>
+      <div class="new-cat-row">
+        <input type="text" id="newCatInput" placeholder="New category name..." maxlength="50">
+        <button class="btn btn-primary" onclick="addCategory()">Add</button>
+      </div>
+      <div id="catMsg"></div>
+    </div>
+    <div id="verseMsg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="saveVerseBtn" onclick="saveVerse()">Save Verse</button>
+    </div>`;
   populateCatSelect();
-  document.getElementById("newRef").value="";
-  document.getElementById("newText").value="";
-  document.getElementById("newCatInput").value="";
-  document.getElementById("verseMsg").innerHTML="";
-  document.getElementById("catMsg").innerHTML="";
-  document.getElementById("modalOverlay").style.display="flex";
+  overlay.style.display="flex";
 }
 function closeModal(){document.getElementById("modalOverlay").style.display="none";}
-
 function populateCatSelect(){
-  const sel=document.getElementById("newCat");
+  const sel=document.getElementById("newCat");if(!sel)return;
   sel.innerHTML="";
-  categories.forEach(c=>{
-    const o=document.createElement("option");
-    o.value=c.id;o.textContent=c.name;sel.appendChild(o);
-  });
+  categories.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=c.name;sel.appendChild(o);});
 }
 
-// ADD CATEGORY — with duplicate check
+// ADD CATEGORY — duplicate check
 async function addCategory(){
   const input=document.getElementById("newCatInput");
   const name=input.value.trim();
   const msg=document.getElementById("catMsg");
   msg.innerHTML="";
   if(!name){msg.innerHTML=`<div class="modal-error">Enter a category name.</div>`;return;}
-
-  // Duplicate check against Supabase
   const{data:existing}=await db.from("categories").select("id").ilike("name",name).maybeSingle();
   if(existing){msg.innerHTML=`<div class="modal-error">"${sanitize(name)}" already exists as a category.</div>`;return;}
-
   const{data,error}=await db.from("categories").insert({name,is_base:isAdmin&&isAddingBase}).select().single();
   if(error){msg.innerHTML=`<div class="modal-error">Error saving category.</div>`;return;}
-
   categories.push({id:data.id,name:data.name,is_base:data.is_base});
   input.value="";populateCatSelect();
   document.getElementById("newCat").value=data.id;
   msg.innerHTML=`<div class="modal-success">"${sanitize(name)}" added.</div>`;
 }
 
-// ADD VERSE — with duplicate check
+// SAVE VERSE — duplicate check
 async function saveVerse(){
   const ref=document.getElementById("newRef").value.trim();
   const text=document.getElementById("newText").value.trim();
@@ -649,26 +853,21 @@ async function saveVerse(){
   if(!ref){msg.innerHTML=`<div class="modal-error">Enter a verse reference.</div>`;return;}
   if(!text){msg.innerHTML=`<div class="modal-error">Enter the verse text.</div>`;return;}
   if(!catId){msg.innerHTML=`<div class="modal-error">Select a category.</div>`;return;}
-
-  // Duplicate check against both tables
   btn.disabled=true;btn.textContent="Checking...";
   const[baseCheck,customCheck]=await Promise.all([
     db.from("verses").select("id").ilike("ref",ref).maybeSingle(),
     db.from("custom_verses").select("id").ilike("ref",ref).eq("user_id",currentUser.id).maybeSingle(),
   ]);
-  btn.disabled=false;btn.textContent="Save Verse";
   if(baseCheck.data||customCheck.data){
-    msg.innerHTML=`<div class="modal-error">"${sanitize(ref)}" already exists.</div>`;return;
+    msg.innerHTML=`<div class="modal-error">"${sanitize(ref)}" already exists.</div>`;
+    btn.disabled=false;btn.textContent="Save Verse";return;
   }
-
-  btn.disabled=true;btn.textContent="Saving...";
+  btn.textContent="Saving...";
   if(isAddingBase&&isAdmin){
-    // Insert into shared verses table
     const{data,error}=await db.from("verses").insert({ref,text,cat_id:catId,translation:"NKJV"}).select().single();
     if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
     baseVerses.push({...data,cat:getCatName(catId),source:"base"});
   }else{
-    // Insert into user's custom_verses
     const{data,error}=await db.from("custom_verses").insert({user_id:currentUser.id,ref,text,cat_id:catId,cat:getCatName(catId)}).select().single();
     if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
     customVerses.push({...data,cat:getCatName(catId),source:"custom"});
@@ -677,7 +876,19 @@ async function saveVerse(){
   closeModal();showToast(`"${ref}" added.`);render();
 }
 
-// SEARCH
+// EVENTS
+document.getElementById("modalOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("modalOverlay"))closeModal();});
+document.querySelectorAll(".nav-item[data-view]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentView=btn.dataset.view;
+    searchQuery="";selectedCat="All";selectedBook="All";
+    document.getElementById("searchInput").value="";
+    if(searchVisible){searchVisible=false;document.getElementById("searchBar").style.display="none";document.getElementById("searchToggle").classList.remove("active");}
+    render();
+  });
+});
 document.getElementById("searchToggle").addEventListener("click",()=>{
   searchVisible=!searchVisible;
   document.getElementById("searchBar").style.display=searchVisible?"block":"none";
@@ -692,32 +903,10 @@ document.getElementById("searchInput").addEventListener("input",e=>{
   }
   render();
 });
-
-// NAV
-document.querySelectorAll(".nav-item[data-view]").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    currentView=btn.dataset.view;
-    searchQuery="";selectedCat="All";selectedBook="All";
-    document.getElementById("searchInput").value="";
-    if(searchVisible){searchVisible=false;document.getElementById("searchBar").style.display="none";document.getElementById("searchToggle").classList.remove("active");}
-    render();
-  });
-});
-
-// ADD BTN — admin gets choice, regular users go straight to custom
 document.getElementById("addBtn").addEventListener("click",()=>{
-  if(isAdmin){
-    // Show choice via modal title toggle — default to base for admin
-    openModal(true);
-  }else{
-    openModal(false);
-  }
+  if(isAdmin)openModal(false); // shows choice screen
+  else openModal(false);       // goes straight to personal
 });
-
-// Admin toggle in modal — if admin, show toggle between base and personal
-document.getElementById("modalOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("modalOverlay"))closeModal();});
 document.getElementById("signOutBtn").addEventListener("click",signOut);
 
 // APPLY USER UI
@@ -725,6 +914,7 @@ function applyUserUI(user){
   currentUser=user;
   isAdmin=user.email===ADMIN_EMAIL;
   document.getElementById("hmEmail").textContent=user.email;
+  document.getElementById("adminBadge").style.display=isAdmin?"inline-flex":"none";
   document.getElementById("signOutBtn").style.display="flex";
   document.getElementById("addBtn").style.display="flex";
 }
@@ -732,7 +922,7 @@ function applyUserUI(user){
 // AUTH STATE
 db.auth.onAuthStateChange(async(event,session)=>{
   if(event==="SIGNED_OUT"||event==="USER_DELETED"){
-    currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];isAdmin=false;
+    currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];vowData=null;isAdmin=false;
     document.getElementById("signOutBtn").style.display="none";
     document.getElementById("addBtn").style.display="none";
     render();return;
@@ -740,24 +930,20 @@ db.auth.onAuthStateChange(async(event,session)=>{
   if(event==="SIGNED_IN"&&session){
     applyUserUI(session.user);
     document.getElementById("mainContent").innerHTML=skelDaily();
-    await loadUserDataSafe();
-    render();return;
+    await loadUserDataSafe();render();return;
   }
   if(event==="TOKEN_REFRESHED"&&session){
     applyUserUI(session.user);
-    await loadUserDataSafe();
-    render();return;
+    await loadUserDataSafe();render();return;
   }
 });
-
 (async()=>{
   try{
     const{data:{session}}=await db.auth.getSession();
     if(session){
       applyUserUI(session.user);
       document.getElementById("mainContent").innerHTML=skelDaily();
-      await loadUserDataSafe();
-      render();
+      await loadUserDataSafe();render();
     }else{currentUser=null;render();}
   }catch(e){currentUser=null;render();}
 })();
