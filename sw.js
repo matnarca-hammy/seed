@@ -1,4 +1,4 @@
-const CACHE = "seed-v1";
+const CACHE = "seed-v2";
 const ASSETS = [
   "/seed/",
   "/seed/index.html",

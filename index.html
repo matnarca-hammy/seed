@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Seed</title>
-<meta name="theme-color" content="#FAFAF7">
+<meta name="theme-color" content="#FAF4E4">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Seed">
@@ -13,6 +13,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+/* SPLASH */
+#splash{position:fixed;inset:0;z-index:9999;background:#FAF4E4;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s ease;}
+#splash.hidden{opacity:0;pointer-events:none;}
+.dark #splash{background:#100E08;}
+.splash-logo{font-family:'Lora',serif;font-size:3rem;font-weight:700;color:#C49A2A;font-style:italic;letter-spacing:0.02em;animation:pulse-logo 1.8s ease-in-out infinite;}
+.splash-logo span{color:#A03020;font-style:normal;}
+@keyframes pulse-logo{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(0.97);}}
+
 :root{
   --bg:#FAFAF7;--bg2:#F3F1EA;--card:#FFFFFF;--card2:#F7F5EE;
   --border:#E8E4D8;--ink:#1A1208;--ink2:#4A3F2A;--ink3:#9A8E78;
@@ -122,8 +130,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .vow-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(26,90,138,0.1) 0%,transparent 70%);border-radius:50%;}
 .vow-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;}
 .vow-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);opacity:0.8;}
-.vow-change{font-size:0.72rem;font-weight:600;color:var(--blue);cursor:pointer;opacity:0.7;background:none;border:none;font-family:'Inter',sans-serif;padding:0;}
-.vow-change:hover{opacity:1;}
 .vow-empty{text-align:center;padding:0.5rem 0 0.25rem;}
 .vow-empty-text{font-size:0.88rem;color:var(--ink3);margin-bottom:0.85rem;line-height:1.5;}
 .vow-set-btn{display:inline-flex;align-items:center;gap:0.4rem;background:var(--blue);color:#fff;border:none;border-radius:50px;padding:0.55rem 1.1rem;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;transition:filter 0.15s;}
@@ -132,7 +138,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .vow-text{font-family:'Lora',serif;font-size:0.98rem;line-height:1.7;color:var(--ink);font-style:italic;margin-bottom:1rem;}
 .vow-footer{display:flex;align-items:center;justify-content:space-between;}
 .vow-ref{font-size:0.72rem;font-weight:700;color:var(--blue);letter-spacing:0.06em;text-transform:uppercase;opacity:0.8;}
-.vow-reset{font-size:0.68rem;color:var(--ink3);font-style:italic;}
 
 /* STATS */
 .quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0;}
@@ -149,12 +154,15 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .vc-cat{font-size:0.62rem;font-weight:600;background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border);border-radius:6px;padding:0.15rem 0.45rem;letter-spacing:0.04em;white-space:nowrap;}
 .vc-text{font-family:'Lora',serif;font-size:0.95rem;line-height:1.7;color:var(--ink2);font-style:italic;margin-bottom:0.75rem;}
 .vc-bottom{display:flex;justify-content:flex-end;align-items:center;gap:0.4rem;}
-.fav-btn{background:none;border:none;cursor:pointer;color:var(--ink3);padding:0.2rem;transition:color 0.15s,transform 0.1s;}
+.fav-btn{background:none;border:none;cursor:pointer;color:var(--ink3);padding:0.2rem;transition:color 0.15s,transform 0.1s;display:flex;align-items:center;}
 .fav-btn:hover{transform:scale(1.2);}
 .fav-btn.active{color:var(--red);}
 .vow-btn{background:none;border:none;cursor:pointer;color:var(--ink3);padding:0.2rem;transition:color 0.15s,transform 0.1s;display:flex;align-items:center;}
 .vow-btn:hover{transform:scale(1.2);}
 .vow-btn.active{color:var(--blue);}
+.note-btn{background:none;border:none;cursor:pointer;color:var(--ink3);padding:0.2rem;transition:color 0.15s,transform 0.1s;display:flex;align-items:center;}
+.note-btn:hover{transform:scale(1.2);}
+.note-btn.active{color:var(--green);}
 
 /* SKELETONS */
 .skeleton{background:linear-gradient(90deg,var(--card2) 25%,var(--border) 50%,var(--card2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
@@ -216,25 +224,31 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
 .btn-ghost{background:var(--card2);border:1.5px solid var(--border);color:var(--ink2);}
 .btn-ghost:hover{background:var(--bg2);}
+.btn-danger{background:rgba(160,48,32,0.08);border:1.5px solid rgba(160,48,32,0.2);color:var(--red);}
+.btn-danger:hover{background:rgba(160,48,32,0.15);}
 .new-cat-row{display:flex;gap:0.5rem;align-items:center;margin-top:0.5rem;}
 .new-cat-row input{flex:1;margin:0;}
 .new-cat-row .btn{flex:none;padding:0.65rem 1rem;font-size:0.8rem;white-space:nowrap;}
 .modal-error{margin-top:0.75rem;padding:0.55rem 0.85rem;background:rgba(160,48,32,0.07);border:1px solid rgba(160,48,32,0.2);border-radius:8px;font-size:0.82rem;color:var(--red);}
 .modal-success{margin-top:0.75rem;padding:0.55rem 0.85rem;background:rgba(42,106,58,0.07);border:1px solid rgba(42,106,58,0.2);border-radius:8px;font-size:0.82rem;color:var(--green);}
 
+/* NOTE MODAL */
+.note-text-display{font-family:'Lora',serif;font-size:0.95rem;line-height:1.7;color:var(--ink2);font-style:italic;padding:0.75rem 0;white-space:pre-wrap;}
+.note-ref-label{font-size:0.72rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;}
+
 /* PICKER */
 .picker-search{margin-bottom:1rem;}
-.picker-search input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:50px;padding:0.65rem 1rem 0.65rem 2.5rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:border-color 0.2s;}
-.picker-search input:focus{border-color:var(--gold);}
-.picker-search-icon{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;}
 .picker-search-wrap{position:relative;}
+.picker-search-wrap input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:50px;padding:0.65rem 1rem 0.65rem 2.5rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.picker-search-wrap input:focus{border-color:var(--gold);}
+.picker-search-icon{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;}
 .picker-list{max-height:55vh;overflow-y:auto;display:flex;flex-direction:column;gap:0.5rem;}
 .picker-item{background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.85rem 1rem;cursor:pointer;transition:all 0.15s;}
 .picker-item:hover{border-color:var(--gold);background:var(--gold-bg);}
 .picker-item-ref{font-size:0.72rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.3rem;}
 .picker-item-text{font-family:'Lora',serif;font-size:0.88rem;line-height:1.55;color:var(--ink2);font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 
-/* CONFIRM OVERLAY */
+/* CONFIRM */
 .confirm-overlay{position:fixed;inset:0;background:rgba(10,8,4,0.5);z-index:300;display:flex;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(3px);}
 .confirm-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem 1.5rem;width:100%;max-width:340px;box-shadow:var(--shadow-lg);}
 .confirm-title{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:0.5rem;}
@@ -248,9 +262,13 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 </style>
 </head>
 <body>
-<div class="app-shell">
 
-  <!-- HEADER -->
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <div class="splash-logo">Seed<span>.</span></div>
+</div>
+
+<div class="app-shell">
   <header class="app-header">
     <div class="header-logo">Seed<span>.</span></div>
     <div class="header-right">
@@ -262,7 +280,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
       </button>
       <div class="hamburger-menu" id="hamburgerMenu">
         <div class="hm-user">
-          <div class="hm-user-email" id="hmEmail">—</div>
+          <div class="hm-user-email" id="hmEmail">--</div>
           <div class="hm-user-meta">
             <span class="hm-signed-in">Signed in</span>
             <span class="admin-badge" id="adminBadge" style="display:none;">Admin</span>
@@ -282,7 +300,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
     </div>
   </header>
 
-  <!-- SEARCH -->
   <div id="searchBar" style="display:none;">
     <div class="search-wrap">
       <span class="search-icon">
@@ -294,7 +311,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 
   <div class="scroll-area" id="mainContent"></div>
 
-  <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
     <button class="nav-item active" data-view="daily">
       <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/></svg></span>
@@ -327,7 +343,16 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
   </div>
 </div>
 
-<!-- VERSE OF WEEK PICKER MODAL -->
+<!-- NOTE MODAL -->
+<div class="modal-overlay" id="noteModalOverlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="noteModalTitle">Note</div>
+    <div id="noteModalBody"></div>
+  </div>
+</div>
+
+<!-- VOW PICKER MODAL -->
 <div class="modal-overlay" id="vowPickerOverlay" style="display:none;">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -365,19 +390,63 @@ const ADMIN_EMAIL="matnarca@gmail.com";
 const{createClient}=supabase;
 const db=createClient(SUPA_URL,SUPA_KEY);
 
+// CANONICAL BIBLE ORDER
+const BIBLE_ORDER=["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Psalm","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"];
+
+function bookOrder(book){
+  const idx=BIBLE_ORDER.findIndex(b=>b.toLowerCase()===book.toLowerCase());
+  return idx===-1?999:idx;
+}
+
+function parseVerseRef(ref){
+  const match=ref.match(/^(.+?)\s+(\d+)(?::(\d+)(?:-(\d+))?)?$/);
+  if(!match)return{book:ref,chapter:0,verseStart:0};
+  return{book:match[1].trim(),chapter:parseInt(match[2])||0,verseStart:parseInt(match[3])||0};
+}
+
+function sortByCanonical(verses){
+  return [...verses].sort((a,b)=>{
+    const pa=parseVerseRef(a.ref);
+    const pb=parseVerseRef(b.ref);
+    const bo=bookOrder(pa.book)-bookOrder(pb.book);
+    if(bo!==0)return bo;
+    if(pa.chapter!==pb.chapter)return pa.chapter-pb.chapter;
+    return pa.verseStart-pb.verseStart;
+  });
+}
+
 // STATE
 let currentUser=null;
-let baseVerses=[],customVerses=[],categories=[],favBaseIds=[],favCustomIds=[];
-let vowData=null; // {id, base_verse_id, custom_verse_id, week_number, year}
+let baseVerses=[],customVerses=[],categories=[],favBaseIds=[],favCustomIds=[],notesMap={};
+let vowData=null;
 let isDark=localStorage.getItem("seed_dark")==="true";
 let searchVisible=false,searchQuery="",selectedCat="All",selectedBook="All",currentView="daily";
 let authMode="login",isAdmin=false,isAddingBase=false;
 let confirmResolve=null;
+let activeNoteVerse=null;
 
 if(isDark)document.body.classList.add("dark");
 
+// SPLASH
+function hideSplash(){
+  const s=document.getElementById("splash");
+  if(s){s.classList.add("hidden");setTimeout(()=>s.remove(),500);}
+}
+
 // HELPERS
-function sanitize(str){const el=document.createElement("div");el.textContent=str;return el.innerHTML;}
+function sanitize(str){
+  if(!str)return"";
+  const el=document.createElement("div");el.textContent=String(str);return el.innerHTML;
+}
+function sanitizeInput(str){
+  if(!str)return"";
+  // Strip HTML tags and dangerous patterns
+  return String(str)
+    .replace(/<[^>]*>/g,"")
+    .replace(/javascript:/gi,"")
+    .replace(/on\w+\s*=/gi,"")
+    .trim();
+}
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2500);}
 function getBook(ref){return ref.replace(/\s+\d.*$/,"").trim();}
 function getWeekNumber(){
@@ -386,7 +455,6 @@ function getWeekNumber(){
   const y=new Date(Date.UTC(s.getUTCFullYear(),0,1));
   return{week:Math.ceil((((s-y)/86400000)+1)/7),year:s.getUTCFullYear()};
 }
-function isSunday(){return new Date().getDay()===0;}
 
 function getAllVerses(){
   return[
@@ -394,46 +462,33 @@ function getAllVerses(){
     ...customVerses.map(v=>({...v,source:"custom"}))
   ];
 }
-function getCatName(catId){
-  const c=categories.find(x=>x.id===catId);return c?c.name:"—";
-}
-function isFav(v){
-  return v.source==="base"?favBaseIds.includes(v.id):favCustomIds.includes(v.id);
-}
+function getCatName(catId){const c=categories.find(x=>x.id===catId);return c?c.name:"--";}
+function isFav(v){return v.source==="base"?favBaseIds.includes(v.id):favCustomIds.includes(v.id);}
+function hasNote(v){return!!notesMap[v.source+":"+v.id];}
+function getNote(v){return notesMap[v.source+":"+v.id]||null;}
+function noteKey(v){return v.source+":"+v.id;}
+
 function getBooks(){
-  const books=[...new Set(getAllVerses().map(v=>getBook(v.ref)))].sort();
+  const books=[...new Set(getAllVerses().map(v=>getBook(v.ref)))];
+  books.sort((a,b)=>{
+    const bo=bookOrder(a)-bookOrder(b);
+    return bo!==0?bo:a.localeCompare(b);
+  });
   return["All",...books];
 }
 function getCategoryNames(){return["All",...categories.map(c=>c.name)];}
 
-// CURRENT VOW VERSE
-function getVowVerse(){
-  if(!vowData)return null;
-  const{week,year}=getWeekNumber();
-  if(vowData.week_number!==week||vowData.year!==year)return null;
-  const all=getAllVerses();
-  if(vowData.base_verse_id)return all.find(v=>v.id===vowData.base_verse_id&&v.source==="base")||null;
-  if(vowData.custom_verse_id)return all.find(v=>v.id===vowData.custom_verse_id&&v.source==="custom")||null;
-  return null;
-}
-function isCurrentVow(v){
-  if(!vowData)return false;
-  const{week,year}=getWeekNumber();
-  if(vowData.week_number!==week||vowData.year!==year)return false;
-  return(v.source==="base"&&vowData.base_verse_id===v.id)||(v.source==="custom"&&vowData.custom_verse_id===v.id);
-}
-
 // LOAD DATA
 async function loadUserData(){
   const{week,year}=getWeekNumber();
-  const[catRes,baseRes,customRes,favRes,vowRes]=await Promise.all([
+  const[catRes,baseRes,customRes,favRes,vowRes,noteRes]=await Promise.all([
     db.from("categories").select("id,name,is_base").order("name"),
     db.from("verses").select("id,ref,text,cat_id,translation").order("ref"),
     db.from("custom_verses").select("id,ref,text,cat_id").eq("user_id",currentUser.id).order("created_at"),
     db.from("favorites").select("id,base_verse_id,custom_verse_id").eq("user_id",currentUser.id),
     db.from("verse_of_week").select("*").eq("user_id",currentUser.id).eq("week_number",week).eq("year",year).maybeSingle(),
+    db.from("notes").select("id,base_verse_id,custom_verse_id,note").eq("user_id",currentUser.id),
   ]);
-  // Assign categories FIRST so getCatName works correctly when mapping verses
   categories=catRes.data||[];
   baseVerses=(baseRes.data||[]).map(v=>({...v,cat:getCatName(v.cat_id)}));
   customVerses=(customRes.data||[]).map(v=>({...v,cat:getCatName(v.cat_id)}));
@@ -441,6 +496,11 @@ async function loadUserData(){
   favBaseIds=favs.filter(f=>f.base_verse_id).map(f=>f.base_verse_id);
   favCustomIds=favs.filter(f=>f.custom_verse_id).map(f=>f.custom_verse_id);
   vowData=vowRes.data||null;
+  notesMap={};
+  (noteRes.data||[]).forEach(n=>{
+    if(n.base_verse_id)notesMap["base:"+n.base_verse_id]=n;
+    if(n.custom_verse_id)notesMap["custom:"+n.custom_verse_id]=n;
+  });
 }
 async function loadUserDataSafe(){
   const timeout=new Promise(resolve=>setTimeout(resolve,6000));
@@ -466,20 +526,28 @@ async function toggleFavById(id,source){
 }
 
 // VERSE OF WEEK
+function getVowVerse(){
+  if(!vowData)return null;
+  const{week,year}=getWeekNumber();
+  if(vowData.week_number!==week||vowData.year!==year)return null;
+  const all=getAllVerses();
+  if(vowData.base_verse_id)return all.find(v=>v.id===vowData.base_verse_id&&v.source==="base")||null;
+  if(vowData.custom_verse_id)return all.find(v=>v.id===vowData.custom_verse_id&&v.source==="custom")||null;
+  return null;
+}
+function isCurrentVow(v){
+  if(!vowData)return false;
+  const{week,year}=getWeekNumber();
+  if(vowData.week_number!==week||vowData.year!==year)return false;
+  return(v.source==="base"&&vowData.base_verse_id===v.id)||(v.source==="custom"&&vowData.custom_verse_id===v.id);
+}
 async function setVow(v){
   const{week,year}=getWeekNumber();
   const row={user_id:currentUser.id,week_number:week,year,base_verse_id:null,custom_verse_id:null};
-  if(v.source==="base")row.base_verse_id=v.id;
-  else row.custom_verse_id=v.id;
-  if(vowData){
-    const{data,error}=await db.from("verse_of_week").update(row).eq("id",vowData.id).select().single();
-    if(!error)vowData=data;
-  }else{
-    const{data,error}=await db.from("verse_of_week").insert(row).select().single();
-    if(!error)vowData=data;
-  }
-  showToast("Verse of the Week set!");
-  closeVowPicker();render();
+  if(v.source==="base")row.base_verse_id=v.id;else row.custom_verse_id=v.id;
+  if(vowData){const{data,error}=await db.from("verse_of_week").update(row).eq("id",vowData.id).select().single();if(!error)vowData=data;}
+  else{const{data,error}=await db.from("verse_of_week").insert(row).select().single();if(!error)vowData=data;}
+  showToast("Verse of the Week set!");closeVowPicker();render();
 }
 async function setVowById(id,source){
   const v=getAllVerses().find(x=>x.id===id&&x.source===source);
@@ -492,7 +560,7 @@ async function setVowById(id,source){
   await setVow(v);
 }
 
-// CONFIRM DIALOG
+// CONFIRM
 function showConfirm(title,text){
   return new Promise(resolve=>{
     confirmResolve=resolve;
@@ -515,17 +583,19 @@ function getDailyVerse(){
   return all[((now.getFullYear()*1000)+day)%all.length];
 }
 
-// SVG HEARTS + VOW ICON
+// SVG ICONS
 const heartFilled=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 .927 -9.215z"/></svg>`;
 const heartEmpty=`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>`;
-const vowIcon=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/></svg>`;
+const starFilled=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"/></svg>`;
+const starEmpty=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/></svg>`;
+const noteFilledIcon=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 3a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2zm-7 8h-4a1 1 0 0 0 0 2h4a1 1 0 0 0 0 -2zm2 -4h-6a1 1 0 0 0 0 2h6a1 1 0 0 0 0 -2z"/></svg>`;
+const noteEmptyIcon=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"/><path d="M9 7l6 0"/><path d="M9 11l6 0"/><path d="M9 15l4 0"/></svg>`;
 
 // SKELETONS
 function skelDaily(){
   return`<div class="daily-greeting"><div class="skeleton" style="height:14px;width:35%;border-radius:4px;margin-bottom:0.4rem;"></div><div class="skeleton" style="height:26px;width:60%;border-radius:6px;"></div></div><div class="skeleton skel-hero"></div><div class="skeleton skel-vow"></div><div class="skel-stats"><div class="skeleton skel-stat"></div><div class="skeleton skel-stat"></div></div>`;
 }
 function skelList(n=4){return Array(n).fill(0).map(()=>`<div class="skeleton skel-card"></div>`).join("");}
-function skelPage(){return`<div class="skeleton skel-title"></div><div class="skeleton skel-sub"></div>${skelList()}`;}
 
 // RENDER DAILY
 function renderDaily(){
@@ -536,31 +606,24 @@ function renderDaily(){
   if(!v){document.getElementById("mainContent").innerHTML=skelDaily();return;}
   const favd=isFav(v);
   const isVow=isCurrentVow(v);
-  const{week}=getWeekNumber();
-  // VOW card
+
   let vowHtml="";
   if(vow){
     const vowFavd=isFav(vow);
     vowHtml=`
       <div class="vow-card">
-        <div class="vow-header">
-          <div class="vow-label">Verse of the Week</div>
-          <button class="vow-change" onclick="openVowPicker()">Change</button>
-        </div>
+        <div class="vow-header"><div class="vow-label">Verse of the Week</div></div>
         <div class="vow-cat">${sanitize(vow.cat)}</div>
-        <div class="vow-text">"${sanitize(vow.text)}"</div>
+        <div class="vow-text">${sanitize(vow.text)}</div>
         <div class="vow-footer">
           <div class="vow-ref">${sanitize(vow.ref)} &middot; NKJV</div>
-          <div style="display:flex;gap:0.4rem;">
-            <button class="fav-circle ${vowFavd?"active":""}" onclick="toggleFavById('${vow.id}','${vow.source}')" title="${vowFavd?"Remove from saved":"Save"}">${vowFavd?heartFilled:heartEmpty}</button>
-          </div>
+          <button class="fav-circle ${vowFavd?"active":""}" onclick="toggleFavById('${vow.id}','${vow.source}')">${vowFavd?heartFilled:heartEmpty}</button>
         </div>
       </div>`;
   }else{
-    const resetNote=isSunday()?'<div class="vow-reset">Resets every Sunday</div>':"";
     vowHtml=`
       <div class="vow-card">
-        <div class="vow-header"><div class="vow-label">Verse of the Week</div>${resetNote}</div>
+        <div class="vow-header"><div class="vow-label">Verse of the Week</div></div>
         <div class="vow-empty">
           <div class="vow-empty-text">Choose a verse to meditate on this week.</div>
           <button class="vow-set-btn" onclick="openVowPicker()">
@@ -579,12 +642,12 @@ function renderDaily(){
     <div class="verse-hero">
       <div class="vh-label">Today</div>
       <div class="vh-cat">${sanitize(v.cat)}</div>
-      <div class="vh-text">"${sanitize(v.text)}"</div>
+      <div class="vh-text">${sanitize(v.text)}</div>
       <div class="vh-footer">
         <div class="vh-ref">${sanitize(v.ref)} &middot; NKJV</div>
         <div class="vh-actions">
-          <button class="vow-circle ${isVow?"active":""}" onclick="setVowById('${v.id}','${v.source}')" title="Set as Verse of the Week">${vowIcon}</button>
-          <button class="fav-circle ${favd?"active":""}" onclick="toggleDailyFav()" title="${favd?"Remove":"Save"}">${favd?heartFilled:heartEmpty}</button>
+          <button class="vow-circle ${isVow?"active":""}" onclick="setVowById('${v.id}','${v.source}')" title="Set as Verse of the Week">${isVow?starFilled:starEmpty}</button>
+          <button class="fav-circle ${favd?"active":""}" onclick="toggleDailyFav()">${favd?heartFilled:heartEmpty}</button>
         </div>
       </div>
     </div>
@@ -609,7 +672,7 @@ function openVowPicker(){
 }
 function closeVowPicker(){document.getElementById("vowPickerOverlay").style.display="none";}
 function renderVowPicker(query){
-  let list=getAllVerses();
+  let list=sortByCanonical(getAllVerses());
   if(query){const q=query.toLowerCase();list=list.filter(v=>v.ref.toLowerCase().includes(q)||v.text.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q));}
   const el=document.getElementById("vowPickerList");
   if(!list.length){el.innerHTML=`<div class="empty">No verses found.</div>`;return;}
@@ -622,27 +685,114 @@ function renderVowPicker(query){
 document.getElementById("vowPickerSearch").addEventListener("input",e=>renderVowPicker(e.target.value));
 document.getElementById("vowPickerOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("vowPickerOverlay"))closeVowPicker();});
 
+// NOTES
+function openNoteModal(id,source){
+  const v=getAllVerses().find(x=>x.id===id&&x.source===source);
+  if(!v)return;
+  activeNoteVerse=v;
+  const existing=getNote(v);
+  document.getElementById("noteModalTitle").textContent=existing?"My Note":"Add a Note";
+  renderNoteModalBody(existing,v);
+  document.getElementById("noteModalOverlay").style.display="flex";
+}
+function closeNoteModal(){
+  document.getElementById("noteModalOverlay").style.display="none";
+  activeNoteVerse=null;
+}
+function renderNoteModalBody(existing,v){
+  const body=document.getElementById("noteModalBody");
+  if(existing){
+    body.innerHTML=`
+      <div class="note-ref-label">${sanitize(v.ref)}</div>
+      <div class="note-text-display" id="noteDisplay">${sanitize(existing.note)}</div>
+      <div class="modal-actions" style="margin-top:1rem;">
+        <button class="btn btn-danger" onclick="deleteNote()">Delete</button>
+        <button class="btn btn-primary" onclick="switchToEditNote()">Edit</button>
+      </div>`;
+  }else{
+    body.innerHTML=`
+      <div class="note-ref-label">${sanitize(v.ref)}</div>
+      <textarea id="noteInput" placeholder="Write your note here..." maxlength="2000" style="min-height:120px;margin-top:0.5rem;width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;resize:vertical;"></textarea>
+      <div id="noteMsgArea"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeNoteModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveNote()">Save Note</button>
+      </div>`;
+    setTimeout(()=>{const el=document.getElementById("noteInput");if(el)el.focus();},100);
+  }
+}
+function switchToEditNote(){
+  const existing=getNote(activeNoteVerse);
+  const body=document.getElementById("noteModalBody");
+  document.getElementById("noteModalTitle").textContent="Edit Note";
+  body.innerHTML=`
+    <div class="note-ref-label">${sanitize(activeNoteVerse.ref)}</div>
+    <textarea id="noteInput" maxlength="2000" style="min-height:120px;margin-top:0.5rem;width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;resize:vertical;">${sanitize(existing?existing.note:"")}</textarea>
+    <div id="noteMsgArea"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeNoteModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNote()">Save Note</button>
+    </div>`;
+  setTimeout(()=>{const el=document.getElementById("noteInput");if(el)el.focus();},100);
+}
+async function saveNote(){
+  const input=document.getElementById("noteInput");
+  const msgArea=document.getElementById("noteMsgArea");
+  if(!input||!activeNoteVerse)return;
+  const raw=input.value.trim();
+  const noteText=sanitizeInput(raw);
+  if(!noteText){msgArea.innerHTML=`<div class="modal-error">Please enter a note.</div>`;return;}
+  if(noteText.length>2000){msgArea.innerHTML=`<div class="modal-error">Note must be 2000 characters or less.</div>`;return;}
+
+  const existing=getNote(activeNoteVerse);
+  const v=activeNoteVerse;
+  const row={user_id:currentUser.id,note:noteText,base_verse_id:null,custom_verse_id:null};
+  if(v.source==="base")row.base_verse_id=v.id;else row.custom_verse_id=v.id;
+
+  if(existing){
+    const{data,error}=await db.from("notes").update({note:noteText}).eq("id",existing.id).select().single();
+    if(error){msgArea.innerHTML=`<div class="modal-error">Error saving note.</div>`;return;}
+    notesMap[noteKey(v)]=data;
+  }else{
+    const{data,error}=await db.from("notes").insert(row).select().single();
+    if(error){msgArea.innerHTML=`<div class="modal-error">Error saving note.</div>`;return;}
+    notesMap[noteKey(v)]=data;
+  }
+  closeNoteModal();showToast("Note saved.");render();
+}
+async function deleteNote(){
+  const v=activeNoteVerse;
+  const existing=getNote(v);
+  if(!existing)return;
+  const{error}=await db.from("notes").delete().eq("id",existing.id);
+  if(error){showToast("Error deleting note.");return;}
+  delete notesMap[noteKey(v)];
+  closeNoteModal();showToast("Note deleted.");render();
+}
+document.getElementById("noteModalOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("noteModalOverlay"))closeNoteModal();});
+
 // RENDER VERSE CARD
 function renderVerseCard(v){
-  const favd=isFav(v);const vowActive=isCurrentVow(v);
+  const favd=isFav(v);const vowActive=isCurrentVow(v);const noted=hasNote(v);
   return`<div class="verse-card">
     <div class="vc-top"><div class="vc-ref">${sanitize(v.ref)}</div><span class="vc-cat">${sanitize(v.cat)}</span></div>
-    <div class="vc-text">"${sanitize(v.text)}"</div>
+    <div class="vc-text">${sanitize(v.text)}</div>
     <div class="vc-bottom">
-      <button class="vow-btn ${vowActive?"active":""}" onclick="setVowById('${v.id}','${v.source}')" title="Set as Verse of the Week">${vowIcon}</button>
+      <button class="note-btn ${noted?"active":""}" onclick="openNoteModal('${v.id}','${v.source}')" title="${noted?"View note":"Add note"}">${noted?noteFilledIcon:noteEmptyIcon}</button>
+      <button class="vow-btn ${vowActive?"active":""}" onclick="setVowById('${v.id}','${v.source}')" title="Set as Verse of the Week">${vowActive?starFilled:starEmpty}</button>
       <button class="fav-btn ${favd?"active":""}" onclick="toggleFavById('${v.id}','${v.source}')">${favd?heartFilled:heartEmpty}</button>
     </div>
   </div>`;
 }
 
-// FILTER ROW — uses category NAMES as values, raw not sanitized to preserve & characters
+// FILTER ROW
 function filterRowHTML(){
   const cats=getCategoryNames();
   const books=getBooks();
   const catActive=selectedCat!=="All";
   const bookActive=selectedBook!=="All";
-  const catOptions=cats.map(c=>`<option value="${c.replace(/"/g,'&quot;')}" ${selectedCat===c?"selected":""}>${sanitize(c)}</option>`).join("");
-  const bookOptions=books.map(b=>`<option value="${b.replace(/"/g,'&quot;')}" ${selectedBook===b?"selected":""}>${sanitize(b)}</option>`).join("");
+  const catOptions=cats.map(c=>`<option value="${c.replace(/"/g,"&quot;")}" ${selectedCat===c?"selected":""}>${sanitize(c)}</option>`).join("");
+  const bookOptions=books.map(b=>`<option value="${b.replace(/"/g,"&quot;")}" ${selectedBook===b?"selected":""}>${sanitize(b)}</option>`).join("");
   return`<div class="filter-row">
     <div class="filter-pill ${catActive?"has-filter":""}">
       ${catActive?sanitize(selectedCat):"Category"} <span class="filter-arrow">&#9660;</span>
@@ -671,15 +821,15 @@ function render(){
   if(currentView==="daily"){renderDaily();return;}
   let list=[],html="";
   if(currentView==="browse"){
-    list=getFiltered(getAllVerses());
+    list=getFiltered(sortByCanonical(getAllVerses()));
     html+=`<div class="page-title">Browse</div><div class="page-sub">Filter by category or book</div>${filterRowHTML()}`;
   }
   if(currentView==="myverses"){
-    list=getFiltered(customVerses.map(v=>({...v,source:"custom"})));
+    list=getFiltered(sortByCanonical(customVerses.map(v=>({...v,source:"custom"}))));
     html+=`<div class="page-title">My Verses</div><div class="page-sub">${customVerses.length} verse${customVerses.length!==1?"s":""} added by you</div>${filterRowHTML()}`;
   }
   if(currentView==="favorites"){
-    const all=getAllVerses();
+    const all=sortByCanonical(getAllVerses());
     list=getFiltered(all.filter(v=>isFav(v)));
     html+=`<div class="page-title">Saved</div><div class="page-sub">${favBaseIds.length+favCustomIds.length} verse${favBaseIds.length+favCustomIds.length!==1?"s":""} saved</div>${filterRowHTML()}`;
   }
@@ -731,7 +881,7 @@ async function handleAuth(){
 async function signOut(){
   closeHamburger();
   await db.auth.signOut();
-  currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];vowData=null;isAdmin=false;
+  currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];vowData=null;notesMap={};isAdmin=false;
   document.getElementById("signOutBtn").style.display="none";
   document.getElementById("addBtn").style.display="none";
   render();
@@ -772,9 +922,7 @@ function openModal(addBase=false){
   const overlay=document.getElementById("modalOverlay");
   const body=document.getElementById("modalBody");
   const title=document.getElementById("modalTitle");
-
-  if(isAdmin&&!addBase&&currentView!=="adminChoice"){
-    // Admin choice screen
+  if(isAdmin&&addBase===false){
     title.textContent="Add a Verse";
     body.innerHTML=`
       <div class="admin-choice">
@@ -794,7 +942,6 @@ function openModal(addBase=false){
       <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button></div>`;
     overlay.style.display="flex";return;
   }
-
   const actuallyBase=addBase===true;
   title.textContent=actuallyBase?"Add Base Verse":"Add My Verse";
   isAddingBase=actuallyBase;
@@ -828,10 +975,9 @@ function populateCatSelect(){
   categories.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=c.name;sel.appendChild(o);});
 }
 
-// ADD CATEGORY — duplicate check
 async function addCategory(){
   const input=document.getElementById("newCatInput");
-  const name=input.value.trim();
+  const name=sanitizeInput(input.value.trim());
   const msg=document.getElementById("catMsg");
   msg.innerHTML="";
   if(!name){msg.innerHTML=`<div class="modal-error">Enter a category name.</div>`;return;}
@@ -845,10 +991,9 @@ async function addCategory(){
   msg.innerHTML=`<div class="modal-success">"${sanitize(name)}" added.</div>`;
 }
 
-// SAVE VERSE — duplicate check
 async function saveVerse(){
-  const ref=document.getElementById("newRef").value.trim();
-  const text=document.getElementById("newText").value.trim();
+  const ref=sanitizeInput(document.getElementById("newRef").value.trim());
+  const text=sanitizeInput(document.getElementById("newText").value.trim());
   const catId=document.getElementById("newCat").value;
   const msg=document.getElementById("verseMsg");
   const btn=document.getElementById("saveVerseBtn");
@@ -907,8 +1052,8 @@ document.getElementById("searchInput").addEventListener("input",e=>{
   render();
 });
 document.getElementById("addBtn").addEventListener("click",()=>{
-  if(isAdmin)openModal(false); // shows choice screen
-  else openModal(false);       // goes straight to personal
+  if(isAdmin)openModal(false);
+  else openModal(false);
 });
 document.getElementById("signOutBtn").addEventListener("click",signOut);
 
@@ -925,19 +1070,19 @@ function applyUserUI(user){
 // AUTH STATE
 db.auth.onAuthStateChange(async(event,session)=>{
   if(event==="SIGNED_OUT"||event==="USER_DELETED"){
-    currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];vowData=null;isAdmin=false;
+    currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];vowData=null;notesMap={};isAdmin=false;
     document.getElementById("signOutBtn").style.display="none";
     document.getElementById("addBtn").style.display="none";
-    render();return;
+    hideSplash();render();return;
   }
   if(event==="SIGNED_IN"&&session){
     applyUserUI(session.user);
     document.getElementById("mainContent").innerHTML=skelDaily();
-    await loadUserDataSafe();render();return;
+    await loadUserDataSafe();hideSplash();render();return;
   }
   if(event==="TOKEN_REFRESHED"&&session){
     applyUserUI(session.user);
-    await loadUserDataSafe();render();return;
+    await loadUserDataSafe();hideSplash();render();return;
   }
 });
 (async()=>{
@@ -946,9 +1091,9 @@ db.auth.onAuthStateChange(async(event,session)=>{
     if(session){
       applyUserUI(session.user);
       document.getElementById("mainContent").innerHTML=skelDaily();
-      await loadUserDataSafe();render();
-    }else{currentUser=null;render();}
-  }catch(e){currentUser=null;render();}
+      await loadUserDataSafe();hideSplash();render();
+    }else{hideSplash();currentUser=null;render();}
+  }catch(e){hideSplash();currentUser=null;render();}
 })();
 
 if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(e=>console.log("SW failed",e));});}
