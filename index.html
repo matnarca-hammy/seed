@@ -687,6 +687,7 @@ function openActionMenu(id,source){
   if(!v)return;
   activeActionVerse=v;
   const isCustom=v.source==="custom";
+  const canEditDelete=isCustom||(isAdmin&&v.source==="base");
   document.getElementById("actionMenuTitle").textContent=sanitize(v.ref);
   const body=document.getElementById("actionMenuBody");
   body.innerHTML=`
@@ -696,7 +697,7 @@ function openActionMenu(id,source){
       </div>
       <div><div class="choice-title">Change Category</div><div class="choice-sub">Move to a different category</div></div>
     </button>
-    ${isCustom?`
+    ${canEditDelete?`
     <button class="choice-btn" onclick="openEditVerse()">
       <div class="choice-icon" style="background:rgba(26,90,138,0.1);color:var(--blue);">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/></svg>
@@ -760,21 +761,21 @@ function openEditVerse(){
   const v=activeActionVerse;
   closeActionMenu();
   activeActionVerse=v;
-  if(!v||v.source!=="custom")return;
+  const isBase=v.source==="base";
   document.getElementById("editVerseBody").innerHTML=`
     <label>Reference</label>
-    <input type="text" id="editVerseRef" value="${sanitize(v.ref)}" maxlength="60">
+    <input type="text" id="editVerseRef" value="${sanitize(v.ref)}" maxlength="60" ${isBase?"":""}> 
     <label>Verse Text</label>
     <textarea id="editVerseText" maxlength="2000" style="min-height:100px;">${sanitize(v.text)}</textarea>
     <div id="editVerseMsg"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeEditVerse()">Cancel</button>
-      <button class="btn btn-primary" id="editVerseSaveBtn" onclick="saveEditVerse('${v.id}')">Save</button>
+      <button class="btn btn-primary" id="editVerseSaveBtn" onclick="saveEditVerse('${v.id}','${v.source}')">Save</button>
     </div>`;
   document.getElementById("editVerseOverlay").style.display="flex";
 }
 function closeEditVerse(){document.getElementById("editVerseOverlay").style.display="none";}
-async function saveEditVerse(id){
+async function saveEditVerse(id,source){
   const ref=sanitizeInput(document.getElementById("editVerseRef").value.trim());
   const text=sanitizeInput(document.getElementById("editVerseText").value.trim());
   const msg=document.getElementById("editVerseMsg");
@@ -782,6 +783,7 @@ async function saveEditVerse(id){
   if(!ref){msg.innerHTML=`<div class="modal-error">Enter a reference.</div>`;return;}
   if(!text){msg.innerHTML=`<div class="modal-error">Enter the verse text.</div>`;return;}
   const v=activeActionVerse;
+  // Duplicate check only if ref changed
   if(ref.toLowerCase()!==v.ref.toLowerCase()){
     const[bc,cc]=await Promise.all([
       db.from("verses").select("id").ilike("ref",ref).maybeSingle(),
@@ -790,9 +792,15 @@ async function saveEditVerse(id){
     if(bc.data||cc.data){msg.innerHTML=`<div class="modal-error">"${sanitize(ref)}" already exists.</div>`;return;}
   }
   btn.disabled=true;btn.textContent="Saving...";
-  const{error}=await db.from("custom_verses").update({ref,text}).eq("id",id).eq("user_id",currentUser.id);
-  if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save";return;}
-  const cv=customVerses.find(x=>x.id===id);if(cv){cv.ref=ref;cv.text=text;}
+  if(source==="base"){
+    const{error}=await db.from("verses").update({ref,text}).eq("id",id);
+    if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save";return;}
+    const bv=baseVerses.find(x=>x.id===id);if(bv){bv.ref=ref;bv.text=text;}
+  }else{
+    const{error}=await db.from("custom_verses").update({ref,text}).eq("id",id).eq("user_id",currentUser.id);
+    if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save";return;}
+    const cv=customVerses.find(x=>x.id===id);if(cv){cv.ref=ref;cv.text=text;}
+  }
   btn.disabled=false;closeEditVerse();showToast("Verse updated.");render();
 }
 
@@ -800,12 +808,18 @@ async function saveEditVerse(id){
 async function deleteVerse(){
   const v=activeActionVerse;
   closeActionMenu();
-  if(!v||v.source!=="custom")return;
+  if(!v)return;
   const ok=await showConfirm("Delete Verse?",`"${v.ref}" will be permanently deleted.`,"Delete");
   if(!ok)return;
-  const{error}=await db.from("custom_verses").delete().eq("id",v.id).eq("user_id",currentUser.id);
-  if(error){showToast("Error deleting verse.");return;}
-  customVerses=customVerses.filter(x=>x.id!==v.id);
+  if(v.source==="base"){
+    const{error}=await db.from("verses").delete().eq("id",v.id);
+    if(error){showToast("Error deleting verse.");return;}
+    baseVerses=baseVerses.filter(x=>x.id!==v.id);
+  }else{
+    const{error}=await db.from("custom_verses").delete().eq("id",v.id).eq("user_id",currentUser.id);
+    if(error){showToast("Error deleting verse.");return;}
+    customVerses=customVerses.filter(x=>x.id!==v.id);
+  }
   showToast("Verse deleted.");render();
 }
 
@@ -819,14 +833,22 @@ function closeManageCategories(){document.getElementById("manageCatsOverlay").st
 function renderManageCats(){
   const body=document.getElementById("manageCatsBody");
   let html=`<div class="cat-list">`;
-  // Base categories — grayed out, read only for all users
+  // Base categories
   baseCategories.forEach(c=>{
-    html+=`<div class="cat-item" style="opacity:0.5;" id="catrow-${c.id}">
-      <span class="cat-item-name base">${sanitize(c.name)}${c.name==="Uncategorized"?' <span style="font-size:0.65rem;">(default)</span>':''}</span>
-      <span style="font-size:0.65rem;color:var(--ink3);">Base</span>
+    const isUncategorized=c.name==="Uncategorized";
+    const adminCanEdit=isAdmin&&!isUncategorized;
+    html+=`<div class="cat-item ${adminCanEdit?"":""}\" style="${adminCanEdit?"":"opacity:0.55;"}" id="catrow-${c.id}">
+      <span class="cat-item-name base">${sanitize(c.name)}${isUncategorized?' <span style="font-size:0.65rem;">(default)</span>':''}</span>
+      ${adminCanEdit
+        ?`<div class="cat-item-actions">
+            <button class="cat-action-btn edit" onclick="startEditBaseCat('${c.id}','${c.name.replace(/'/g,"\\'")}')"> ${editIcon}</button>
+            <button class="cat-action-btn del" onclick="deleteBaseCat('${c.id}','${c.name.replace(/'/g,"\\'")}')"> ${trashIcon}</button>
+          </div>`
+        :`<span style="font-size:0.65rem;color:var(--ink3);">${isUncategorized?"Default":"Base"}</span>`
+      }
     </div>`;
   });
-  // Custom categories — editable
+  // Custom categories — editable by all users
   customCategories.forEach(c=>{
     html+=`<div class="cat-item" id="catrow-${c.id}">
       <span class="cat-item-name">${sanitize(c.name)}</span>
