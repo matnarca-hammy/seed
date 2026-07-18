@@ -867,6 +867,7 @@ async function addCategoryFromManage(){
   showToast(`"${name}" added.`);
   renderManageCats();
 }
+function startEditCustomCat(id,currentName){
   const row=document.getElementById(`catrow-${id}`);
   if(!row)return;
   row.innerHTML=`
