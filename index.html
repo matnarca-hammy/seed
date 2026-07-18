@@ -30,6 +30,7 @@
   --shadow-md:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);
   --shadow-lg:0 12px 32px rgba(0,0,0,0.10),0 4px 8px rgba(0,0,0,0.05);
   --radius:16px;--radius-sm:10px;--radius-lg:24px;
+  --nav-pill-w:360px;
 }
 .dark{
   --bg:#100E08;--bg2:#1A1610;--card:#1E1A12;--card2:#252018;
@@ -42,10 +43,10 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{height:100%;}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;min-height:100dvh;transition:background 0.25s,color 0.25s;overscroll-behavior:none;}
-.app-shell{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;max-width:480px;margin:0 auto;position:relative;}
+.app-shell{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;max-width:1400px;margin:0 auto;position:relative;}
 
 /* HEADER */
-.app-header{position:sticky;top:0;z-index:100;background:var(--bg);padding:0 1.25rem;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.app-header{position:sticky;top:0;z-index:100;background:var(--bg);padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
 .header-logo{font-family:'Lora',serif;font-size:1.5rem;font-weight:700;color:var(--gold);letter-spacing:0.02em;font-style:italic;}
 .header-logo span{color:var(--red);font-style:normal;}
 .header-right{display:flex;align-items:center;gap:0.5rem;position:relative;}
@@ -69,24 +70,40 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .hm-divider{height:1px;background:var(--border);}
 
 /* SEARCH */
-.search-wrap{margin:0.75rem 1.25rem 0;position:relative;}
-.search-wrap input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:50px;padding:0.65rem 1rem 0.65rem 2.6rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow-sm);}
+.search-wrap{margin:0.75rem 1.5rem 0;position:relative;}
+.search-wrap input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:50px;padding:0.65rem 1rem 0.65rem 2.6rem;font-family:'Inter',sans-serif;font-size:16px;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow-sm);}
 .search-wrap input::placeholder{color:var(--ink3);}
 .search-wrap input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,42,0.12);}
 .search-icon{position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;}
 
 /* SCROLL */
-.scroll-area{flex:1;overflow-y:auto;padding:1.25rem 1.25rem calc(56px + env(safe-area-inset-bottom) + 1rem);}
+.scroll-area{flex:1;overflow-y:auto;padding:1.5rem 1.5rem calc(80px + env(safe-area-inset-bottom) + 1.5rem);}
 
-/* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--card);border-top:1px solid var(--border);display:flex;align-items:stretch;justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);z-index:50;box-shadow:0 -4px 20px rgba(0,0,0,0.06);height:calc(56px + env(safe-area-inset-bottom));}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.22rem;cursor:pointer;padding:0.5rem 0;border:none;background:none;color:var(--ink3);font-family:'Inter',sans-serif;font-size:0.6rem;font-weight:500;letter-spacing:0.02em;transition:color 0.15s;position:relative;overflow:hidden;}
+/* FLOATING PILL NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:calc(1.25rem + env(safe-area-inset-bottom));
+  left:50%;
+  transform:translateX(-50%);
+  width:var(--nav-pill-w);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:50px;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  z-index:50;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15),0 2px 8px rgba(0,0,0,0.08);
+  height:58px;
+  padding:0 0.5rem;
+}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.22rem;cursor:pointer;padding:0.5rem 0;border:none;background:none;color:var(--ink3);font-family:'Inter',sans-serif;font-size:0.6rem;font-weight:500;letter-spacing:0.02em;transition:color 0.15s;position:relative;border-radius:50px;}
 .nav-item.active{color:var(--gold);}
-.nav-item.active::after{content:'';position:absolute;top:0;left:20%;right:20%;height:2.5px;background:var(--gold);border-radius:0 0 3px 3px;}
+.nav-item.active::after{content:'';position:absolute;top:0;left:15%;right:15%;height:2.5px;background:var(--gold);border-radius:0 0 3px 3px;}
 .nav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
 .nav-item.active .nav-icon{transform:scale(1.15);}
 .nav-label{line-height:1;}
-.nav-item.center-btn{background:var(--gold);color:#fff!important;border-radius:50%;width:48px;height:48px;flex:none;align-self:center;margin-bottom:calc(env(safe-area-inset-bottom)*0.5);box-shadow:0 4px 16px rgba(196,154,42,0.5);font-size:0;padding:0;gap:0;overflow:visible;}
+.nav-item.center-btn{background:var(--gold);color:#fff!important;border-radius:50%;width:44px;height:44px;flex:none;box-shadow:0 4px 12px rgba(196,154,42,0.5);font-size:0;padding:0;gap:0;}
 .nav-item.center-btn::after{display:none;}
 .nav-item.center-btn .nav-icon{color:#fff;transform:none;}
 .nav-item.center-btn:hover{filter:brightness(1.1);}
@@ -104,16 +121,21 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;margin-top:0.25rem;}
 .sec-title{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);}
 
-/* DAILY CARD */
+/* DAILY LAYOUT — mobile default */
 .daily-greeting{margin-bottom:1.25rem;}
 .greeting-label{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.2rem;}
 .greeting-date{font-family:'Lora',serif;font-size:1.3rem;font-weight:600;color:var(--ink);}
-.verse-hero{background:linear-gradient(145deg,#FBF5E0 0%,#F0E8C8 60%,#EAE0B8 100%);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:2rem 1.75rem 1.75rem;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;margin-bottom:1rem;}
+.today-grid{display:flex;flex-direction:column;gap:1rem;}
+.today-left{display:flex;flex-direction:column;gap:1rem;}
+.today-right{display:flex;flex-direction:column;gap:1rem;}
+
+/* DAILY CARD */
+.verse-hero{background:linear-gradient(145deg,#FBF5E0 0%,#F0E8C8 60%,#EAE0B8 100%);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:2rem 1.75rem 1.75rem;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;}
 .dark .verse-hero{background:linear-gradient(145deg,#2A2210 0%,#221A08 100%);}
 .verse-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(196,154,42,0.12) 0%,transparent 70%);border-radius:50%;}
 .vh-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.75rem;}
 .vh-cat{display:inline-flex;align-items:center;background:rgba(196,154,42,0.12);border:1px solid var(--gold-border);border-radius:20px;padding:0.25rem 0.75rem;font-size:0.68rem;font-weight:600;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.25rem;}
-.vh-text{font-family:'Lora',serif;font-size:1.15rem;line-height:1.75;color:var(--ink);font-style:italic;font-weight:400;margin-bottom:1.5rem;}
+.vh-text{font-family:'Lora',serif;font-size:1.1rem;line-height:1.75;color:var(--ink);font-style:italic;font-weight:400;margin-bottom:1.5rem;}
 .vh-footer{display:flex;align-items:center;justify-content:space-between;}
 .vh-ref{font-size:0.78rem;font-weight:700;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;}
 .vh-actions{display:flex;align-items:center;gap:0.5rem;}
@@ -125,7 +147,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .vow-circle.active{background:rgba(26,90,138,0.08);border-color:rgba(26,90,138,0.2);color:var(--blue);}
 
 /* VOW CARD */
-.vow-card{background:linear-gradient(145deg,#EDF4FA 0%,#E0EDF7 100%);border:1px solid #B8D4E8;border-radius:var(--radius-lg);padding:1.5rem 1.5rem 1.4rem;box-shadow:var(--shadow-md);margin-bottom:1rem;position:relative;overflow:hidden;}
+.vow-card{background:linear-gradient(145deg,#EDF4FA 0%,#E0EDF7 100%);border:1px solid #B8D4E8;border-radius:var(--radius-lg);padding:1.5rem 1.5rem 1.4rem;box-shadow:var(--shadow-md);position:relative;overflow:hidden;}
 .dark .vow-card{background:linear-gradient(145deg,#0E1A24 0%,#0A1420 100%);border-color:#1A3A52;}
 .vow-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(26,90,138,0.1) 0%,transparent 70%);border-radius:50%;}
 .vow-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;}
@@ -135,25 +157,25 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .vow-set-btn{display:inline-flex;align-items:center;gap:0.4rem;background:var(--blue);color:#fff;border:none;border-radius:50px;padding:0.55rem 1.1rem;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;transition:filter 0.15s;}
 .vow-set-btn:hover{filter:brightness(1.1);}
 .vow-cat{display:inline-flex;background:rgba(26,90,138,0.1);border:1px solid rgba(26,90,138,0.2);border-radius:20px;padding:0.2rem 0.65rem;font-size:0.65rem;font-weight:600;color:var(--blue);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.85rem;}
-.vow-text{font-family:'Lora',serif;font-size:0.98rem;line-height:1.7;color:var(--ink);font-style:italic;margin-bottom:1rem;}
+.vow-text{font-family:'Lora',serif;font-size:0.95rem;line-height:1.7;color:var(--ink);font-style:italic;margin-bottom:1rem;}
 .vow-footer{display:flex;align-items:center;justify-content:space-between;}
 .vow-ref{font-size:0.72rem;font-weight:700;color:var(--blue);letter-spacing:0.06em;text-transform:uppercase;opacity:0.8;}
 
 /* STATS */
-.quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0;}
+.quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow-sm);}
 .stat-num{font-family:'Lora',serif;font-size:1.6rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:0.25rem;}
 .stat-label{font-size:0.72rem;color:var(--ink3);font-weight:500;}
 
-/* VERSE CARDS */
-.verse-list{display:flex;flex-direction:column;gap:0.75rem;}
-.verse-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.2rem;box-shadow:var(--shadow-sm);transition:box-shadow 0.2s,transform 0.15s;}
+/* VERSE CARDS — mobile: single column, fixed height */
+.verse-grid{display:grid;grid-template-columns:1fr;gap:0.75rem;}
+.verse-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.2rem;box-shadow:var(--shadow-sm);transition:box-shadow 0.2s,transform 0.15s;height:160px;display:flex;flex-direction:column;overflow:hidden;}
 .verse-card:active{transform:scale(0.99);}
-.vc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.6rem;gap:0.5rem;}
+.vc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.5rem;gap:0.5rem;flex-shrink:0;}
 .vc-ref{font-size:0.72rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;}
 .vc-cat{font-size:0.62rem;font-weight:600;background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border);border-radius:6px;padding:0.15rem 0.45rem;letter-spacing:0.04em;white-space:nowrap;}
-.vc-text{font-family:'Lora',serif;font-size:0.95rem;line-height:1.7;color:var(--ink2);font-style:italic;margin-bottom:0.75rem;}
-.vc-bottom{display:flex;justify-content:flex-end;align-items:center;gap:0.4rem;}
+.vc-text{font-family:'Lora',serif;font-size:0.9rem;line-height:1.6;color:var(--ink2);font-style:italic;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
+.vc-bottom{display:flex;justify-content:flex-end;align-items:center;gap:0.4rem;flex-shrink:0;margin-top:0.5rem;}
 .fav-btn{background:none;border:none;cursor:pointer;color:var(--ink3);padding:0.2rem;transition:color 0.15s,transform 0.1s;display:flex;align-items:center;}
 .fav-btn:hover{transform:scale(1.2);}
 .fav-btn.active{color:var(--red);}
@@ -164,16 +186,26 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .note-btn:hover{transform:scale(1.2);}
 .note-btn.active{color:var(--green);}
 
+/* MANAGE CATEGORIES */
+.cat-list{display:flex;flex-direction:column;gap:0.5rem;max-height:60vh;overflow-y:auto;}
+.cat-item{display:flex;align-items:center;justify-content:space-between;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem 1rem;}
+.cat-item-name{font-size:0.9rem;color:var(--ink);font-weight:500;}
+.cat-item-name.base{color:var(--ink3);font-style:italic;}
+.cat-item-actions{display:flex;gap:0.35rem;}
+.cat-action-btn{background:none;border:none;cursor:pointer;color:var(--ink3);padding:0.25rem;border-radius:6px;transition:color 0.15s,background 0.15s;display:flex;align-items:center;}
+.cat-action-btn:hover{background:var(--bg2);}
+.cat-action-btn.edit:hover{color:var(--gold);}
+.cat-action-btn.del:hover{color:var(--red);}
+.cat-edit-row{display:flex;gap:0.5rem;align-items:center;flex:1;}
+.cat-edit-input{flex:1;background:var(--card);border:1.5px solid var(--gold);border-radius:var(--radius-sm);padding:0.4rem 0.7rem;font-family:'Inter',sans-serif;font-size:0.88rem;color:var(--ink);outline:none;}
+
 /* SKELETONS */
 .skeleton{background:linear-gradient(90deg,var(--card2) 25%,var(--border) 50%,var(--card2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.skel-hero{height:260px;border-radius:var(--radius-lg);margin-bottom:1rem;}
-.skel-vow{height:160px;border-radius:var(--radius-lg);margin-bottom:1rem;}
-.skel-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.skel-hero{height:260px;border-radius:var(--radius-lg);}
+.skel-vow{height:180px;border-radius:var(--radius-lg);}
 .skel-stat{height:80px;border-radius:var(--radius);}
-.skel-card{height:110px;border-radius:var(--radius);margin-bottom:0.75rem;}
-.skel-title{height:28px;border-radius:6px;width:50%;margin-bottom:0.4rem;}
-.skel-sub{height:14px;border-radius:4px;width:70%;margin-bottom:1.25rem;}
+.skel-card{height:160px;border-radius:var(--radius);}
 
 /* ADMIN CHOICE */
 .admin-choice{display:flex;flex-direction:column;gap:0.75rem;padding:0.25rem 0 0.5rem;}
@@ -186,7 +218,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .choice-sub{font-size:0.75rem;color:var(--ink3);}
 
 /* AUTH */
-.auth-wrap{padding:2rem 1.25rem;}
+.auth-wrap{padding:2rem 1.5rem;max-width:480px;margin:0 auto;}
 .auth-hero{text-align:center;margin-bottom:2rem;}
 .auth-logo{font-family:'Lora',serif;font-size:2.5rem;font-weight:700;color:var(--gold);font-style:italic;margin-bottom:0.5rem;}
 .auth-logo span{color:var(--red);font-style:normal;}
@@ -196,7 +228,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .auth-card-sub{font-size:0.82rem;color:var(--ink3);margin-bottom:1.5rem;}
 .auth-field{margin-bottom:1rem;}
 .auth-label{display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.4rem;}
-.auth-input{width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.95rem;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.auth-input{width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:16px;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
 .auth-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,42,0.12);}
 .auth-btn{width:100%;margin-top:0.5rem;background:var(--gold);color:#fff;border:none;border-radius:50px;padding:0.9rem;font-family:'Inter',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;letter-spacing:0.02em;box-shadow:0 4px 16px rgba(196,154,42,0.35);transition:filter 0.15s,transform 0.1s;}
 .auth-btn:hover{filter:brightness(1.08);}
@@ -209,12 +241,12 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(10,8,4,0.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px);}
-.modal{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:1.5rem 1.5rem 2.5rem;width:100%;max-width:480px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;}
+.modal{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:1.5rem 1.5rem 2.5rem;width:100%;max-width:560px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;}
 .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 1.25rem;}
 .modal-title{font-family:'Lora',serif;font-size:1.15rem;font-weight:700;color:var(--ink);margin-bottom:1.25rem;}
 .modal label{display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.4rem;margin-top:1rem;}
 .modal label:first-of-type{margin-top:0;}
-.modal input,.modal textarea,.modal select{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:border-color 0.2s;resize:vertical;}
+.modal input,.modal textarea,.modal select{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;font-family:'Inter',sans-serif;font-size:16px;color:var(--ink);outline:none;transition:border-color 0.2s;resize:vertical;}
 .modal input:focus,.modal textarea:focus,.modal select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,42,0.1);}
 .modal textarea{min-height:90px;}
 .modal-actions{display:flex;gap:0.75rem;margin-top:1.5rem;}
@@ -239,7 +271,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 /* PICKER */
 .picker-search{margin-bottom:1rem;}
 .picker-search-wrap{position:relative;}
-.picker-search-wrap input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:50px;padding:0.65rem 1rem 0.65rem 2.5rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.picker-search-wrap input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:50px;padding:0.65rem 1rem 0.65rem 2.5rem;font-family:'Inter',sans-serif;font-size:16px;color:var(--ink);outline:none;transition:border-color 0.2s;}
 .picker-search-wrap input:focus{border-color:var(--gold);}
 .picker-search-icon{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;}
 .picker-list{max-height:55vh;overflow-y:auto;display:flex;flex-direction:column;gap:0.5rem;}
@@ -257,16 +289,31 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 
 /* EMPTY / TOAST */
 .empty{text-align:center;padding:3rem 1rem;color:var(--ink3);font-style:italic;font-size:0.95rem;}
-.toast{position:fixed;bottom:calc(56px + env(safe-area-inset-bottom) + 1rem);left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:500;padding:0.65rem 1.25rem;border-radius:50px;box-shadow:var(--shadow-lg);opacity:0;transition:transform 0.25s ease,opacity 0.25s ease;z-index:400;white-space:nowrap;pointer-events:none;}
+.toast{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom) + 1rem);left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:500;padding:0.65rem 1.25rem;border-radius:50px;box-shadow:var(--shadow-lg);opacity:0;transition:transform 0.25s ease,opacity 0.25s ease;z-index:400;white-space:nowrap;pointer-events:none;}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ── RESPONSIVE ── */
+/* iPad: 768px+ */
+@media (min-width:768px){
+  .verse-grid{grid-template-columns:repeat(3,1fr);}
+  .today-grid{flex-direction:row;align-items:flex-start;gap:1.25rem;}
+  .today-left{flex:1;}
+  .today-right{flex:1;}
+  .scroll-area{padding:1.5rem 2rem calc(80px + env(safe-area-inset-bottom) + 1.5rem);}
+  .search-wrap{margin:0.75rem 2rem 0;}
+}
+/* Desktop: 1024px+ */
+@media (min-width:1024px){
+  .verse-grid{grid-template-columns:repeat(4,1fr);}
+  .scroll-area{padding:1.5rem 3rem calc(80px + env(safe-area-inset-bottom) + 1.5rem);}
+  .search-wrap{margin:0.75rem 3rem 0;}
+  .app-header{padding:0 3rem;}
+}
 </style>
 </head>
 <body>
 
-<!-- SPLASH SCREEN -->
-<div id="splash">
-  <div class="splash-logo">Seed<span>.</span></div>
-</div>
+<div id="splash"><div class="splash-logo">Seed<span>.</span></div></div>
 
 <div class="app-shell">
   <header class="app-header">
@@ -286,6 +333,10 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
             <span class="admin-badge" id="adminBadge" style="display:none;">Admin</span>
           </div>
         </div>
+        <button class="hm-item" id="manageCatsBtn" style="display:none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
+          Manage Categories
+        </button>
         <button class="hm-item" id="darkToggle">
           <svg id="darkIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/></svg>
           <svg id="lightIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/></svg>
@@ -336,47 +387,40 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 
 <!-- ADD VERSE MODAL -->
 <div class="modal-overlay" id="modalOverlay" style="display:none;">
-  <div class="modal" id="modalInner">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="modalTitle">Add a Verse</div>
-    <div id="modalBody"></div>
-  </div>
+  <div class="modal"><div class="modal-handle"></div><div class="modal-title" id="modalTitle">Add a Verse</div><div id="modalBody"></div></div>
 </div>
 
 <!-- NOTE MODAL -->
 <div class="modal-overlay" id="noteModalOverlay" style="display:none;">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="noteModalTitle">Note</div>
-    <div id="noteModalBody"></div>
-  </div>
+  <div class="modal"><div class="modal-handle"></div><div class="modal-title" id="noteModalTitle">Note</div><div id="noteModalBody"></div></div>
 </div>
 
-<!-- VOW PICKER MODAL -->
+<!-- VOW PICKER -->
 <div class="modal-overlay" id="vowPickerOverlay" style="display:none;">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">Set Verse of the Week</div>
-    <div class="picker-search">
-      <div class="picker-search-wrap">
-        <span class="picker-search-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>
-        </span>
-        <input type="text" id="vowPickerSearch" placeholder="Search verses..." autocomplete="off">
-      </div>
-    </div>
+    <div class="picker-search"><div class="picker-search-wrap">
+      <span class="picker-search-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg></span>
+      <input type="text" id="vowPickerSearch" placeholder="Search verses..." autocomplete="off">
+    </div></div>
     <div class="picker-list" id="vowPickerList"></div>
   </div>
 </div>
 
-<!-- CONFIRM DIALOG -->
+<!-- MANAGE CATEGORIES MODAL -->
+<div class="modal-overlay" id="manageCatsOverlay" style="display:none;">
+  <div class="modal"><div class="modal-handle"></div><div class="modal-title">Manage Categories</div><div id="manageCatsBody"></div></div>
+</div>
+
+<!-- CONFIRM -->
 <div class="confirm-overlay" id="confirmOverlay" style="display:none;">
   <div class="confirm-box">
     <div class="confirm-title" id="confirmTitle"></div>
     <div class="confirm-text" id="confirmText"></div>
     <div class="confirm-actions">
       <button class="btn btn-ghost" onclick="resolveConfirm(false)">Cancel</button>
-      <button class="btn btn-primary" onclick="resolveConfirm(true)">Replace</button>
+      <button class="btn btn-primary" id="confirmOkBtn" onclick="resolveConfirm(true)">Confirm</button>
     </div>
   </div>
 </div>
@@ -387,111 +431,61 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 const SUPA_URL="https://lbdjclsoayhnesavsnam.supabase.co";
 const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxiZGpjbHNvYXlobmVzYXZzbmFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NzY0ODIsImV4cCI6MjA5NzI1MjQ4Mn0.Kk1OPpRfot2TetIf-GzSexnYsmHpuyWxT2r2BfsR62A";
 const ADMIN_EMAIL="matnarca@gmail.com";
+const UNCATEGORIZED_ID="aa875755-1059-4492-ab06-0ed4de529e96";
 const{createClient}=supabase;
 const db=createClient(SUPA_URL,SUPA_KEY);
 
 // CANONICAL BIBLE ORDER
 const BIBLE_ORDER=["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Psalm","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"];
-
-function bookOrder(book){
-  const idx=BIBLE_ORDER.findIndex(b=>b.toLowerCase()===book.toLowerCase());
-  return idx===-1?999:idx;
-}
-
-function parseVerseRef(ref){
-  const match=ref.match(/^(.+?)\s+(\d+)(?::(\d+)(?:-(\d+))?)?$/);
-  if(!match)return{book:ref,chapter:0,verseStart:0};
-  return{book:match[1].trim(),chapter:parseInt(match[2])||0,verseStart:parseInt(match[3])||0};
-}
-
-function sortByCanonical(verses){
-  return [...verses].sort((a,b)=>{
-    const pa=parseVerseRef(a.ref);
-    const pb=parseVerseRef(b.ref);
-    const bo=bookOrder(pa.book)-bookOrder(pb.book);
-    if(bo!==0)return bo;
-    if(pa.chapter!==pb.chapter)return pa.chapter-pb.chapter;
-    return pa.verseStart-pb.verseStart;
-  });
-}
+function bookOrder(book){const idx=BIBLE_ORDER.findIndex(b=>b.toLowerCase()===book.toLowerCase());return idx===-1?999:idx;}
+function parseVerseRef(ref){const m=ref.match(/^(.+?)\s+(\d+)(?::(\d+))?$/);if(!m)return{book:ref,chapter:0,verseStart:0};return{book:m[1].trim(),chapter:parseInt(m[2])||0,verseStart:parseInt(m[3])||0};}
+function sortByCanonical(verses){return[...verses].sort((a,b)=>{const pa=parseVerseRef(a.ref),pb=parseVerseRef(b.ref);const bo=bookOrder(pa.book)-bookOrder(pb.book);if(bo!==0)return bo;if(pa.chapter!==pb.chapter)return pa.chapter-pb.chapter;return pa.verseStart-pb.verseStart;});}
 
 // STATE
 let currentUser=null;
-let baseVerses=[],customVerses=[],categories=[],favBaseIds=[],favCustomIds=[],notesMap={};
+let baseVerses=[],customVerses=[],baseCategories=[],customCategories=[],favBaseIds=[],favCustomIds=[],notesMap={};
 let vowData=null;
 let isDark=localStorage.getItem("seed_dark")==="true";
 let searchVisible=false,searchQuery="",selectedCat="All",selectedBook="All",currentView="daily";
 let authMode="login",isAdmin=false,isAddingBase=false;
-let confirmResolve=null;
-let activeNoteVerse=null;
+let confirmResolve=null,activeNoteVerse=null;
 
 if(isDark)document.body.classList.add("dark");
 
-// SPLASH
-function hideSplash(){
-  const s=document.getElementById("splash");
-  if(s){s.classList.add("hidden");setTimeout(()=>s.remove(),500);}
-}
+function hideSplash(){const s=document.getElementById("splash");if(s){s.classList.add("hidden");setTimeout(()=>s.remove(),500);}}
 
-// HELPERS
-function sanitize(str){
-  if(!str)return"";
-  const el=document.createElement("div");el.textContent=String(str);return el.innerHTML;
-}
-function sanitizeInput(str){
-  if(!str)return"";
-  // Strip HTML tags and dangerous patterns
-  return String(str)
-    .replace(/<[^>]*>/g,"")
-    .replace(/javascript:/gi,"")
-    .replace(/on\w+\s*=/gi,"")
-    .trim();
-}
+function sanitize(str){if(!str)return"";const el=document.createElement("div");el.textContent=String(str);return el.innerHTML;}
+function sanitizeInput(str){if(!str)return"";return String(str).replace(/<[^>]*>/g,"").replace(/javascript:/gi,"").replace(/on\w+\s*=/gi,"").trim();}
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2500);}
 function getBook(ref){return ref.replace(/\s+\d.*$/,"").trim();}
-function getWeekNumber(){
-  const d=new Date();const s=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
-  s.setUTCDate(s.getUTCDate()+4-(s.getUTCDay()||7));
-  const y=new Date(Date.UTC(s.getUTCFullYear(),0,1));
-  return{week:Math.ceil((((s-y)/86400000)+1)/7),year:s.getUTCFullYear()};
-}
+function getWeekNumber(){const d=new Date();const s=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));s.setUTCDate(s.getUTCDate()+4-(s.getUTCDay()||7));const y=new Date(Date.UTC(s.getUTCFullYear(),0,1));return{week:Math.ceil((((s-y)/86400000)+1)/7),year:s.getUTCFullYear()};}
 
-function getAllVerses(){
-  return[
-    ...baseVerses.map(v=>({...v,source:"base"})),
-    ...customVerses.map(v=>({...v,source:"custom"}))
-  ];
-}
-function getCatName(catId){const c=categories.find(x=>x.id===catId);return c?c.name:"--";}
+function getAllVerses(){return[...baseVerses.map(v=>({...v,source:"base"})),...customVerses.map(v=>({...v,source:"custom"}))];}
+function getAllCategories(){return[...baseCategories,...customCategories];}
+function getCatName(catId){const c=getAllCategories().find(x=>x.id===catId);return c?c.name:"Uncategorized";}
 function isFav(v){return v.source==="base"?favBaseIds.includes(v.id):favCustomIds.includes(v.id);}
 function hasNote(v){return!!notesMap[v.source+":"+v.id];}
 function getNote(v){return notesMap[v.source+":"+v.id]||null;}
 function noteKey(v){return v.source+":"+v.id;}
-
-function getBooks(){
-  const books=[...new Set(getAllVerses().map(v=>getBook(v.ref)))];
-  books.sort((a,b)=>{
-    const bo=bookOrder(a)-bookOrder(b);
-    return bo!==0?bo:a.localeCompare(b);
-  });
-  return["All",...books];
-}
-function getCategoryNames(){return["All",...categories.map(c=>c.name)];}
+function getBooks(){const books=[...new Set(getAllVerses().map(v=>getBook(v.ref)))];books.sort((a,b)=>{const bo=bookOrder(a)-bookOrder(b);return bo!==0?bo:a.localeCompare(b);});return["All",...books];}
+function getCategoryNames(){const names=[...new Set(getAllCategories().map(c=>c.name))].sort();return["All",...names];}
 
 // LOAD DATA
 async function loadUserData(){
   const{week,year}=getWeekNumber();
-  const[catRes,baseRes,customRes,favRes,vowRes,noteRes]=await Promise.all([
+  const[baseCatRes,customCatRes,baseRes,customRes,favRes,vowRes,noteRes]=await Promise.all([
     db.from("categories").select("id,name,is_base").order("name"),
+    db.from("custom_categories").select("id,name").eq("user_id",currentUser.id).order("name"),
     db.from("verses").select("id,ref,text,cat_id,translation").order("ref"),
-    db.from("custom_verses").select("id,ref,text,cat_id").eq("user_id",currentUser.id).order("created_at"),
+    db.from("custom_verses").select("id,ref,text,base_cat_id,custom_cat_id").eq("user_id",currentUser.id).order("created_at"),
     db.from("favorites").select("id,base_verse_id,custom_verse_id").eq("user_id",currentUser.id),
     db.from("verse_of_week").select("*").eq("user_id",currentUser.id).eq("week_number",week).eq("year",year).maybeSingle(),
     db.from("notes").select("id,base_verse_id,custom_verse_id,note").eq("user_id",currentUser.id),
   ]);
-  categories=catRes.data||[];
+  baseCategories=baseCatRes.data||[];
+  customCategories=customCatRes.data||[];
   baseVerses=(baseRes.data||[]).map(v=>({...v,cat:getCatName(v.cat_id)}));
-  customVerses=(customRes.data||[]).map(v=>({...v,cat:getCatName(v.cat_id)}));
+  customVerses=(customRes.data||[]).map(v=>({...v,cat:getCatName(v.base_cat_id||v.custom_cat_id)}));
   const favs=favRes.data||[];
   favBaseIds=favs.filter(f=>f.base_verse_id).map(f=>f.base_verse_id);
   favCustomIds=favs.filter(f=>f.custom_verse_id).map(f=>f.custom_verse_id);
@@ -502,10 +496,7 @@ async function loadUserData(){
     if(n.custom_verse_id)notesMap["custom:"+n.custom_verse_id]=n;
   });
 }
-async function loadUserDataSafe(){
-  const timeout=new Promise(resolve=>setTimeout(resolve,6000));
-  await Promise.race([loadUserData(),timeout]);
-}
+async function loadUserDataSafe(){const timeout=new Promise(resolve=>setTimeout(resolve,6000));await Promise.race([loadUserData(),timeout]);}
 
 // FAVORITES
 async function toggleFav(v){
@@ -520,10 +511,7 @@ async function toggleFav(v){
   }
   render();
 }
-async function toggleFavById(id,source){
-  const v=getAllVerses().find(x=>x.id===id&&x.source===source);
-  if(v)await toggleFav(v);
-}
+async function toggleFavById(id,source){const v=getAllVerses().find(x=>x.id===id&&x.source===source);if(v)await toggleFav(v);}
 
 // VERSE OF WEEK
 function getVowVerse(){
@@ -550,35 +538,28 @@ async function setVow(v){
   showToast("Verse of the Week set!");closeVowPicker();render();
 }
 async function setVowById(id,source){
-  const v=getAllVerses().find(x=>x.id===id&&x.source===source);
-  if(!v)return;
+  const v=getAllVerses().find(x=>x.id===id&&x.source===source);if(!v)return;
   const existing=getVowVerse();
-  if(existing&&existing.id!==v.id){
-    const ok=await showConfirm("Replace Verse of the Week?",`"${v.ref}" will replace your current verse of the week.`);
-    if(!ok)return;
-  }
+  if(existing&&existing.id!==v.id){const ok=await showConfirm("Replace Verse of the Week?",`"${v.ref}" will replace your current verse of the week.`,"Replace");if(!ok)return;}
   await setVow(v);
 }
 
 // CONFIRM
-function showConfirm(title,text){
+function showConfirm(title,text,okLabel="Confirm"){
   return new Promise(resolve=>{
     confirmResolve=resolve;
     document.getElementById("confirmTitle").textContent=title;
     document.getElementById("confirmText").textContent=text;
+    document.getElementById("confirmOkBtn").textContent=okLabel;
     document.getElementById("confirmOverlay").style.display="flex";
   });
 }
-function resolveConfirm(val){
-  document.getElementById("confirmOverlay").style.display="none";
-  if(confirmResolve){confirmResolve(val);confirmResolve=null;}
-}
+function resolveConfirm(val){document.getElementById("confirmOverlay").style.display="none";if(confirmResolve){confirmResolve(val);confirmResolve=null;}}
 
 // DAILY VERSE
 function getDailyVerse(){
   const all=getAllVerses();if(!all.length)return null;
-  const now=new Date();
-  const start=new Date(now.getFullYear(),0,0);
+  const now=new Date();const start=new Date(now.getFullYear(),0,0);
   const day=Math.floor((now-start)/86400000);
   return all[((now.getFullYear()*1000)+day)%all.length];
 }
@@ -590,48 +571,50 @@ const starFilled=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
 const starEmpty=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/></svg>`;
 const noteFilledIcon=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 3a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2zm-7 8h-4a1 1 0 0 0 0 2h4a1 1 0 0 0 0 -2zm2 -4h-6a1 1 0 0 0 0 2h6a1 1 0 0 0 0 -2z"/></svg>`;
 const noteEmptyIcon=`<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"/><path d="M9 7l6 0"/><path d="M9 11l6 0"/><path d="M9 15l4 0"/></svg>`;
+const editIcon=`<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/></svg>`;
+const trashIcon=`<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0"/><path d="M10 11l0 6"/><path d="M14 11l0 6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/></svg>`;
 
 // SKELETONS
 function skelDaily(){
-  return`<div class="daily-greeting"><div class="skeleton" style="height:14px;width:35%;border-radius:4px;margin-bottom:0.4rem;"></div><div class="skeleton" style="height:26px;width:60%;border-radius:6px;"></div></div><div class="skeleton skel-hero"></div><div class="skeleton skel-vow"></div><div class="skel-stats"><div class="skeleton skel-stat"></div><div class="skeleton skel-stat"></div></div>`;
+  return`<div class="daily-greeting"><div class="skeleton" style="height:14px;width:35%;border-radius:4px;margin-bottom:0.4rem;"></div><div class="skeleton" style="height:26px;width:60%;border-radius:6px;"></div></div>
+  <div class="today-grid">
+    <div class="today-left"><div class="skeleton skel-hero"></div></div>
+    <div class="today-right"><div class="skeleton skel-vow"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;"><div class="skeleton skel-stat"></div><div class="skeleton skel-stat"></div></div></div>
+  </div>`;
 }
-function skelList(n=4){return Array(n).fill(0).map(()=>`<div class="skeleton skel-card"></div>`).join("");}
+function skelList(n=6){return`<div class="verse-grid">${Array(n).fill(0).map(()=>`<div class="skeleton skel-card"></div>`).join("")}</div>`;}
 
 // RENDER DAILY
 function renderDaily(){
-  const v=getDailyVerse();
-  const vow=getVowVerse();
+  const v=getDailyVerse();const vow=getVowVerse();
   const now=new Date();
   const dateStr=now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
   if(!v){document.getElementById("mainContent").innerHTML=skelDaily();return;}
-  const favd=isFav(v);
-  const isVow=isCurrentVow(v);
+  const favd=isFav(v);const isVow=isCurrentVow(v);
 
   let vowHtml="";
   if(vow){
     const vowFavd=isFav(vow);
-    vowHtml=`
-      <div class="vow-card">
-        <div class="vow-header"><div class="vow-label">Verse of the Week</div></div>
-        <div class="vow-cat">${sanitize(vow.cat)}</div>
-        <div class="vow-text">${sanitize(vow.text)}</div>
-        <div class="vow-footer">
-          <div class="vow-ref">${sanitize(vow.ref)} &middot; NKJV</div>
-          <button class="fav-circle ${vowFavd?"active":""}" onclick="toggleFavById('${vow.id}','${vow.source}')">${vowFavd?heartFilled:heartEmpty}</button>
-        </div>
-      </div>`;
+    vowHtml=`<div class="vow-card">
+      <div class="vow-header"><div class="vow-label">Verse of the Week</div></div>
+      <div class="vow-cat">${sanitize(vow.cat)}</div>
+      <div class="vow-text">${sanitize(vow.text)}</div>
+      <div class="vow-footer">
+        <div class="vow-ref">${sanitize(vow.ref)} &middot; NKJV</div>
+        <button class="fav-circle ${vowFavd?"active":""}" onclick="toggleFavById('${vow.id}','${vow.source}')">${vowFavd?heartFilled:heartEmpty}</button>
+      </div>
+    </div>`;
   }else{
-    vowHtml=`
-      <div class="vow-card">
-        <div class="vow-header"><div class="vow-label">Verse of the Week</div></div>
-        <div class="vow-empty">
-          <div class="vow-empty-text">Choose a verse to meditate on this week.</div>
-          <button class="vow-set-btn" onclick="openVowPicker()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg>
-            Set Verse
-          </button>
-        </div>
-      </div>`;
+    vowHtml=`<div class="vow-card">
+      <div class="vow-header"><div class="vow-label">Verse of the Week</div></div>
+      <div class="vow-empty">
+        <div class="vow-empty-text">Choose a verse to meditate on this week.</div>
+        <button class="vow-set-btn" onclick="openVowPicker()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg>
+          Set Verse
+        </button>
+      </div>
+    </div>`;
   }
 
   document.getElementById("mainContent").innerHTML=`
@@ -639,72 +622,161 @@ function renderDaily(){
       <div class="greeting-label">Verse of the Day</div>
       <div class="greeting-date">${sanitize(dateStr)}</div>
     </div>
-    <div class="verse-hero">
-      <div class="vh-label">Today</div>
-      <div class="vh-cat">${sanitize(v.cat)}</div>
-      <div class="vh-text">${sanitize(v.text)}</div>
-      <div class="vh-footer">
-        <div class="vh-ref">${sanitize(v.ref)} &middot; NKJV</div>
-        <div class="vh-actions">
-          <button class="vow-circle ${isVow?"active":""}" onclick="setVowById('${v.id}','${v.source}')" title="Set as Verse of the Week">${isVow?starFilled:starEmpty}</button>
-          <button class="fav-circle ${favd?"active":""}" onclick="toggleDailyFav()">${favd?heartFilled:heartEmpty}</button>
+    <div class="today-grid">
+      <div class="today-left">
+        <div class="verse-hero">
+          <div class="vh-label">Today</div>
+          <div class="vh-cat">${sanitize(v.cat)}</div>
+          <div class="vh-text">${sanitize(v.text)}</div>
+          <div class="vh-footer">
+            <div class="vh-ref">${sanitize(v.ref)} &middot; NKJV</div>
+            <div class="vh-actions">
+              <button class="vow-circle ${isVow?"active":""}" onclick="setVowById('${v.id}','${v.source}')" title="Set as Verse of the Week">${isVow?starFilled:starEmpty}</button>
+              <button class="fav-circle ${favd?"active":""}" onclick="toggleDailyFav()">${favd?heartFilled:heartEmpty}</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    ${vowHtml}
-    <div class="quick-stats">
-      <div class="stat-card"><div class="stat-num">${baseVerses.length+customVerses.length}</div><div class="stat-label">Total Verses</div></div>
-      <div class="stat-card"><div class="stat-num">${favBaseIds.length+favCustomIds.length}</div><div class="stat-label">Saved Verses</div></div>
+      <div class="today-right">
+        ${vowHtml}
+        <div class="quick-stats">
+          <div class="stat-card"><div class="stat-num">${baseVerses.length+customVerses.length}</div><div class="stat-label">Total Verses</div></div>
+          <div class="stat-card"><div class="stat-num">${favBaseIds.length+favCustomIds.length}</div><div class="stat-label">Saved Verses</div></div>
+        </div>
+      </div>
     </div>`;
 }
-
-async function toggleDailyFav(){
-  const v=getDailyVerse();if(!v)return;
-  await toggleFav(v);renderDaily();
-}
+async function toggleDailyFav(){const v=getDailyVerse();if(!v)return;await toggleFav(v);renderDaily();}
 
 // VOW PICKER
-function openVowPicker(){
-  renderVowPicker("");
-  document.getElementById("vowPickerOverlay").style.display="flex";
-  document.getElementById("vowPickerSearch").value="";
-  document.getElementById("vowPickerSearch").focus();
-}
+function openVowPicker(){renderVowPicker("");document.getElementById("vowPickerOverlay").style.display="flex";document.getElementById("vowPickerSearch").value="";document.getElementById("vowPickerSearch").focus();}
 function closeVowPicker(){document.getElementById("vowPickerOverlay").style.display="none";}
 function renderVowPicker(query){
   let list=sortByCanonical(getAllVerses());
   if(query){const q=query.toLowerCase();list=list.filter(v=>v.ref.toLowerCase().includes(q)||v.text.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q));}
   const el=document.getElementById("vowPickerList");
   if(!list.length){el.innerHTML=`<div class="empty">No verses found.</div>`;return;}
-  el.innerHTML=list.map(v=>`
-    <div class="picker-item" onclick="setVowById('${v.id}','${v.source}')">
-      <div class="picker-item-ref">${sanitize(v.ref)} &middot; ${sanitize(v.cat)}</div>
-      <div class="picker-item-text">${sanitize(v.text)}</div>
-    </div>`).join("");
+  el.innerHTML=list.map(v=>`<div class="picker-item" onclick="setVowById('${v.id}','${v.source}')"><div class="picker-item-ref">${sanitize(v.ref)} &middot; ${sanitize(v.cat)}</div><div class="picker-item-text">${sanitize(v.text)}</div></div>`).join("");
 }
 document.getElementById("vowPickerSearch").addEventListener("input",e=>renderVowPicker(e.target.value));
 document.getElementById("vowPickerOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("vowPickerOverlay"))closeVowPicker();});
 
+// MANAGE CATEGORIES
+function openManageCategories(){
+  closeHamburger();
+  renderManageCats();
+  document.getElementById("manageCatsOverlay").style.display="flex";
+}
+function closeManageCategories(){document.getElementById("manageCatsOverlay").style.display="none";}
+function renderManageCats(){
+  const body=document.getElementById("manageCatsBody");
+  let html=`<div class="cat-list">`;
+  // Base categories — read only
+  baseCategories.forEach(c=>{
+    html+=`<div class="cat-item">
+      <span class="cat-item-name base">${sanitize(c.name)} ${c.name==="Uncategorized"?"(default)":""}</span>
+      ${isAdmin&&c.name!=="Uncategorized"?`<div class="cat-item-actions"><button class="cat-action-btn edit" onclick="startEditBaseCat('${c.id}','${c.name.replace(/'/g,"\\'")}')"> ${editIcon}</button><button class="cat-action-btn del" onclick="deleteBaseCat('${c.id}','${c.name.replace(/'/g,"\\'")}')"> ${trashIcon}</button></div>`:`<span style="font-size:0.65rem;color:var(--ink3);">Base</span>`}
+    </div>`;
+  });
+  // Custom categories
+  customCategories.forEach(c=>{
+    html+=`<div class="cat-item" id="catrow-${c.id}">
+      <span class="cat-item-name">${sanitize(c.name)}</span>
+      <div class="cat-item-actions">
+        <button class="cat-action-btn edit" onclick="startEditCustomCat('${c.id}','${c.name.replace(/'/g,"\\'")}')"> ${editIcon}</button>
+        <button class="cat-action-btn del" onclick="deleteCustomCat('${c.id}','${c.name.replace(/'/g,"\\'")}')"> ${trashIcon}</button>
+      </div>
+    </div>`;
+  });
+  html+=`</div>`;
+  html+=`<div id="manageCatMsg"></div>`;
+  html+=`<div class="modal-actions" style="margin-top:1rem;"><button class="btn btn-ghost" onclick="closeManageCategories()">Done</button></div>`;
+  body.innerHTML=html;
+}
+
+function startEditCustomCat(id,currentName){
+  const row=document.getElementById(`catrow-${id}`);
+  if(!row)return;
+  row.innerHTML=`
+    <div class="cat-edit-row">
+      <input class="cat-edit-input" type="text" id="editCatInput-${id}" value="${sanitize(currentName)}" maxlength="50">
+      <button class="btn btn-primary" style="flex:none;padding:0.4rem 0.8rem;font-size:0.8rem;" onclick="saveEditCustomCat('${id}')">Save</button>
+      <button class="btn btn-ghost" style="flex:none;padding:0.4rem 0.8rem;font-size:0.8rem;" onclick="renderManageCats()">Cancel</button>
+    </div>`;
+}
+async function saveEditCustomCat(id){
+  const input=document.getElementById(`editCatInput-${id}`);
+  const name=sanitizeInput(input.value.trim());
+  const msg=document.getElementById("manageCatMsg");
+  msg.innerHTML="";
+  if(!name){msg.innerHTML=`<div class="modal-error">Enter a category name.</div>`;return;}
+  const{data:existing}=await db.from("custom_categories").select("id").eq("user_id",currentUser.id).ilike("name",name).neq("id",id).maybeSingle();
+  if(existing){msg.innerHTML=`<div class="modal-error">"${sanitize(name)}" already exists.</div>`;return;}
+  const{error}=await db.from("custom_categories").update({name}).eq("id",id).eq("user_id",currentUser.id);
+  if(error){msg.innerHTML=`<div class="modal-error">Error updating category.</div>`;return;}
+  const cat=customCategories.find(c=>c.id===id);if(cat)cat.name=name;
+  customVerses=customVerses.map(v=>v.custom_cat_id===id?{...v,cat:name}:v);
+  showToast(`Category renamed to "${name}".`);renderManageCats();render();
+}
+async function deleteCustomCat(id,name){
+  const ok=await showConfirm(`Delete "${name}"?`,"Verses in this category will move to Uncategorized.","Delete");
+  if(!ok)return;
+  const{error}=await db.from("custom_categories").delete().eq("id",id).eq("user_id",currentUser.id);
+  if(error){showToast("Error deleting category.");return;}
+  customCategories=customCategories.filter(c=>c.id!==id);
+  customVerses=customVerses.map(v=>v.custom_cat_id===id?{...v,cat:"Uncategorized",custom_cat_id:null,base_cat_id:UNCATEGORIZED_ID}:v);
+  showToast(`"${name}" deleted.`);renderManageCats();render();
+}
+
+function startEditBaseCat(id,currentName){
+  const row=document.getElementById(`catrow-${id}`);
+  if(!row)return;
+  row.innerHTML=`
+    <div class="cat-edit-row">
+      <input class="cat-edit-input" type="text" id="editBaseCatInput-${id}" value="${sanitize(currentName)}" maxlength="50">
+      <button class="btn btn-primary" style="flex:none;padding:0.4rem 0.8rem;font-size:0.8rem;" onclick="saveEditBaseCat('${id}')">Save</button>
+      <button class="btn btn-ghost" style="flex:none;padding:0.4rem 0.8rem;font-size:0.8rem;" onclick="renderManageCats()">Cancel</button>
+    </div>`;
+}
+async function saveEditBaseCat(id){
+  const input=document.getElementById(`editBaseCatInput-${id}`);
+  const name=sanitizeInput(input.value.trim());
+  const msg=document.getElementById("manageCatMsg");
+  msg.innerHTML="";
+  if(!name){msg.innerHTML=`<div class="modal-error">Enter a category name.</div>`;return;}
+  const{error}=await db.from("categories").update({name}).eq("id",id);
+  if(error){msg.innerHTML=`<div class="modal-error">Error updating category.</div>`;return;}
+  const cat=baseCategories.find(c=>c.id===id);if(cat)cat.name=name;
+  baseVerses=baseVerses.map(v=>v.cat_id===id?{...v,cat:name}:v);
+  showToast(`Category renamed to "${name}".`);renderManageCats();render();
+}
+async function deleteBaseCat(id,name){
+  const ok=await showConfirm(`Delete "${name}"?`,"All verses in this category will move to Uncategorized.","Delete");
+  if(!ok)return;
+  const{error}=await db.from("categories").delete().eq("id",id);
+  if(error){showToast("Error deleting category.");return;}
+  baseCategories=baseCategories.filter(c=>c.id!==id);
+  baseVerses=baseVerses.map(v=>v.cat_id===id?{...v,cat:"Uncategorized",cat_id:UNCATEGORIZED_ID}:v);
+  showToast(`"${name}" deleted.`);renderManageCats();render();
+}
+document.getElementById("manageCatsOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("manageCatsOverlay"))closeManageCategories();});
+
 // NOTES
 function openNoteModal(id,source){
-  const v=getAllVerses().find(x=>x.id===id&&x.source===source);
-  if(!v)return;
+  const v=getAllVerses().find(x=>x.id===id&&x.source===source);if(!v)return;
   activeNoteVerse=v;
   const existing=getNote(v);
   document.getElementById("noteModalTitle").textContent=existing?"My Note":"Add a Note";
   renderNoteModalBody(existing,v);
   document.getElementById("noteModalOverlay").style.display="flex";
 }
-function closeNoteModal(){
-  document.getElementById("noteModalOverlay").style.display="none";
-  activeNoteVerse=null;
-}
+function closeNoteModal(){document.getElementById("noteModalOverlay").style.display="none";activeNoteVerse=null;}
 function renderNoteModalBody(existing,v){
   const body=document.getElementById("noteModalBody");
   if(existing){
     body.innerHTML=`
       <div class="note-ref-label">${sanitize(v.ref)}</div>
-      <div class="note-text-display" id="noteDisplay">${sanitize(existing.note)}</div>
+      <div class="note-text-display">${sanitize(existing.note)}</div>
       <div class="modal-actions" style="margin-top:1rem;">
         <button class="btn btn-danger" onclick="deleteNote()">Delete</button>
         <button class="btn btn-primary" onclick="switchToEditNote()">Edit</button>
@@ -712,66 +784,44 @@ function renderNoteModalBody(existing,v){
   }else{
     body.innerHTML=`
       <div class="note-ref-label">${sanitize(v.ref)}</div>
-      <textarea id="noteInput" placeholder="Write your note here..." maxlength="2000" style="min-height:120px;margin-top:0.5rem;width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;resize:vertical;"></textarea>
+      <textarea id="noteInput" placeholder="Write your note here..." maxlength="2000" style="min-height:120px;margin-top:0.5rem;width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;font-family:'Inter',sans-serif;font-size:16px;color:var(--ink);outline:none;resize:vertical;"></textarea>
       <div id="noteMsgArea"></div>
-      <div class="modal-actions">
-        <button class="btn btn-ghost" onclick="closeNoteModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveNote()">Save Note</button>
-      </div>`;
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeNoteModal()">Cancel</button><button class="btn btn-primary" onclick="saveNote()">Save Note</button></div>`;
     setTimeout(()=>{const el=document.getElementById("noteInput");if(el)el.focus();},100);
   }
 }
 function switchToEditNote(){
   const existing=getNote(activeNoteVerse);
-  const body=document.getElementById("noteModalBody");
   document.getElementById("noteModalTitle").textContent="Edit Note";
-  body.innerHTML=`
+  document.getElementById("noteModalBody").innerHTML=`
     <div class="note-ref-label">${sanitize(activeNoteVerse.ref)}</div>
-    <textarea id="noteInput" maxlength="2000" style="min-height:120px;margin-top:0.5rem;width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;resize:vertical;">${sanitize(existing?existing.note:"")}</textarea>
+    <textarea id="noteInput" maxlength="2000" style="min-height:120px;margin-top:0.5rem;width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;font-family:'Inter',sans-serif;font-size:16px;color:var(--ink);outline:none;resize:vertical;">${sanitize(existing?existing.note:"")}</textarea>
     <div id="noteMsgArea"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeNoteModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveNote()">Save Note</button>
-    </div>`;
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeNoteModal()">Cancel</button><button class="btn btn-primary" onclick="saveNote()">Save Note</button></div>`;
   setTimeout(()=>{const el=document.getElementById("noteInput");if(el)el.focus();},100);
 }
 async function saveNote(){
-  const input=document.getElementById("noteInput");
-  const msgArea=document.getElementById("noteMsgArea");
+  const input=document.getElementById("noteInput");const msgArea=document.getElementById("noteMsgArea");
   if(!input||!activeNoteVerse)return;
-  const raw=input.value.trim();
-  const noteText=sanitizeInput(raw);
+  const noteText=sanitizeInput(input.value.trim());
   if(!noteText){msgArea.innerHTML=`<div class="modal-error">Please enter a note.</div>`;return;}
   if(noteText.length>2000){msgArea.innerHTML=`<div class="modal-error">Note must be 2000 characters or less.</div>`;return;}
-
-  const existing=getNote(activeNoteVerse);
-  const v=activeNoteVerse;
+  const existing=getNote(activeNoteVerse);const v=activeNoteVerse;
   const row={user_id:currentUser.id,note:noteText,base_verse_id:null,custom_verse_id:null};
   if(v.source==="base")row.base_verse_id=v.id;else row.custom_verse_id=v.id;
-
-  if(existing){
-    const{data,error}=await db.from("notes").update({note:noteText}).eq("id",existing.id).select().single();
-    if(error){msgArea.innerHTML=`<div class="modal-error">Error saving note.</div>`;return;}
-    notesMap[noteKey(v)]=data;
-  }else{
-    const{data,error}=await db.from("notes").insert(row).select().single();
-    if(error){msgArea.innerHTML=`<div class="modal-error">Error saving note.</div>`;return;}
-    notesMap[noteKey(v)]=data;
-  }
+  if(existing){const{data,error}=await db.from("notes").update({note:noteText}).eq("id",existing.id).select().single();if(error){msgArea.innerHTML=`<div class="modal-error">Error saving note.</div>`;return;}notesMap[noteKey(v)]=data;}
+  else{const{data,error}=await db.from("notes").insert(row).select().single();if(error){msgArea.innerHTML=`<div class="modal-error">Error saving note.</div>`;return;}notesMap[noteKey(v)]=data;}
   closeNoteModal();showToast("Note saved.");render();
 }
 async function deleteNote(){
-  const v=activeNoteVerse;
-  const existing=getNote(v);
-  if(!existing)return;
+  const v=activeNoteVerse;const existing=getNote(v);if(!existing)return;
   const{error}=await db.from("notes").delete().eq("id",existing.id);
   if(error){showToast("Error deleting note.");return;}
-  delete notesMap[noteKey(v)];
-  closeNoteModal();showToast("Note deleted.");render();
+  delete notesMap[noteKey(v)];closeNoteModal();showToast("Note deleted.");render();
 }
 document.getElementById("noteModalOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("noteModalOverlay"))closeNoteModal();});
 
-// RENDER VERSE CARD
+// VERSE CARD
 function renderVerseCard(v){
   const favd=isFav(v);const vowActive=isCurrentVow(v);const noted=hasNote(v);
   return`<div class="verse-card">
@@ -787,10 +837,8 @@ function renderVerseCard(v){
 
 // FILTER ROW
 function filterRowHTML(){
-  const cats=getCategoryNames();
-  const books=getBooks();
-  const catActive=selectedCat!=="All";
-  const bookActive=selectedBook!=="All";
+  const cats=getCategoryNames();const books=getBooks();
+  const catActive=selectedCat!=="All";const bookActive=selectedBook!=="All";
   const catOptions=cats.map(c=>`<option value="${c.replace(/"/g,"&quot;")}" ${selectedCat===c?"selected":""}>${sanitize(c)}</option>`).join("");
   const bookOptions=books.map(b=>`<option value="${b.replace(/"/g,"&quot;")}" ${selectedBook===b?"selected":""}>${sanitize(b)}</option>`).join("");
   return`<div class="filter-row">
@@ -806,7 +854,6 @@ function filterRowHTML(){
 }
 function selectCat(v){selectedCat=v;render();}
 function selectBook(v){selectedBook=v;render();}
-
 function getFiltered(list){
   if(selectedCat!=="All")list=list.filter(v=>v.cat===selectedCat);
   if(selectedBook!=="All")list=list.filter(v=>getBook(v.ref)===selectedBook);
@@ -835,11 +882,11 @@ function render(){
   }
   html+=`<div class="sec-header"><span class="sec-title">Results</span><span class="sec-title">${list.length} verse${list.length!==1?"s":""}</span></div>`;
   if(list.length===0){
-    if(currentView==="favorites")html+=`<div class="empty">Nothing saved yet. Tap the heart on any verse to save it here.</div>`;
+    if(currentView==="favorites")html+=`<div class="empty">Nothing saved yet.</div>`;
     else if(currentView==="myverses")html+=`<div class="empty">No verses added yet. Tap + to add your first verse.</div>`;
-    else html+=`<div class="empty">No verses found for these filters.</div>`;
+    else html+=`<div class="empty">No verses found.</div>`;
   }else{
-    html+=`<div class="verse-list">${list.map(v=>renderVerseCard(v)).join("")}</div>`;
+    html+=`<div class="verse-grid">${list.map(v=>renderVerseCard(v)).join("")}</div>`;
   }
   main.innerHTML=html;
 }
@@ -850,10 +897,7 @@ function renderAuth(){
   const isLogin=authMode==="login";
   main.innerHTML=`
     <div class="auth-wrap">
-      <div class="auth-hero">
-        <div class="auth-logo">Seed<span>.</span></div>
-        <div class="auth-tagline">Rooted in the Word. Strengthened by truth.</div>
-      </div>
+      <div class="auth-hero"><div class="auth-logo">Seed<span>.</span></div><div class="auth-tagline">Rooted in the Word. Strengthened by truth.</div></div>
       <div class="auth-card">
         <div class="auth-card-title">${isLogin?"Welcome back":"Create account"}</div>
         <div class="auth-card-sub">${isLogin?"Sign in to access your saved verses.":"Sign up to save verses to the cloud."}</div>
@@ -870,8 +914,7 @@ function switchAuth(mode){authMode=mode;render();}
 async function handleAuth(){
   const email=document.getElementById("authEmail").value.trim();
   const password=document.getElementById("authPassword").value;
-  const btn=document.getElementById("authSubmit");
-  const msg=document.getElementById("authMsg");
+  const btn=document.getElementById("authSubmit");const msg=document.getElementById("authMsg");
   if(!email||!password){msg.innerHTML=`<div class="auth-error">Please enter your email and password.</div>`;return;}
   btn.disabled=true;btn.textContent=authMode==="login"?"Signing in...":"Creating account...";msg.innerHTML="";
   const result=authMode==="login"?await db.auth.signInWithPassword({email,password}):await db.auth.signUp({email,password});
@@ -879,19 +922,16 @@ async function handleAuth(){
   else if(authMode==="signup"&&!result.data.session){msg.innerHTML=`<div class="auth-success">Check your email to confirm, then sign in.</div>`;btn.disabled=false;btn.textContent="Sign Up";}
 }
 async function signOut(){
-  closeHamburger();
-  await db.auth.signOut();
-  currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];vowData=null;notesMap={};isAdmin=false;
+  closeHamburger();await db.auth.signOut();
+  currentUser=null;baseVerses=[];customVerses=[];baseCategories=[];customCategories=[];favBaseIds=[];favCustomIds=[];vowData=null;notesMap={};isAdmin=false;
   document.getElementById("signOutBtn").style.display="none";
   document.getElementById("addBtn").style.display="none";
+  document.getElementById("manageCatsBtn").style.display="none";
   render();
 }
 
 // HAMBURGER
-function closeHamburger(){
-  document.getElementById("hamburgerMenu").classList.remove("open");
-  document.getElementById("hamburgerBtn").classList.remove("active");
-}
+function closeHamburger(){document.getElementById("hamburgerMenu").classList.remove("open");document.getElementById("hamburgerBtn").classList.remove("active");}
 document.getElementById("hamburgerBtn").addEventListener("click",e=>{
   e.stopPropagation();
   const menu=document.getElementById("hamburgerMenu");
@@ -899,10 +939,10 @@ document.getElementById("hamburgerBtn").addEventListener("click",e=>{
   document.getElementById("hamburgerBtn").classList.toggle("active",isOpen);
 });
 document.addEventListener("click",e=>{
-  const menu=document.getElementById("hamburgerMenu");
-  const btn=document.getElementById("hamburgerBtn");
+  const menu=document.getElementById("hamburgerMenu");const btn=document.getElementById("hamburgerBtn");
   if(!menu.contains(e.target)&&e.target!==btn)closeHamburger();
 });
+document.getElementById("manageCatsBtn").addEventListener("click",openManageCategories);
 
 // DARK MODE
 function applyDarkIcons(){
@@ -910,10 +950,7 @@ function applyDarkIcons(){
   document.getElementById("lightIcon").style.display=isDark?"block":"none";
   document.getElementById("darkLabel").textContent=isDark?"Light Mode":"Dark Mode";
 }
-document.getElementById("darkToggle").addEventListener("click",()=>{
-  isDark=!isDark;document.body.classList.toggle("dark",isDark);
-  localStorage.setItem("seed_dark",isDark);applyDarkIcons();
-});
+document.getElementById("darkToggle").addEventListener("click",()=>{isDark=!isDark;document.body.classList.toggle("dark",isDark);localStorage.setItem("seed_dark",isDark);applyDarkIcons();});
 applyDarkIcons();
 
 // ADD MODAL
@@ -927,15 +964,11 @@ function openModal(addBase=false){
     body.innerHTML=`
       <div class="admin-choice">
         <button class="choice-btn" onclick="openModal(true)">
-          <div class="choice-icon base">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"/><path d="M11 13l9 -9"/><path d="M15 4h5v5"/></svg>
-          </div>
+          <div class="choice-icon base"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"/><path d="M11 13l9 -9"/><path d="M15 4h5v5"/></svg></div>
           <div><div class="choice-title">Add Base Verse</div><div class="choice-sub">Visible to all users</div></div>
         </button>
         <button class="choice-btn" onclick="openModal('personal')">
-          <div class="choice-icon personal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18"/><path d="M13 8l2 0"/><path d="M13 12l2 0"/></svg>
-          </div>
+          <div class="choice-icon personal"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18"/><path d="M13 8l2 0"/><path d="M13 12l2 0"/></svg></div>
           <div><div class="choice-title">Add My Verse</div><div class="choice-sub">Only visible to you</div></div>
         </button>
       </div>
@@ -945,13 +978,18 @@ function openModal(addBase=false){
   const actuallyBase=addBase===true;
   title.textContent=actuallyBase?"Add Base Verse":"Add My Verse";
   isAddingBase=actuallyBase;
+
+  // Build category select — base cats + user custom cats
+  const allCats=[...baseCategories,...customCategories];
+  const catOptions=allCats.map(c=>`<option value="${c.id}|${c.id===UNCATEGORIZED_ID?"base":actuallyBase?"base":"custom"}">${sanitize(c.name)}</option>`).join("");
+
   body.innerHTML=`
     <label>Reference (e.g. John 3:16)</label>
     <input type="text" id="newRef" placeholder="Book chapter:verse" maxlength="60">
     <label>Verse Text</label>
     <textarea id="newText" placeholder="Type or paste the verse here..." maxlength="2000"></textarea>
     <label>Category</label>
-    <select id="newCat"></select>
+    <select id="newCat">${catOptions}</select>
     <div style="margin-top:1rem;">
       <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.5rem;">Or create a new category</div>
       <div class="new-cat-row">
@@ -965,15 +1003,9 @@ function openModal(addBase=false){
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
       <button class="btn btn-primary" id="saveVerseBtn" onclick="saveVerse()">Save Verse</button>
     </div>`;
-  populateCatSelect();
   overlay.style.display="flex";
 }
 function closeModal(){document.getElementById("modalOverlay").style.display="none";}
-function populateCatSelect(){
-  const sel=document.getElementById("newCat");if(!sel)return;
-  sel.innerHTML="";
-  categories.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=c.name;sel.appendChild(o);});
-}
 
 async function addCategory(){
   const input=document.getElementById("newCatInput");
@@ -981,44 +1013,63 @@ async function addCategory(){
   const msg=document.getElementById("catMsg");
   msg.innerHTML="";
   if(!name){msg.innerHTML=`<div class="modal-error">Enter a category name.</div>`;return;}
-  const{data:existing}=await db.from("categories").select("id").ilike("name",name).maybeSingle();
-  if(existing){msg.innerHTML=`<div class="modal-error">"${sanitize(name)}" already exists as a category.</div>`;return;}
-  const{data,error}=await db.from("categories").insert({name,is_base:isAdmin&&isAddingBase}).select().single();
-  if(error){msg.innerHTML=`<div class="modal-error">Error saving category.</div>`;return;}
-  categories.push({id:data.id,name:data.name,is_base:data.is_base});
-  input.value="";populateCatSelect();
-  document.getElementById("newCat").value=data.id;
+
+  // Duplicate check across both tables
+  const[baseCheck,customCheck]=await Promise.all([
+    db.from("categories").select("id").ilike("name",name).maybeSingle(),
+    db.from("custom_categories").select("id").eq("user_id",currentUser.id).ilike("name",name).maybeSingle(),
+  ]);
+  if(baseCheck.data||customCheck.data){msg.innerHTML=`<div class="modal-error">"${sanitize(name)}" already exists.</div>`;return;}
+
+  if(isAdmin&&isAddingBase){
+    // Admin adding base category
+    const{data,error}=await db.from("categories").insert({name,is_base:true}).select().single();
+    if(error){msg.innerHTML=`<div class="modal-error">Error saving category.</div>`;return;}
+    baseCategories.push(data);
+  }else{
+    // User adding personal category
+    const{data,error}=await db.from("custom_categories").insert({user_id:currentUser.id,name}).select().single();
+    if(error){msg.innerHTML=`<div class="modal-error">Error saving category.</div>`;return;}
+    customCategories.push(data);
+  }
+  // Refresh category select
+  const allCats=[...baseCategories,...customCategories];
+  const sel=document.getElementById("newCat");
+  if(sel){sel.innerHTML=allCats.map(c=>`<option value="${c.id}">${sanitize(c.name)}</option>`).join("");sel.value=allCats[allCats.length-1].id;}
+  input.value="";
   msg.innerHTML=`<div class="modal-success">"${sanitize(name)}" added.</div>`;
 }
 
 async function saveVerse(){
   const ref=sanitizeInput(document.getElementById("newRef").value.trim());
   const text=sanitizeInput(document.getElementById("newText").value.trim());
-  const catId=document.getElementById("newCat").value;
+  const catVal=document.getElementById("newCat").value;
   const msg=document.getElementById("verseMsg");
   const btn=document.getElementById("saveVerseBtn");
   msg.innerHTML="";
   if(!ref){msg.innerHTML=`<div class="modal-error">Enter a verse reference.</div>`;return;}
   if(!text){msg.innerHTML=`<div class="modal-error">Enter the verse text.</div>`;return;}
-  if(!catId){msg.innerHTML=`<div class="modal-error">Select a category.</div>`;return;}
+  if(!catVal){msg.innerHTML=`<div class="modal-error">Select a category.</div>`;return;}
+
   btn.disabled=true;btn.textContent="Checking...";
   const[baseCheck,customCheck]=await Promise.all([
     db.from("verses").select("id").ilike("ref",ref).maybeSingle(),
     db.from("custom_verses").select("id").ilike("ref",ref).eq("user_id",currentUser.id).maybeSingle(),
   ]);
-  if(baseCheck.data||customCheck.data){
-    msg.innerHTML=`<div class="modal-error">"${sanitize(ref)}" already exists.</div>`;
-    btn.disabled=false;btn.textContent="Save Verse";return;
-  }
+  if(baseCheck.data||customCheck.data){msg.innerHTML=`<div class="modal-error">"${sanitize(ref)}" already exists.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
+
   btn.textContent="Saving...";
   if(isAddingBase&&isAdmin){
-    const{data,error}=await db.from("verses").insert({ref,text,cat_id:catId,translation:"NKJV"}).select().single();
+    const{data,error}=await db.from("verses").insert({ref,text,cat_id:catVal,translation:"NKJV"}).select().single();
     if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
-    baseVerses.push({...data,cat:getCatName(catId),source:"base"});
+    baseVerses.push({...data,cat:getCatName(catVal),source:"base"});
   }else{
-    const{data,error}=await db.from("custom_verses").insert({user_id:currentUser.id,ref,text,cat_id:catId,cat:getCatName(catId)}).select().single();
+    // Determine if catVal is a base or custom category
+    const isBaseCat=baseCategories.some(c=>c.id===catVal);
+    const row={user_id:currentUser.id,ref,text,base_cat_id:isBaseCat?catVal:UNCATEGORIZED_ID,custom_cat_id:isBaseCat?null:catVal};
+    const{data,error}=await db.from("custom_verses").insert(row).select().single();
     if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
-    customVerses.push({...data,cat:getCatName(catId),source:"custom"});
+    customVerses.push({...data,cat:getCatName(catVal),source:"custom"});
   }
   btn.disabled=false;btn.textContent="Save Verse";
   closeModal();showToast(`"${ref}" added.`);render();
@@ -1029,8 +1080,7 @@ document.getElementById("modalOverlay").addEventListener("click",e=>{if(e.target
 document.querySelectorAll(".nav-item[data-view]").forEach(btn=>{
   btn.addEventListener("click",()=>{
     document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    currentView=btn.dataset.view;
+    btn.classList.add("active");currentView=btn.dataset.view;
     searchQuery="";selectedCat="All";selectedBook="All";
     document.getElementById("searchInput").value="";
     if(searchVisible){searchVisible=false;document.getElementById("searchBar").style.display="none";document.getElementById("searchToggle").classList.remove("active");}
@@ -1045,34 +1095,29 @@ document.getElementById("searchToggle").addEventListener("click",()=>{
 });
 document.getElementById("searchInput").addEventListener("input",e=>{
   searchQuery=e.target.value;
-  if(searchQuery&&currentView==="daily"){
-    currentView="browse";
-    document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view==="browse"));
-  }
+  if(searchQuery&&currentView==="daily"){currentView="browse";document.querySelectorAll(".nav-item[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view==="browse"));}
   render();
 });
-document.getElementById("addBtn").addEventListener("click",()=>{
-  if(isAdmin)openModal(false);
-  else openModal(false);
-});
+document.getElementById("addBtn").addEventListener("click",()=>openModal(false));
 document.getElementById("signOutBtn").addEventListener("click",signOut);
 
 // APPLY USER UI
 function applyUserUI(user){
-  currentUser=user;
-  isAdmin=user.email===ADMIN_EMAIL;
+  currentUser=user;isAdmin=user.email===ADMIN_EMAIL;
   document.getElementById("hmEmail").textContent=user.email;
   document.getElementById("adminBadge").style.display=isAdmin?"inline-flex":"none";
   document.getElementById("signOutBtn").style.display="flex";
   document.getElementById("addBtn").style.display="flex";
+  document.getElementById("manageCatsBtn").style.display="flex";
 }
 
 // AUTH STATE
 db.auth.onAuthStateChange(async(event,session)=>{
   if(event==="SIGNED_OUT"||event==="USER_DELETED"){
-    currentUser=null;baseVerses=[];customVerses=[];categories=[];favBaseIds=[];favCustomIds=[];vowData=null;notesMap={};isAdmin=false;
+    currentUser=null;baseVerses=[];customVerses=[];baseCategories=[];customCategories=[];favBaseIds=[];favCustomIds=[];vowData=null;notesMap={};isAdmin=false;
     document.getElementById("signOutBtn").style.display="none";
     document.getElementById("addBtn").style.display="none";
+    document.getElementById("manageCatsBtn").style.display="none";
     hideSplash();render();return;
   }
   if(event==="SIGNED_IN"&&session){
@@ -1081,18 +1126,14 @@ db.auth.onAuthStateChange(async(event,session)=>{
     await loadUserDataSafe();hideSplash();render();return;
   }
   if(event==="TOKEN_REFRESHED"&&session){
-    applyUserUI(session.user);
-    await loadUserDataSafe();hideSplash();render();return;
+    applyUserUI(session.user);await loadUserDataSafe();hideSplash();render();return;
   }
 });
 (async()=>{
   try{
     const{data:{session}}=await db.auth.getSession();
-    if(session){
-      applyUserUI(session.user);
-      document.getElementById("mainContent").innerHTML=skelDaily();
-      await loadUserDataSafe();hideSplash();render();
-    }else{hideSplash();currentUser=null;render();}
+    if(session){applyUserUI(session.user);document.getElementById("mainContent").innerHTML=skelDaily();await loadUserDataSafe();hideSplash();render();}
+    else{hideSplash();currentUser=null;render();}
   }catch(e){hideSplash();currentUser=null;render();}
 })();
 
