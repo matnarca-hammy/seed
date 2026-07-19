@@ -520,12 +520,26 @@ async function loadUserDataSafe(){const timeout=new Promise(resolve=>setTimeout(
 // FAVORITES
 async function toggleFav(v){
   if(isFav(v)){
-    if(v.source==="base"){favBaseIds=favBaseIds.filter(id=>id!==v.id);await db.from("favorites").delete().eq("user_id",currentUser.id).eq("base_verse_id",v.id);}
-    else{favCustomIds=favCustomIds.filter(id=>id!==v.id);await db.from("favorites").delete().eq("user_id",currentUser.id).eq("custom_verse_id",v.id);}
+    if(v.source==="base"){
+      const{error,count}=await db.from("favorites").delete().eq("user_id",currentUser.id).eq("base_verse_id",v.id);
+      if(error){showToast("Error removing from Saved.");return;}
+      favBaseIds=favBaseIds.filter(id=>id!==v.id);
+    }else{
+      const{error,count}=await db.from("favorites").delete().eq("user_id",currentUser.id).eq("custom_verse_id",v.id);
+      if(error){showToast("Error removing from Saved.");return;}
+      favCustomIds=favCustomIds.filter(id=>id!==v.id);
+    }
     showToast("Removed from Saved");
   }else{
-    if(v.source==="base"){favBaseIds.push(v.id);await db.from("favorites").insert({user_id:currentUser.id,base_verse_id:v.id});}
-    else{favCustomIds.push(v.id);await db.from("favorites").insert({user_id:currentUser.id,custom_verse_id:v.id});}
+    if(v.source==="base"){
+      const{data,error}=await db.from("favorites").insert({user_id:currentUser.id,base_verse_id:v.id}).select().single();
+      if(error||!data){showToast("Error saving verse.");return;}
+      favBaseIds.push(v.id);
+    }else{
+      const{data,error}=await db.from("favorites").insert({user_id:currentUser.id,custom_verse_id:v.id}).select().single();
+      if(error||!data){showToast("Error saving verse.");return;}
+      favCustomIds.push(v.id);
+    }
     showToast("Saved!");
   }
   render();
@@ -552,8 +566,15 @@ async function setVow(v){
   const{week,year}=getWeekNumber();
   const row={user_id:currentUser.id,week_number:week,year,base_verse_id:null,custom_verse_id:null};
   if(v.source==="base")row.base_verse_id=v.id;else row.custom_verse_id=v.id;
-  if(vowData){const{data,error}=await db.from("verse_of_week").update(row).eq("id",vowData.id).select().single();if(!error)vowData=data;}
-  else{const{data,error}=await db.from("verse_of_week").insert(row).select().single();if(!error)vowData=data;}
+  if(vowData){
+    const{data,error}=await db.from("verse_of_week").update(row).eq("id",vowData.id).select().single();
+    if(error||!data){showToast("Error setting Verse of the Week.");return;}
+    vowData=data;
+  }else{
+    const{data,error}=await db.from("verse_of_week").insert(row).select().single();
+    if(error||!data){showToast("Error setting Verse of the Week.");return;}
+    vowData=data;
+  }
   showToast("Verse of the Week set!");closeVowPicker();render();
 }
 async function setVowById(id,source){
@@ -743,14 +764,14 @@ async function saveChangeCat(id,source){
   const msg=document.getElementById("changeCatMsg");
   const catName=getCatName(catId);
   if(source==="base"){
-    const{error}=await db.from("verses").update({cat_id:catId}).eq("id",id);
-    if(error){msg.innerHTML=`<div class="modal-error">Error updating category.</div>`;return;}
+    const{data,error}=await db.from("verses").update({cat_id:catId}).eq("id",id).select().single();
+    if(error||!data){msg.innerHTML=`<div class="modal-error">Error updating category. Please try again.</div>`;return;}
     const bv=baseVerses.find(x=>x.id===id);if(bv){bv.cat=catName;bv.cat_id=catId;}
   }else{
     const isBaseCat=catType==="base";
     const row=isBaseCat?{base_cat_id:catId,custom_cat_id:null}:{base_cat_id:UNCATEGORIZED_ID,custom_cat_id:catId};
-    const{error}=await db.from("custom_verses").update(row).eq("id",id).eq("user_id",currentUser.id);
-    if(error){msg.innerHTML=`<div class="modal-error">Error updating category.</div>`;return;}
+    const{data,error}=await db.from("custom_verses").update(row).eq("id",id).eq("user_id",currentUser.id).select().single();
+    if(error||!data){msg.innerHTML=`<div class="modal-error">Error updating category. Please try again.</div>`;return;}
     const cv=customVerses.find(x=>x.id===id);if(cv){cv.cat=catName;cv.base_cat_id=isBaseCat?catId:UNCATEGORIZED_ID;cv.custom_cat_id=isBaseCat?null:catId;}
   }
   closeChangeCat();showToast("Category updated.");render();
@@ -761,10 +782,10 @@ function openEditVerse(){
   const v=activeActionVerse;
   closeActionMenu();
   activeActionVerse=v;
-  const isBase=v.source==="base";
+  if(!v)return;
   document.getElementById("editVerseBody").innerHTML=`
     <label>Reference</label>
-    <input type="text" id="editVerseRef" value="${sanitize(v.ref)}" maxlength="60" ${isBase?"":""}> 
+    <input type="text" id="editVerseRef" value="${sanitize(v.ref)}" maxlength="60">
     <label>Verse Text</label>
     <textarea id="editVerseText" maxlength="2000" style="min-height:100px;">${sanitize(v.text)}</textarea>
     <div id="editVerseMsg"></div>
@@ -782,9 +803,10 @@ async function saveEditVerse(id,source){
   const btn=document.getElementById("editVerseSaveBtn");
   if(!ref){msg.innerHTML=`<div class="modal-error">Enter a reference.</div>`;return;}
   if(!text){msg.innerHTML=`<div class="modal-error">Enter the verse text.</div>`;return;}
-  const v=activeActionVerse;
-  // Duplicate check only if ref changed
-  if(ref.toLowerCase()!==v.ref.toLowerCase()){
+  const origRef=source==="base"
+    ?(baseVerses.find(x=>x.id===id)||{}).ref||""
+    :(customVerses.find(x=>x.id===id)||{}).ref||"";
+  if(ref.toLowerCase()!==origRef.toLowerCase()){
     const[bc,cc]=await Promise.all([
       db.from("verses").select("id").ilike("ref",ref).maybeSingle(),
       db.from("custom_verses").select("id").ilike("ref",ref).eq("user_id",currentUser.id).neq("id",id).maybeSingle(),
@@ -793,12 +815,12 @@ async function saveEditVerse(id,source){
   }
   btn.disabled=true;btn.textContent="Saving...";
   if(source==="base"){
-    const{error}=await db.from("verses").update({ref,text}).eq("id",id);
-    if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save";return;}
+    const{data,error}=await db.from("verses").update({ref,text}).eq("id",id).select().single();
+    if(error||!data){msg.innerHTML=`<div class="modal-error">Error saving verse. Please try again.</div>`;btn.disabled=false;btn.textContent="Save";return;}
     const bv=baseVerses.find(x=>x.id===id);if(bv){bv.ref=ref;bv.text=text;}
   }else{
-    const{error}=await db.from("custom_verses").update({ref,text}).eq("id",id).eq("user_id",currentUser.id);
-    if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save";return;}
+    const{data,error}=await db.from("custom_verses").update({ref,text}).eq("id",id).eq("user_id",currentUser.id).select().single();
+    if(error||!data){msg.innerHTML=`<div class="modal-error">Error saving verse. Please try again.</div>`;btn.disabled=false;btn.textContent="Save";return;}
     const cv=customVerses.find(x=>x.id===id);if(cv){cv.ref=ref;cv.text=text;}
   }
   btn.disabled=false;closeEditVerse();showToast("Verse updated.");render();
@@ -813,11 +835,11 @@ async function deleteVerse(){
   if(!ok)return;
   if(v.source==="base"){
     const{error}=await db.from("verses").delete().eq("id",v.id);
-    if(error){showToast("Error deleting verse.");return;}
+    if(error){showToast("Error deleting verse. Please try again.");return;}
     baseVerses=baseVerses.filter(x=>x.id!==v.id);
   }else{
     const{error}=await db.from("custom_verses").delete().eq("id",v.id).eq("user_id",currentUser.id);
-    if(error){showToast("Error deleting verse.");return;}
+    if(error){showToast("Error deleting verse. Please try again.");return;}
     customVerses=customVerses.filter(x=>x.id!==v.id);
   }
   showToast("Verse deleted.");render();
@@ -883,7 +905,7 @@ async function addCategoryFromManage(){
   ]);
   if(bc.data||cc.data){msg.innerHTML=`<div class="modal-error">"${sanitize(name)}" already exists.</div>`;return;}
   const{data,error}=await db.from("custom_categories").insert({user_id:currentUser.id,name}).select().single();
-  if(error){msg.innerHTML=`<div class="modal-error">Error saving category.</div>`;return;}
+  if(error||!data){msg.innerHTML=`<div class="modal-error">Error saving category. Please try again.</div>`;return;}
   customCategories.push(data);
   input.value="";
   showToast(`"${name}" added.`);
@@ -907,8 +929,8 @@ async function saveEditCustomCat(id){
   if(!name){msg.innerHTML=`<div class="modal-error">Enter a category name.</div>`;return;}
   const{data:existing}=await db.from("custom_categories").select("id").eq("user_id",currentUser.id).ilike("name",name).neq("id",id).maybeSingle();
   if(existing){msg.innerHTML=`<div class="modal-error">"${sanitize(name)}" already exists.</div>`;return;}
-  const{error}=await db.from("custom_categories").update({name}).eq("id",id).eq("user_id",currentUser.id);
-  if(error){msg.innerHTML=`<div class="modal-error">Error updating category.</div>`;return;}
+  const{data,error}=await db.from("custom_categories").update({name}).eq("id",id).eq("user_id",currentUser.id).select().single();
+  if(error||!data){msg.innerHTML=`<div class="modal-error">Error updating category. Please try again.</div>`;return;}
   const cat=customCategories.find(c=>c.id===id);if(cat)cat.name=name;
   customVerses=customVerses.map(v=>v.custom_cat_id===id?{...v,cat:name}:v);
   showToast(`Category renamed to "${name}".`);renderManageCats();render();
@@ -917,7 +939,7 @@ async function deleteCustomCat(id,name){
   const ok=await showConfirm(`Delete "${name}"?`,"Verses in this category will move to Uncategorized.","Delete");
   if(!ok)return;
   const{error}=await db.from("custom_categories").delete().eq("id",id).eq("user_id",currentUser.id);
-  if(error){showToast("Error deleting category.");return;}
+  if(error){showToast("Error deleting category. Please try again.");return;}
   customCategories=customCategories.filter(c=>c.id!==id);
   customVerses=customVerses.map(v=>v.custom_cat_id===id?{...v,cat:"Uncategorized",custom_cat_id:null,base_cat_id:UNCATEGORIZED_ID}:v);
   showToast(`"${name}" deleted.`);renderManageCats();render();
@@ -939,8 +961,8 @@ async function saveEditBaseCat(id){
   const msg=document.getElementById("manageCatMsg");
   msg.innerHTML="";
   if(!name){msg.innerHTML=`<div class="modal-error">Enter a category name.</div>`;return;}
-  const{error}=await db.from("categories").update({name}).eq("id",id);
-  if(error){msg.innerHTML=`<div class="modal-error">Error updating category.</div>`;return;}
+  const{data,error}=await db.from("categories").update({name}).eq("id",id).select().single();
+  if(error||!data){msg.innerHTML=`<div class="modal-error">Error updating category. Please try again.</div>`;return;}
   const cat=baseCategories.find(c=>c.id===id);if(cat)cat.name=name;
   baseVerses=baseVerses.map(v=>v.cat_id===id?{...v,cat:name}:v);
   showToast(`Category renamed to "${name}".`);renderManageCats();render();
@@ -949,7 +971,7 @@ async function deleteBaseCat(id,name){
   const ok=await showConfirm(`Delete "${name}"?`,"All verses in this category will move to Uncategorized.","Delete");
   if(!ok)return;
   const{error}=await db.from("categories").delete().eq("id",id);
-  if(error){showToast("Error deleting category.");return;}
+  if(error){showToast("Error deleting category. Please try again.");return;}
   baseCategories=baseCategories.filter(c=>c.id!==id);
   baseVerses=baseVerses.map(v=>v.cat_id===id?{...v,cat:"Uncategorized",cat_id:UNCATEGORIZED_ID}:v);
   showToast(`"${name}" deleted.`);renderManageCats();render();
@@ -1004,14 +1026,21 @@ async function saveNote(){
   const existing=getNote(activeNoteVerse);const v=activeNoteVerse;
   const row={user_id:currentUser.id,note:noteText,base_verse_id:null,custom_verse_id:null};
   if(v.source==="base")row.base_verse_id=v.id;else row.custom_verse_id=v.id;
-  if(existing){const{data,error}=await db.from("notes").update({note:noteText}).eq("id",existing.id).select().single();if(error){msgArea.innerHTML=`<div class="modal-error">Error saving note.</div>`;return;}notesMap[noteKey(v)]=data;}
-  else{const{data,error}=await db.from("notes").insert(row).select().single();if(error){msgArea.innerHTML=`<div class="modal-error">Error saving note.</div>`;return;}notesMap[noteKey(v)]=data;}
+  if(existing){
+    const{data,error}=await db.from("notes").update({note:noteText}).eq("id",existing.id).select().single();
+    if(error||!data){msgArea.innerHTML=`<div class="modal-error">Error saving note. Please try again.</div>`;return;}
+    notesMap[noteKey(v)]=data;
+  }else{
+    const{data,error}=await db.from("notes").insert(row).select().single();
+    if(error||!data){msgArea.innerHTML=`<div class="modal-error">Error saving note. Please try again.</div>`;return;}
+    notesMap[noteKey(v)]=data;
+  }
   closeNoteModal();showToast("Note saved.");render();
 }
 async function deleteNote(){
   const v=activeNoteVerse;const existing=getNote(v);if(!existing)return;
   const{error}=await db.from("notes").delete().eq("id",existing.id);
-  if(error){showToast("Error deleting note.");return;}
+  if(error){showToast("Error deleting note. Please try again.");return;}
   delete notesMap[noteKey(v)];closeNoteModal();showToast("Note deleted.");render();
 }
 document.getElementById("noteModalOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("noteModalOverlay"))closeNoteModal();});
@@ -1222,12 +1251,12 @@ async function addCategory(){
   if(isAdmin&&isAddingBase){
     // Admin adding base category
     const{data,error}=await db.from("categories").insert({name,is_base:true}).select().single();
-    if(error){msg.innerHTML=`<div class="modal-error">Error saving category.</div>`;return;}
+    if(error||!data){msg.innerHTML=`<div class="modal-error">Error saving category. Please try again.</div>`;return;}
     baseCategories.push(data);
   }else{
     // User adding personal category
     const{data,error}=await db.from("custom_categories").insert({user_id:currentUser.id,name}).select().single();
-    if(error){msg.innerHTML=`<div class="modal-error">Error saving category.</div>`;return;}
+    if(error||!data){msg.innerHTML=`<div class="modal-error">Error saving category. Please try again.</div>`;return;}
     customCategories.push(data);
   }
   // Refresh category select with correct format
@@ -1268,13 +1297,13 @@ async function saveVerse(){
   btn.textContent="Saving...";
   if(isAddingBase&&isAdmin){
     const{data,error}=await db.from("verses").insert({ref,text,cat_id:catId,translation:"NKJV"}).select().single();
-    if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
+    if(error||!data){msg.innerHTML=`<div class="modal-error">Error saving verse. Please try again.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
     baseVerses.push({...data,cat:getCatName(catId),source:"base"});
   }else{
     const isBaseCat=catType==="base";
     const row={user_id:currentUser.id,ref,text,base_cat_id:isBaseCat?catId:UNCATEGORIZED_ID,custom_cat_id:isBaseCat?null:catId};
     const{data,error}=await db.from("custom_verses").insert(row).select().single();
-    if(error){msg.innerHTML=`<div class="modal-error">Error saving verse.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
+    if(error||!data){msg.innerHTML=`<div class="modal-error">Error saving verse. Please try again.</div>`;btn.disabled=false;btn.textContent="Save Verse";return;}
     customVerses.push({...data,cat:getCatName(catId),source:"custom"});
   }
   btn.disabled=false;btn.textContent="Save Verse";
